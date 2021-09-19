@@ -286,6 +286,11 @@ class LogFrame(LabelFrame):
         self.log_text.insert("end", data + "\n", color)
         self.log_text["state"] = "disabled"
         self.log_text.see("end")
+
+    def clearLogs(self):
+        self.log_text["state"] = "normal"
+        self.log_text.delete("1.0", "end")
+        self.log_text["state"] = "disabled"
         
 
 
@@ -413,7 +418,7 @@ class MainApplicatin(Frame):
     def resetAll(self):
         self.player_frame.stopTrack()
         self.connect_frame.setNormalState()
-        self.log_frame.log_text.delete(0, "end")
+        self.log_frame.clearLogs()
         self.log_frame.upload_btn.configure(text="Upload", state="normal")
         self.connections_frame.clear()
         self.player_frame.status_label["text"] = "Waiting for the track..."
