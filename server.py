@@ -80,10 +80,8 @@ class Server:
             {"method":"connectionplus", "user":username}
         ))
 
-        time.sleep(0.5)
-
-        #if self.player.current_playing:
-        #   t.sendDataPickle({"method": "checksong", "songname":self.player.current_playing})
+        if self.player.current_playing:
+            t.sendDataPickle({"method": "checksong", "songname":self.player.current_playing})
 
         while True:
             dataraw = t.recvData()
@@ -106,6 +104,7 @@ class Server:
                 t.sendDataPickle({"method": "returnTracks", "data":self.player.tracks})
 
             elif data["method"] == "req":
+                self.player.current_playing = None
                 self.player.people_ready = 0
                 songname = data["songname"]
                 self.player.waiting_song = songname
@@ -121,10 +120,19 @@ class Server:
                 t.send(data)
 
             elif data["method"] == "ready":
+                if self.player.current_playing:
+                    t.sendDataPickle(
+                        {
+                            "method":"playtime",
+                            "songname": self.player.current_playing,
+                            "time": time.perf_counter()-self.player.current_started_time
+                        }
+                    )
+                    continue
                 self.player.people_ready += 1
                 if self.player.people_ready == len(self.connections):
                     self.player.current_playing = self.player.waiting_song
-                    self.player.current_started_time = time.time()
+                    self.player.current_started_time = time.perf_counter()
                     self.sendAll(b"play"+self.player.waiting_song.encode())
 
         del self.connections[username]

@@ -34,7 +34,8 @@ class Client:
             self.app.connect_frame.setNormalState()
             showwarning("Connection", "Connection failed.")
             return
-        except Exception:
+        except Exception as e:
+            print(e)
             showerror("Client", "Maybe there is an error in the inputs. "+
                       "Check them and try again")
             return
@@ -122,6 +123,7 @@ class Client:
                 self.app.mainstatus_label["text"] = f"NETWORK IDLE"
                 self.app.mainstatus_label["foreground"] = "black"
                 self.app.log(songname + " has been downloaded!", "green")
+                self.app.log("Ready for the song! Waiting for others...")
 
             elif data["method"] == "connectionplus":
                 user = data["user"]
@@ -130,6 +132,12 @@ class Client:
             elif data["method"] == "connectionminus":
                 user = data["user"]
                 self.app.connections_frame.removeUser(user)
+
+            elif data["method"] == "playtime":
+                songname = data["songname"]
+                start_time = data["time"]
+                self.app.player_frame.playTrack(songname, start_time)
+                self.app.log(f"Playing {songname}", "green")
 
         if not self.force_disconnect:
             self.alive = False
@@ -325,9 +333,9 @@ class PlayerFrame(LabelFrame):
         self.volume_label.grid(row=1, column=0, padx=3, pady=3)
         self.volume_scale.grid(row=1, column=1, padx=3, pady=3)
 
-    def playTrack(self, songname):
+    def playTrack(self, songname, start_time=0):
         pygame.mixer.music.load("clientmusic\\"+songname)
-        pygame.mixer.music.play()
+        pygame.mixer.music.play(start=start_time, loops=0)
         root.deiconify()
         root.title(f"Mync Client - Playing {songname}")
         self.status_label.configure(
@@ -374,7 +382,7 @@ class RequestTopLevel(Toplevel):
         self.tracks = tracks
         for track in tracks:
             self.tracks_list.insert("end", track)
-        self.status_label["text"] = "Pick a song..."
+        self.status_label["text"] = "Pick a song... (scrollable)"
 
     def play(self):
         songname = self.tracks_list.get(self.tracks_list.curselection())
