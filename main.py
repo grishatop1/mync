@@ -95,7 +95,7 @@ class Client:
 
             elif data["method"] == "checksong":
                 songname = data["songname"]
-                tracks = os.listdir("clientmusic/")
+                tracks = os.listdir("./clientmusic/")
                 if not songname in tracks:
                     self.t.sendDataPickle(
                         {"method": "reqsongfile", "songname": songname}
@@ -116,7 +116,7 @@ class Client:
                 data = self.t.recvData()
                 if not data or data == b"drop":
                     break
-                with open("clientmusic/"+songname, "wb") as f:
+                with open("./clientmusic/"+songname, "wb") as f:
                     f.write(data)
                 self.t.sendDataPickle(
                         {"method": "ready", "songname": songname}
@@ -265,7 +265,7 @@ class LogFrame(LabelFrame):
                                           filetypes=(("Music Files", "*.mp3"),))
         if not file: return
 
-        copyfile(file, "clientmusic/"+os.path.basename(file))
+        copyfile(file, "./clientmusic/"+os.path.basename(file))
         self.parent.setStatusLabel(f"Uploading {os.path.basename(file)}")
         self.parent.log(f"Uploading {os.path.basename(file)}")        
         self.upload_btn.config(state="disabled", text="Uploading...")
