@@ -155,5 +155,5 @@ class Server:
 
 
 if __name__ == "__main__":
-    server = Server("192.168.0.33", 8888)
+    server = Server(socket.gethostbyname(socket.gethostname()), 8888)
     server.runServer()
