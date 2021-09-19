@@ -15,6 +15,47 @@ from shutil import copyfile
 from transfer import Transfer
 from pypresence import Presence
 
+class CacheManager:
+    def __init__(self):
+        self.appdata = os.getenv('APPDATA').replace("\\", "/")
+        self.cache_path = self.appdata+"/.mync/"
+        self.cache_file = self.cache_path+"cache.temp"
+        self._checkInitial()
+
+    def _checkInitial(self):
+        #checks if program was started for the first time
+        if not os.path.exists(self.cache_file):
+            self._check()
+            data = {
+                "volume": 80,
+                "ip": "",
+                "username": ""
+            }
+            with open(self.cache_file, "wb") as f:
+                pickle.dump(data, f)
+    
+    def _check(self):
+        os.makedirs(self.cache_path, exist_ok=True)
+        open(self.cache_file, "ab").close()
+
+    def _load(self):
+        self._check()
+        with open(self.cache_file, "rb") as f:
+            self.data = pickle.load(f)
+
+    def read(self, key):
+        self._load()
+        try:
+            return self.data[key]
+        except:
+            return None
+
+    def write(self, key, value):
+        self._load()
+        self.data[key] = value
+        with open(self.cache_file, "wb") as f:
+            pickle.dump(self.data, f)
+
 class Client:
     def __init__(self, app, ip, port, username):
         self.app = app
@@ -57,6 +98,9 @@ class Client:
         self.app.connections_frame.addUsers(users)
         self.app.connect_frame.setConnectedState()
         showinfo("Connection", "Connected to the server!")
+
+        self.app.cache.write("ip", f"{self.addr[0]}:{self.addr[1]}")
+        self.app.cache.write("username", self.username)
 
     def disconnect(self):
         self.force_disconnect = True
@@ -181,9 +225,9 @@ class ConnectFrame(LabelFrame):
         self.ip_entry.grid(row=2, column=1, padx=3, pady=3)
         self.connect_btn.grid(row=3, column=0, columnspan=2, padx=3, pady=3)
 
-        #debug
-        self.ip_entry.insert(0,"192.168.0.33:8888")
-        self.username_entry.insert(0, "grisha")
+        #load cache
+        self.ip_entry.insert(0,self.parent.cache.read("ip"))
+        self.username_entry.insert(0, self.parent.cache.read("username"))
 
     def startConnectThread(self):
         if not self.username_entry.get():
@@ -202,7 +246,7 @@ class ConnectFrame(LabelFrame):
         self.client.disconnect()
         self.parent.resetAll()
         showinfo("Connection", "Disconnected!")
-        del self.client
+        self.client = None
 
     def setConnectingState(self):
         self.username_entry["state"] = "disabled"
@@ -334,7 +378,9 @@ class PlayerFrame(LabelFrame):
                                     length=300,
                                     variable=self.volume_var)
         self.volume_scale.bind("<Motion>", self.setvolume)
-        self.volume_var.set(80)
+        self.volume_var.set(
+            self.parent.cache.read("volume")
+        )
 
         self.status_label.grid(row=0, column=0, columnspan=2, padx=3, pady=3)
         self.volume_label.grid(row=1, column=0, padx=3, pady=3)
@@ -363,7 +409,9 @@ class PlayerFrame(LabelFrame):
         )
 
     def setvolume(self, event):
-        pygame.mixer.music.set_volume(self.volume_var.get()/100)
+        volume = self.volume_var.get()
+        pygame.mixer.music.set_volume(volume/100)
+        self.parent.cache.write("volume", volume)
 
 class RequestTopLevel(Toplevel):
     def __init__(self, parent, *args, **kwargs) -> None:
@@ -396,7 +444,10 @@ class RequestTopLevel(Toplevel):
         self.status_label["text"] = "Pick a song... (scrollable)"
 
     def play(self):
-        songname = self.tracks_list.get(self.tracks_list.curselection())
+        try:
+            songname = self.tracks_list.get(self.tracks_list.curselection())
+        except:
+            return
         self.parent.connect_frame.client.reqSong(songname)
         self.destroy()
 
@@ -405,6 +456,7 @@ class MainApplicatin(Frame):
         Frame.__init__(self, parent, *args, **kwargs)
         self.parent = parent
         self.ds_presence = DSPresence()
+        self.cache = CacheManager()
 
         self.connect_frame = ConnectFrame(self, text="Connection")
         self.connect_frame.grid(row=0, column=0, padx=5, pady=5)
@@ -479,6 +531,7 @@ if __name__ == "__main__":
     root.resizable(0,0)
 
     os.makedirs("sharedmusic/", exist_ok=True)
+
     app = MainApplicatin(root)
     app.pack(side="top", fill="both", expand=True)
 
