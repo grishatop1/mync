@@ -151,7 +151,7 @@ class Client:
         self.t.sendDataPickle({"method":"gettracks"})
 
     def reqSong(self, songname):
-        self.t.sendDataPickle({"method": "req", "songname": songname})
+        self.t.sendDataPickle({"method": "req", "songname": songname}, blocking=False)
 
 class ConnectFrame(LabelFrame):
     def __init__(self, parent, *args, **kwargs) -> None:
@@ -258,7 +258,7 @@ class LogFrame(LabelFrame):
 
         copyfile(file, "clientmusic/"+os.path.basename(file))
         self.parent.setStatusLabel(f"Uploading {os.path.basename(file)}")
-        self.parent.log(f"Uploading {os.path.basename(file)}", "green")        
+        self.parent.log(f"Uploading {os.path.basename(file)}")        
         self.upload_btn.config(state="disabled", text="Uploading...")
         threading.Thread(target=self.parent.connect_frame.client.uploadSong,
                          args=(file,)).start()
