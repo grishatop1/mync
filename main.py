@@ -70,7 +70,6 @@ class Client:
         try:
             self.s.settimeout(5)
             self.s.connect(self.addr)
-            self.s.settimeout(None)
             self.alive = True
         except socket.error:
             self.app.connect_frame.setNormalState()
@@ -90,9 +89,15 @@ class Client:
             self.app.connect_frame.setNormalState()
             showwarning("Connection", "Username is already taken.")
             return
-        users = pickle.loads(connections)
-        self.t.send(b"gotall")
+        try:
+            users = pickle.loads(connections)
+        except pickle.UnpicklingError:
+            self.app.connect_frame.setNormalState()
+            showwarning("Connection", "Couldn't connect to the server.")
+            return
 
+        self.t.send(b"gotall")
+        self.s.settimeout(None)
         threading.Thread(target=self.mainThread, daemon=True).start()
 
         self.app.connections_frame.addUsers(users)
@@ -377,10 +382,11 @@ class PlayerFrame(LabelFrame):
                                     orient="horizontal",
                                     length=300,
                                     variable=self.volume_var)
-        self.volume_scale.bind("<Motion>", self.setvolume)
+        self.volume_scale.bind("<B1-Motion>", self.setvolume)
         self.volume_var.set(
             self.parent.cache.read("volume")
         )
+        self.setvolume()
 
         self.status_label.grid(row=0, column=0, columnspan=2, padx=3, pady=3)
         self.volume_label.grid(row=1, column=0, padx=3, pady=3)
@@ -408,7 +414,7 @@ class PlayerFrame(LabelFrame):
             foreground="black"
         )
 
-    def setvolume(self, event):
+    def setvolume(self, event=None):
         volume = self.volume_var.get()
         pygame.mixer.music.set_volume(volume/100)
         self.parent.cache.write("volume", volume)
@@ -532,9 +538,9 @@ if __name__ == "__main__":
 
     os.makedirs("sharedmusic/", exist_ok=True)
 
+    pygame.mixer.init()
+
     app = MainApplicatin(root)
     app.pack(side="top", fill="both", expand=True)
-
-    pygame.mixer.init()
 
     root.mainloop()
