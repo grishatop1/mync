@@ -333,7 +333,7 @@ class PlayerFrame(LabelFrame):
                                     orient="horizontal",
                                     length=300,
                                     variable=self.volume_var)
-        self.volume_scale.bind("<ButtonRelease-1>", self.setvolume)
+        self.volume_scale.bind("<Motion>", self.setvolume)
         self.volume_var.set(100)
 
         self.status_label.grid(row=0, column=0, columnspan=2, padx=3, pady=3)
