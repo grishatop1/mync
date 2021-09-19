@@ -89,7 +89,7 @@ class Client:
                 )
                 self.app.resetStatusLabel()
                 self.app.log(
-                    "The song has been uploaded! You can now request it",
+                    "The song has been uploaded! You can now request it.",
                     "green")
                 continue
 
@@ -100,7 +100,7 @@ class Client:
                     self.t.sendDataPickle(
                         {"method": "reqsongfile", "songname": songname}
                     )
-                    self.app.log("Missing song :(. Requesting it...", "red")
+                    self.app.log("Missing song :( Requesting it...", "red")
                 else:
                     self.t.sendDataPickle(
                         {"method": "ready", "songname": songname}
