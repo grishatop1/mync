@@ -7,7 +7,7 @@ import os
 from transfer import Transfer
 
 class ServerPlayer:
-    PATH = "servermusic/"
+    PATH = "sharedmusic/"
     def __init__(self, server) -> None:
         self.server = server
         self.waiting_song = None
@@ -33,6 +33,7 @@ class ServerPlayer:
 
 
 class Server:
+    os.makedirs("sharedmusic/", exist_ok=True)
     def __init__(self, ip, port) -> None:
         self.ip = ip
         self.port = port
@@ -95,7 +96,7 @@ class Server:
                 song = t.recvData()
                 if not song or song == b"drop":
                     break
-                with open("servermusic/"+songname, "wb") as f:
+                with open(self.player.PATH+songname, "wb") as f:
                     f.write(song)
                 self.player.addTrack(songname)
                 t.sendDataPickle({"method": "songrecvd"})

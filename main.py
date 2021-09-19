@@ -95,7 +95,7 @@ class Client:
 
             elif data["method"] == "checksong":
                 songname = data["songname"]
-                tracks = os.listdir("./clientmusic/")
+                tracks = os.listdir("./sharedmusic/")
                 if not songname in tracks:
                     self.t.sendDataPickle(
                         {"method": "reqsongfile", "songname": songname}
@@ -116,7 +116,7 @@ class Client:
                 data = self.t.recvData()
                 if not data or data == b"drop":
                     break
-                with open("./clientmusic/"+songname, "wb") as f:
+                with open("./sharedmusic/"+songname, "wb") as f:
                     f.write(data)
                 self.t.sendDataPickle(
                         {"method": "ready", "songname": songname}
@@ -265,7 +265,7 @@ class LogFrame(LabelFrame):
                                           filetypes=(("Music Files", "*.mp3"),))
         if not file: return
 
-        copyfile(file, "./clientmusic/"+os.path.basename(file))
+        copyfile(file, "./sharedmusic/"+os.path.basename(file))
         self.parent.setStatusLabel(f"Uploading {os.path.basename(file)}")
         self.parent.log(f"Uploading {os.path.basename(file)}")        
         self.upload_btn.config(state="disabled", text="Uploading...")
@@ -334,23 +334,23 @@ class PlayerFrame(LabelFrame):
                                     length=300,
                                     variable=self.volume_var)
         self.volume_scale.bind("<Motion>", self.setvolume)
-        self.volume_var.set(100)
+        self.volume_var.set(80)
 
         self.status_label.grid(row=0, column=0, columnspan=2, padx=3, pady=3)
         self.volume_label.grid(row=1, column=0, padx=3, pady=3)
         self.volume_scale.grid(row=1, column=1, padx=3, pady=3)
 
     def playTrack(self, songname, start_time=0):
-        pygame.mixer.music.load("clientmusic\\"+songname)
+        pygame.mixer.music.load("sharedmusic\\"+songname)
         pygame.mixer.music.play(start=start_time, loops=0)
         root.deiconify()
-        root.title(f"Mync Client - Playing {songname}")
+        root.title(f"Mync Client - Playing {songname[:100]}")
         self.status_label.configure(
-            text=f"Playing {songname}",
+            text=f"Playing {songname[:80]}",
             foreground="green"
         )
         self.parent.ds_presence.update(
-            f"{os.path.splitext(songname)[0]}",
+            f"{os.path.splitext(songname[:110])[0]}",
             time.time()
             )
 
@@ -478,6 +478,7 @@ if __name__ == "__main__":
     root.title("Mync Client")
     root.resizable(0,0)
 
+    os.makedirs("sharedmusic/", exist_ok=True)
     app = MainApplicatin(root)
     app.pack(side="top", fill="both", expand=True)
 
