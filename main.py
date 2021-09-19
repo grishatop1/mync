@@ -1,4 +1,5 @@
 import os
+import time
 import socket
 import pickle
 import threading
@@ -11,8 +12,8 @@ from tkinter.messagebox import *
 from tkinter import filedialog
 
 from shutil import copyfile
-
 from transfer import Transfer
+from pypresence import Presence
 
 class Client:
     def __init__(self, app, ip, port, username):
@@ -323,6 +324,7 @@ class PlayerFrame(LabelFrame):
         self.parent = parent
 
         self.player = None
+        self.start_time = 0
 
         self.status_label = Label(self, text="Waiting for the track...")
         self.volume_label = Label(self, text="Volume:")
@@ -347,6 +349,10 @@ class PlayerFrame(LabelFrame):
             text=f"Playing {songname}",
             foreground="green"
         )
+        self.parent.ds_presence.update(
+            f"{os.path.splitext(songname)[0]}",
+            time.time()
+            )
 
     def stopTrack(self):
         pygame.mixer.music.stop()
@@ -398,6 +404,7 @@ class MainApplicatin(Frame):
     def __init__(self, parent, *args, **kwargs) -> None:
         Frame.__init__(self, parent, *args, **kwargs)
         self.parent = parent
+        self.ds_presence = DSPresence()
 
         self.connect_frame = ConnectFrame(self, text="Connection")
         self.connect_frame.grid(row=0, column=0, padx=5, pady=5)
@@ -436,6 +443,35 @@ class MainApplicatin(Frame):
             text="NETWORK IDLE",
             foreground="black"
         )
+
+class DSPresence:
+    def __init__(self):
+        self.presence = None
+        self.connect()
+
+    def connect(self):
+        self.presence = Presence(889166597476982804)
+        self.presence.connect()
+        self.update("Not connected")
+
+    def update(self, text, start_time=None):
+        if start_time:
+            self.presence.update(
+                pid=os.getpid(),
+                state=text,
+                large_image="mync",
+                large_text="Mync!",
+                start=start_time,
+                buttons=[{"label": "Get mync", "url": "https://github.com/grishatop1/mync"}]
+            )
+        else:
+            self.presence.update(
+                pid=os.getpid(),
+                state=text,
+                large_image="mync",
+                large_text="Mync!",
+                buttons=[{"label": "Get mync", "url": "https://github.com/grishatop1/mync"}]
+            )
 
 if __name__ == "__main__":
     root = Tk()
