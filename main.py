@@ -189,6 +189,9 @@ class Client:
                 self.app.player_frame.playTrack(songname, start_time)
                 self.app.log(f"Playing {songname}", "green")
 
+            elif data["method"] == "transmit":
+                self.app.log(data["message"], data["color"])
+
         if not self.force_disconnect:
             self.alive = False
             self.s.close()
@@ -210,6 +213,9 @@ class Client:
 
     def reqSong(self, songname):
         self.t.sendDataPickle({"method": "req", "songname": songname}, blocking=False)
+
+    def transmitMsg(self, message, color="black"):
+        self.t.sendDataPickle({"method":"transmit", "message":message, "color": color}, blocking=False)
 
 class ConnectFrame(LabelFrame):
     def __init__(self, parent, *args, **kwargs) -> None:
@@ -292,6 +298,8 @@ class LogFrame(LabelFrame):
         self.log_text.tag_configure("green", foreground="green")
         self.log_text.tag_configure("red", foreground="red")
         self.log_text.tag_configure("black", foreground="black")
+        self.log_text.tag_configure("orange", foreground="orange")
+        self.log_text.tag_configure("blue", foreground="blue")
 
         self.upload_btn = Button(self, text="Upload",
                                  command=self.startUploadThread)

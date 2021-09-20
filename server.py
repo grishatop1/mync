@@ -92,6 +92,7 @@ class Server:
             data = pickle.loads(dataraw)
             
             if data["method"] == "song":
+                self.transmitAllExceptMe(f"{username} is uploading a song!", "blue", username)
                 songname = data["songname"]
                 song = t.recvData()
                 if not song or song == b"drop":
@@ -100,6 +101,7 @@ class Server:
                     f.write(song)
                 self.player.addTrack(songname)
                 t.sendDataPickle({"method": "songrecvd"})
+                self.transmitAllExceptMe(f"{username} have uploaded a song!", "blue", username)
 
             elif data["method"] == "gettracks":
                 t.sendDataPickle({"method": "returnTracks", "data":self.player.tracks})
@@ -136,6 +138,10 @@ class Server:
                     self.player.current_started_time = time.perf_counter()
                     self.sendAll(b"play"+self.player.waiting_song.encode())
 
+            elif data["method"] == "transmit":
+                self.transmitAllExceptMe(data["message"], data["color"], username)
+                
+
         del self.connections[username]
         self.snd_connections.remove(username)
         self.sendAllExceptMe(pickle.dumps(
@@ -152,7 +158,12 @@ class Server:
             if username == senderUsername:
                 continue
             else:
-               self.connections[username][2].send(data) 
+               self.connections[username][2].send(data)
+
+    def transmitAllExceptMe(self, message, color, username):
+        self.sendAllExceptMe(pickle.dumps(
+            {"method":"transmit", "message": message, "color":color}
+        ), username)
 
 
 if __name__ == "__main__":
