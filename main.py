@@ -542,6 +542,18 @@ class DSPresence:
                 buttons=[{"label": "Get mync", "url": "https://github.com/grishatop1/mync"}]
             )
 
+def about(*args):
+    '''Shows an About box'''
+    messagebox.showinfo(title='About Mync',
+                               message=
+'''Mync - Music Sync
+---------
+Have a suggestion, found a typo or a bug, wanna just chat about the
+program? Report the problem on the GitHub page (where you probably
+got the program) at https://github.com/grishatop1/mync!
+---------
+''')
+
 if __name__ == "__main__":
     root = Tk()
     root.title("Mync Client")
@@ -553,5 +565,11 @@ if __name__ == "__main__":
 
     app = MainApplicatin(root)
     app.pack(side="top", fill="both", expand=True)
+
+    root.bind("<F1>",about)
+    menu = Menu(root)
+    help_menu = Menu(menu, tearoff=0)
+    menu.add_command(label='About', command=about, underline=0)
+    root.config(menu=menu)
 
     root.mainloop()
