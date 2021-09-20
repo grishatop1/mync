@@ -5,7 +5,8 @@
 Listen to music together in sync! Request from server's songlist or upload your own songs.
 
 ## Requirements
-**mync** requires **pygame** because it uses pygame's mixer module for playing audio
+**mync** requires **pygame** because it uses pygame's mixer module for playing audio.
+
 Run `pip install pygame` in your CLI and that's all you need to run the app.
 
 ## Usage
