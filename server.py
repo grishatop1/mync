@@ -101,7 +101,7 @@ class Server:
                     f.write(song)
                 self.player.addTrack(songname)
                 t.sendDataPickle({"method": "songrecvd"})
-                self.transmitAllExceptMe(f"{username} have uploaded a song!", "blue", username)
+                self.transmitAllExceptMe(f"{username} has uploaded a song!", "blue", username)
 
             elif data["method"] == "gettracks":
                 t.sendDataPickle({"method": "returnTracks", "data":self.player.tracks})
