@@ -51,7 +51,7 @@ class Server:
         self.s.bind(self.addr)
         self.s.listen()
 
-        print(f"Server started on {self.addr}")
+        print(f"Server started on {self.addr[0]}:{self.addr[1]}")
         self.acceptThread()
 
     def acceptThread(self):
