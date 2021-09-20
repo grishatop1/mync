@@ -449,7 +449,10 @@ class RequestTopLevel(Toplevel):
         self.reqTracks()
     
     def reqTracks(self):
-        self.parent.connect_frame.client.getTracks()
+        threading.Thread(
+            target=self.parent.connect_frame.client.getTracks,
+            daemon=True
+        ).start()
 
     def loadTracks(self, tracks):
         self.tracks = tracks
