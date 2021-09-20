@@ -78,7 +78,7 @@ class Client:
         except Exception as e:
             print(e)
             showerror("Client", "Maybe there is an error in the inputs. "+
-                      "Check them and try again")
+                      "Check them and try again.")
             return
 
         self.s.ioctl(socket.SIO_KEEPALIVE_VALS, (1, 10000, 3000))
