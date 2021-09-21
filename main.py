@@ -365,7 +365,7 @@ class ConnectionsFrame(LabelFrame):
         LabelFrame.__init__(self, parent, *args, **kwargs)
         self.parent = parent
 
-        self.connections_listbox = Listbox(self)
+        self.connections_listbox = Listbox(self, width=30)
         self.connections_listbox.pack(padx=3, pady=3)
 
     def addUser(self, username):
@@ -435,17 +435,48 @@ class PlayerFrame(LabelFrame):
         pygame.mixer.music.set_volume(volume/100)
         self.parent.cache.write("volume", volume)
 
+class PlaceholderEntry(Entry):
+    def __init__(self, container,placeholder,placeholder_style,*args, **kwargs):
+        super().__init__(container, *args, **kwargs)
+        self.placeholder = placeholder
+
+        self.field_style = kwargs.pop("style", "TEntry")
+        self.placeholder_style=kwargs.pop("placeholder_style",self.field_style)
+        self["style"] = self.placeholder_style
+
+        self.insert("0", self.placeholder)
+        self["foreground"] = "gray"
+        self.bind("<FocusIn>", self._clear_placeholder)
+        self.bind("<FocusOut>", self._add_placeholder)
+
+    def _clear_placeholder(self, e):
+        if self["style"] == self.placeholder_style:
+            self.delete("0", "end")
+            self["style"] = self.field_style
+            self["foreground"] = "black"
+
+    def _add_placeholder(self, e):
+        if not self.get():
+            self.insert("0", self.placeholder)
+            self["style"] = self.placeholder_style
+            self["foreground"] = "gray"
+
 class ChatFrame(LabelFrame):
     def __init__(self, parent, *args, **kwargs) -> None:
         LabelFrame.__init__(self, parent, *args, **kwargs)
         self.parent = parent
 
-        self.chat_log = Text(self, width=20, height=10, state="disabled")
+        self.chat_log = Text(self, width=25, height=10, state="disabled")
         self.chat_log.grid(row=0, column=0, columnspan=3, padx=3, pady=3)
 
-        self.input = Entry(self)
+        self.message = StringVar()
+        
+        self.input = PlaceholderEntry(
+            self,
+            "Enter message",
+            style="TEntry",
+            placeholder_style="Placeholder.TEntry")
         self.input.grid(row=1, column=0, columnspan=2, padx=3, pady=3)
-
         
         self.send_btn = Button(self, text="Send",
                                   command=self.send_msg)
