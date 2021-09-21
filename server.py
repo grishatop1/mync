@@ -174,12 +174,12 @@ class Server:
 if __name__ == "__main__":
     main=Tk()
     main.title("Mync Server")
-    main.geometry('255x100')
+    main.geometry("255x100")
     main.resizable(False,False)
 
     def help_(*args):
-        messagebox.showinfo(title='How to use',message=
-    '''0) Please read before use:
+        messagebox.showinfo(title="How to use",message=
+    """0) Please read before use:
 
 1) The default port is 8888, but you can also set a custom port. First
   check the 'Custom Port' checbox, and then type in the preferred
@@ -188,7 +188,7 @@ if __name__ == "__main__":
 
 2) Pressing the 'Start Server' button will start the server on the
   custom port or port 8888 and close the launcher. You can also press
-  F3 to launch the server.''')
+  F3 to launch the server.""")
 
     #checkbox toggler for entry box
     def entrytog(*args):
@@ -201,11 +201,16 @@ if __name__ == "__main__":
             custom_port_entry["state"]=""
             custom_port_entry["foreground"]="black"
             custom_port_entry.delete(0,"end")
-            custom_port_entry.insert(0, '')
+            custom_port_entry.insert(0, "")
             custom_port_entry.focus()
+
+    def thread():
+        threading.Thread(target=start,daemon=True).start()
 
     def start(*args):
         try:
+            startB["text"]="Exit Launcher"
+            startB["command"]=exitcond
             #if custom port
             if custom_port_var.get() and custom_port_cbox_var.get():
                 #start server with custom port
@@ -218,12 +223,14 @@ if __name__ == "__main__":
                 server = Server(socket.gethostbyname(socket.gethostname()),
                                 8888)
                 server.runServer()
-
-            #kill GUI window
-            main.destroy()
         except Exception as error:
             messagebox.showerror(
             "Error!","The following error has occured:\n\n\"{}\"".format(error))
+
+    def exitcond(*args):
+        if (res2 := messagebox.askyesno("Are you sure?","Exit Launcher?")):
+            main.destroy()
+        
 
     #checkbox variable
     custom_port_cbox_var=IntVar()
@@ -235,7 +242,7 @@ if __name__ == "__main__":
     custom_port_cbox.grid(column=0,row=0,sticky="we",padx=50,pady=3)
 
     #port entry variable
-    custom_port_var=StringVar(value='8888')
+    custom_port_var=StringVar(value="8888")
 
     #port entry
     custom_port_entry=Entry(main, textvariable=custom_port_var,
@@ -243,18 +250,18 @@ if __name__ == "__main__":
     custom_port_entry.grid(column=0,row=1,sticky="we",padx=50)
 
     #start button
-    startB=Button(main, text="Start Server",command=start)
+    startB=Button(main, text="Start Server",command=thread)
     startB.grid(column=0,row=2,columnspan=3,sticky="we",padx=50,pady=10)
 
     #bind to help window
     main.bind("<F1>",help_)
     
     #bind to start server
-    main.bind("<F3>",start)
+    main.bind("<F3>",thread)
 
     #menu config
     menu = Menu(main)
-    menu.add_command(label='How to Use', command=help_, underline=0)
+    menu.add_command(label="How to Use", command=help_, underline=0)
     main.config(menu=menu)
 
     main.mainloop()
