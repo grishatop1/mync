@@ -519,9 +519,12 @@ class DSPresence:
         self.connect()
 
     def connect(self):
-        self.presence = Presence(889166597476982804)
-        self.presence.connect()
-        self.update("Not connected")
+        try:
+            self.presence = Presence(889166597476982804)
+            self.presence.connect()
+            self.update("Not connected")
+        except:
+            pass
 
     def update(self, text, start_time=None):
         if start_time:
