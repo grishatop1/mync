@@ -325,12 +325,13 @@ class LogFrame(LabelFrame):
             self,
             "Enter message",
             style="TEntry",
-            placeholder_style="Placeholder.TEntry")
-        self.input.grid(row=2, column=0, padx=3, pady=3, sticky = "we")
+            placeholder_style="Placeholder.TEntry",
+            width=40)
+        self.input.grid(row=2, column=0, padx=3, pady=3, sticky="we")
         
         self.send_btn = Button(self, text="Send",
                                   command=self.send_msg)
-        self.send_btn.grid(row=2, column=1, padx=3, pady=3)
+        self.send_btn.grid(row=2, column=1, padx=3, pady=3, sticky="e")
 
     def send_msg(*args):
         #needs backend!
@@ -530,7 +531,7 @@ class MainApplication(Frame):
         self.connect_frame = ConnectFrame(self, text="Connection")
         self.connect_frame.grid(row=0, column=0, padx=5, pady=5)
 
-        self.log_frame = LogFrame(self, text="Logs & Song Control")
+        self.log_frame = LogFrame(self, text="Logs")
         self.log = self.log_frame.insertTextLine
         self.log_frame.grid(row=0, column=1, padx=5, pady=5)
 
