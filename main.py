@@ -331,7 +331,7 @@ class LogFrame(LabelFrame):
         
         self.send_btn = Button(self, text="Send",
                                   command=self.send_msg)
-        self.send_btn.grid(row=2, column=1, padx=3, pady=3, sticky="e")
+        self.send_btn.grid(row=2, column=1, padx=3, pady=3, sticky="we")
 
     def send_msg(*args):
         #needs backend!
