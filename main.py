@@ -468,7 +468,7 @@ class RequestTopLevel(Toplevel):
         self.parent.connect_frame.client.reqSong(songname)
         self.destroy()
 
-class MainApplicatin(Frame):
+class MainApplication(Frame):
     def __init__(self, parent, *args, **kwargs) -> None:
         Frame.__init__(self, parent, *args, **kwargs)
         self.parent = parent
@@ -563,7 +563,7 @@ if __name__ == "__main__":
 
     pygame.mixer.init()
 
-    app = MainApplicatin(root)
+    app = MainApplication(root)
     app.pack(side="top", fill="both", expand=True)
 
     root.bind("<F1>",about)
