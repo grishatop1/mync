@@ -215,7 +215,7 @@ if __name__ == "__main__":
             if custom_port_var.get() and custom_port_cbox_var.get():
                 #start server with custom port
                 server = Server(socket.gethostbyname(socket.gethostname()),
-                                custom_port_var.get())
+                                int(custom_port_var.get()))
                 server.runServer()
                 
             else:
