@@ -435,6 +435,26 @@ class PlayerFrame(LabelFrame):
         pygame.mixer.music.set_volume(volume/100)
         self.parent.cache.write("volume", volume)
 
+class ChatFrame(LabelFrame):
+    def __init__(self, parent, *args, **kwargs) -> None:
+        LabelFrame.__init__(self, parent, *args, **kwargs)
+        self.parent = parent
+
+        self.chat_log = Text(self, width=20, height=10, state="disabled")
+        self.chat_log.grid(row=0, column=0, columnspan=3, padx=3, pady=3)
+
+        self.input = Entry(self)
+        self.input.grid(row=1, column=0, columnspan=2, padx=3, pady=3)
+
+        
+        self.send_btn = Button(self, text="Send",
+                                  command=self.send_msg)
+        self.send_btn.grid(row=1, column=2, padx=3, pady=3)
+
+    def send_msg(*args):
+        #needs backend!
+        pass
+
 class RequestTopLevel(Toplevel):
     def __init__(self, parent, *args, **kwargs) -> None:
         Toplevel.__init__(self, parent, *args, **kwargs)
@@ -494,7 +514,10 @@ class MainApplication(Frame):
         self.connections_frame.grid(row=0, column=2, padx=5, pady=5)
 
         self.player_frame = PlayerFrame(self, text="PLAYER")
-        self.player_frame.grid(row=1, column=0, columnspan=3, padx=5, pady=10)
+        self.player_frame.grid(row=1, column=0, columnspan=2, padx=5, pady=10)
+
+        self.chat_frame = ChatFrame(self, text="Chat")
+        self.chat_frame.grid(row=1, column=2, columnspan=1, padx=5, pady=10)
 
         self.mainstatus_label = Label(self, text="NETWORK IDLE")
         self.mainstatus_label.grid(row=2, columnspan=3, padx=5, pady=5)
