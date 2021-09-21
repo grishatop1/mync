@@ -329,7 +329,7 @@ class LogFrame(LabelFrame):
             width=40)
         self.input.grid(row=2, column=0, padx=3, pady=3, sticky="we")
         
-        self.send_btn = Button(self, text="Send",
+        self.send_btn = Button(self, text="➡️",
                                   command=self.send_msg)
         self.send_btn.grid(row=2, column=1, padx=3, pady=3, sticky="we")
 
