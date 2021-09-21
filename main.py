@@ -218,10 +218,12 @@ class Client:
         self.t.sendDataPickle({"method":"gettracks"})
 
     def reqSong(self, songname):
-        self.t.sendDataPickle({"method": "req", "songname": songname}, blocking=False)
+        self.t.sendDataPickle({"method": "req", "songname": songname},
+                              blocking=False)
 
     def transmitMsg(self, message, color="black"):
-        self.t.sendDataPickle({"method":"transmit", "message":message, "color": color}, blocking=False)
+        self.t.sendDataPickle({"method":"transmit", "message":message,
+                               "color": color}, blocking=False)
 
 class ConnectFrame(LabelFrame):
     def __init__(self, parent, *args, **kwargs) -> None:
@@ -325,7 +327,7 @@ class LogFrame(LabelFrame):
 
         root.focus()
         file = filedialog.askopenfilename(title="Open music file",
-                                          filetypes=(("Music Files", "*.mp3"),))
+                                          filetypes=(("Music Files","*.mp3"),))
         if not file: return
 
         copyfile(file, "./sharedmusic/"+os.path.basename(file))
@@ -541,7 +543,8 @@ class DSPresence:
                     large_image="mync",
                     large_text="Mync!",
                     start=start_time,
-                    buttons=[{"label": "Get mync", "url": "https://github.com/grishatop1/mync"}]
+                    buttons=[{"label": "Get mync", "url":
+                              "https://github.com/grishatop1/mync"}]
                 )
             else:
                 self.presence.update(
@@ -549,7 +552,8 @@ class DSPresence:
                     state=text,
                     large_image="mync",
                     large_text="Mync!",
-                    buttons=[{"label": "Get mync", "url": "https://github.com/grishatop1/mync"}]
+                    buttons=[{"label": "Get mync", "url":
+                              "https://github.com/grishatop1/mync"}]
                 )
         except:
             pass
