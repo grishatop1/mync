@@ -527,23 +527,26 @@ class DSPresence:
             pass
 
     def update(self, text, start_time=None):
-        if start_time:
-            self.presence.update(
-                pid=os.getpid(),
-                state=text,
-                large_image="mync",
-                large_text="Mync!",
-                start=start_time,
-                buttons=[{"label": "Get mync", "url": "https://github.com/grishatop1/mync"}]
-            )
-        else:
-            self.presence.update(
-                pid=os.getpid(),
-                state=text,
-                large_image="mync",
-                large_text="Mync!",
-                buttons=[{"label": "Get mync", "url": "https://github.com/grishatop1/mync"}]
-            )
+        try:
+            if start_time:
+                self.presence.update(
+                    pid=os.getpid(),
+                    state=text,
+                    large_image="mync",
+                    large_text="Mync!",
+                    start=start_time,
+                    buttons=[{"label": "Get mync", "url": "https://github.com/grishatop1/mync"}]
+                )
+            else:
+                self.presence.update(
+                    pid=os.getpid(),
+                    state=text,
+                    large_image="mync",
+                    large_text="Mync!",
+                    buttons=[{"label": "Get mync", "url": "https://github.com/grishatop1/mync"}]
+                )
+        except:
+            pass
 
 def about(*args):
     '''Shows an About box'''
