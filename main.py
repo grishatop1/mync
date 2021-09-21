@@ -121,8 +121,11 @@ class Client:
             
             if data[:4] == b"play":
                 songname = data[4:].decode()
-                self.app.player_frame.playTrack(songname)
-                self.app.log(f"Playing {songname}", "green")
+                try:
+                    self.app.player_frame.playTrack(songname)
+                    self.app.log(f"Playing {songname}", "green")
+                except:
+                    showerror("Player", "Error playing track!")
                 continue
 
             data = pickle.loads(data)
@@ -186,8 +189,11 @@ class Client:
             elif data["method"] == "playtime":
                 songname = data["songname"]
                 start_time = data["time"]
-                self.app.player_frame.playTrack(songname, start_time)
-                self.app.log(f"Playing {songname}", "green")
+                try:
+                    self.app.player_frame.playTrack(songname, start_time)
+                    self.app.log(f"Playing {songname}", "green")
+                except:
+                    showerror("Player", "Error playing track!")
 
             elif data["method"] == "transmit":
                 self.app.log(data["message"], data["color"])
