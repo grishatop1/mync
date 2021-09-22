@@ -9,7 +9,7 @@ from tkinter import messagebox
 from tkinter import filedialog
 from tkinter.ttk import *
 
-from transfer import Transfer
+from modules.transfer import Transfer
 
 class ServerPlayer:
     PATH = "sharedmusic/"

@@ -11,9 +11,10 @@ from tkinter.ttk import *
 from tkinter.messagebox import *
 from tkinter import filedialog
 
+from modules.transfer import Transfer
+from modules.pypresence import Presence
+
 from shutil import copyfile
-from transfer import Transfer
-from pypresence import Presence
 
 class CacheManager:
     def __init__(self):
