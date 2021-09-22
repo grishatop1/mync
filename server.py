@@ -187,8 +187,8 @@ if __name__ == "__main__":
   port.
 
 2) Pressing the 'Start Server' button will start the server on the
-  custom port or port 8888 and close the launcher. You can also press
-  F3 to launch the server.""")
+  custom port or port 8888. Pressing it again will stop the server and
+  close the launcher. You can also press F3 to launch the server.""")
 
     #checkbox toggler for entry box
     def entrytog(*args):
@@ -209,7 +209,7 @@ if __name__ == "__main__":
 
     def start(*args):
         try:
-            startB["text"]="Exit Launcher"
+            startB["text"]="Close server"
             startB["command"]=exitcond
             #if custom port
             if custom_port_var.get() and custom_port_cbox_var.get():
@@ -228,7 +228,7 @@ if __name__ == "__main__":
             "Error!","The following error has occured:\n\n\"{}\"".format(error))
 
     def exitcond(*args):
-        if (res2 := messagebox.askyesno("Are you sure?","Exit Launcher?")):
+        if (res2 := messagebox.askyesno("Are you sure?","Close server?")):
             main.destroy()
         
 
