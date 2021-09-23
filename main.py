@@ -1,3 +1,4 @@
+from modules.ft import ClientFT
 import os
 import time
 import socket
@@ -15,6 +16,7 @@ from modules.transfer import Transfer
 from modules.pypresence import Presence
 
 from shutil import copyfile
+from contextlib import suppress
 
 class CacheManager:
     def __init__(self):
@@ -60,6 +62,8 @@ class CacheManager:
 class Client:
     def __init__(self, app, ip, port, username):
         self.app = app
+        self.ip = ip
+        self.port = port
         self.addr = (ip,port)
         self.username = username
         self.s = socket.socket()
@@ -130,8 +134,17 @@ class Client:
                 continue
 
             data = pickle.loads(data)
+            if data["method"] == "songStatus":
+                try:
+                    self.app.log_frame.upload_win.updateStatus(data["speed"], 
+                    data["received"])
+                except:
+                    pass
+
+            elif data["method"] == "songReceived":
+                self.app.log_frame.upload_win.onReceive()
             
-            if data["method"] == "returnTracks":
+            elif data["method"] == "returnTracks":
                 if self.app.log_frame.req_win:
                     self.app.log_frame.req_win.loadTracks(data["data"])
             
@@ -206,14 +219,9 @@ class Client:
             showerror("Connection", "Connection has been lost.")
 
     def uploadSong(self, path):
-        songname = os.path.basename(path)
-        with open(path, "rb") as f:
-            song = f.read()
-        self.t.sendDataPickle(
-            {"method": "song",
-            "songname": songname}
-        )
-        self.t.send(song)
+        self.ft = ClientFT(self, self.ip, self.port+1)
+        if self.ft.connect():
+            self.ft.upload(path)
 
     def getTracks(self):
         self.t.sendDataPickle({"method":"gettracks"})
@@ -301,6 +309,7 @@ class LogFrame(LabelFrame):
         self.parent = parent
 
         self.log_text = Text(self, width=40, height=10, state="disabled")
+        self.upload_win = None
         #self.log_entry = Entry(self, width=45)
         #self.log_entry.bind("<Return>", self.messageAction)
 
@@ -335,8 +344,9 @@ class LogFrame(LabelFrame):
         self.parent.setStatusLabel(f"Uploading {os.path.basename(file)}")
         self.parent.log(f"Uploading {os.path.basename(file)}")        
         self.upload_btn.config(state="disabled", text="Uploading...")
-        threading.Thread(target=self.parent.connect_frame.client.uploadSong,
-                         args=(file,)).start()
+        
+        self.upload_win = UploadTopLevel(self.parent, file)
+        self.upload_win.mainloop()
 
     def startRequestWindow(self):
         if not self.parent.connect_frame.client:
@@ -477,6 +487,100 @@ class RequestTopLevel(Toplevel):
         self.parent.connect_frame.client.reqSong(songname)
         self.destroy()
 
+class UploadTopLevel(Toplevel):
+    def __init__(self, parent, file, *args, **kwargs) -> None:
+        Toplevel.__init__(self, parent, *args, **kwargs)
+        self.parent = parent
+        self.file = file
+        self.filename = os.path.basename(file)
+
+        self.title("Upload Window")
+        self.resizable(0,0)
+        self.protocol("WM_DELETE_WINDOW", self.cancel)
+
+        self.canv_w = 300
+        self.canv_h = 80
+        self.canv_count = self.canv_h//15
+        self.points = []
+
+        self.title_label = Label(self, text=f"Uploading {self.filename[:25]}...")
+        self.graph_canvas = Canvas(self, width=self.canv_w, height=self.canv_h, background="white")
+        self.speed_label = Label(self, text="Loading...")
+        self.percent_label = Label(self, text="Loading...")
+        self.cancel_btn = Button(self, text="Cancel", command=self.cancel)
+
+        self.title_label.grid(row=0, column=0, columnspan=2, pady=(10,0))
+        self.graph_canvas.grid(row=1, column=0, columnspan=2, padx=15, pady=8)
+        self.speed_label.grid(row=2, column=0, padx=3, pady=3)
+        self.percent_label.grid(row=2, column=1, padx=3, pady=3)
+        self.cancel_btn.grid(row=3, column=0, columnspan=2, padx=3, pady=3)
+
+        self.drawGraph()
+        self.start()
+
+    def updateStatus(self, bps, received):
+        songsize = round(os.path.getsize(self.file)/1024/1024, 1)
+        self.speed_label["text"] = f"{round(bps/1024, 1)}kbps"
+        self.percent_label["text"] = f"Sent: {round(received/1024/1024, 1)}MB/{songsize}MB"
+        self.updateGraph(bps)
+
+    def start(self):
+        copyfile(self.file, "./sharedmusic/"+os.path.basename(self.file))
+        threading.Thread(
+            target=self.parent.connect_frame.client.uploadSong, args=(self.file,)
+        ).start()
+        
+
+    def onReceive(self):
+        self.parent.log("The song has been uploaded!\nNow you can request it.", 
+        "green")
+        self.parent.resetStatusLabel()
+        self.parent.log_frame.upload_btn.configure(
+            state="normal",
+            text="Upload"
+        )
+        self.destroy()
+
+    def cancel(self):
+        self.parent.connect_frame.client.ft.stopUploading = True
+        self.parent.connect_frame.client.ft.suicide()
+        self.onCancel()
+
+    def onCancel(self):
+        self.parent.log("Upload has been canceled.", "red")
+        self.parent.resetStatusLabel()
+        self.parent.log_frame.upload_btn.configure(
+            state="normal",
+            text="Upload"
+        )
+        self.destroy()
+
+    # /////CANVAS GRAPH//////
+    def drawGraph(self):
+        self.graph_canvas.delete("all")
+        for i in range(self.canv_count+1):
+            y = self.canv_h - i*15
+            self.graph_canvas.create_line(0, y, self.canv_w+3, y, fill="#dbdbdb")
+            self.graph_canvas.create_text(25, y, text=f"{int(round((i*15)*3.333))}kb/s", font=("Arial", 8))
+    
+    def updateGraph(self, bps):
+        self.drawGraph()
+
+        y = self.canv_h - bps//1024//3.3
+        self.points.append(y)
+
+        prevoriusXY = [50,self.canv_h]
+        if len(self.points)>(self.canv_w+50)/25:
+            self.points.pop(0)
+            prevoriusXY = [50, y]
+
+        for i, y in enumerate(self.points):
+            x = i * 15 + 50
+            self.graph_canvas.create_line(prevoriusXY[0], prevoriusXY[1], x,y, fill="blue", width=3)
+            prevoriusXY = (x,y)
+
+        self.graph_canvas.create_rectangle(prevoriusXY[0]-3, prevoriusXY[1]-3, prevoriusXY[0]+3, prevoriusXY[1]+3, fill="red", outline="red")
+
 class MainApplication(Frame):
     def __init__(self, parent, *args, **kwargs) -> None:
         Frame.__init__(self, parent, *args, **kwargs)
@@ -508,6 +612,8 @@ class MainApplication(Frame):
         self.connections_frame.clear()
         self.player_frame.status_label["text"] = "Waiting for the track..."
         self.resetStatusLabel()
+        if self.log_frame.upload_win: self.log_frame.upload_win.cancel()
+
         root.focus()
 
     def setStatusLabel(self, text):
@@ -525,7 +631,7 @@ class MainApplication(Frame):
 class DSPresence:
     def __init__(self):
         self.presence = None
-        self.connect()
+        #self.connect()
 
     def connect(self):
         try:

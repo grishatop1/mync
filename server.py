@@ -10,9 +10,11 @@ from tkinter import filedialog
 from tkinter.ttk import *
 
 from modules.transfer import Transfer
+from modules.ft import ServerFT
 
 class ServerPlayer:
     PATH = "sharedmusic/"
+    UPLOAD_PATH = "sharedmusic/uploading/"
     def __init__(self, server) -> None:
         self.server = server
         self.waiting_song = None
@@ -23,19 +25,75 @@ class ServerPlayer:
         self.tracks = self.loadTracks()
 
     def loadTracks(self):
-        tracks = os.listdir(self.PATH)
-        output = {}
-        for track in tracks:
-            with open(self.PATH+track, "rb") as f:
-                data = f.read() 
-            output[track] = hash(data)
-        return output
+        tracks = [f for f in os.listdir('sharedmusic/') if os.path.isfile("sharedmusic/"+f)]
+        return tracks
 
     def addTrack(self, songname):
-        with open(self.PATH+songname, "rb") as f:
-            data = f.read()
-        self.tracks[songname] = hash(data)
+        self.tracks.append(songname)
 
+class ClientHandler:
+    def __init__(self, server, username, sock, transport):
+        self.server = server
+        self.username = username
+        self.s = sock
+        self.t = transport
+        
+        self.songhandler = False
+
+    def mainThread(self):
+        while True:
+            dataraw = self.t.recvData()
+            if not dataraw or dataraw == b"drop":
+                break
+
+            data = pickle.loads(dataraw)
+        
+
+            if data["method"] == "gettracks":
+                self.t.sendDataPickle({"method": "returnTracks", "data":self.server.player.tracks})
+
+            elif data["method"] == "req":
+                self.server.player.current_playing = None
+                self.server.player.people_ready = 0
+                songname = data["songname"]
+                self.server.player.waiting_song = songname
+                self.server.sendAll(pickle.dumps(
+                    {"method":"checksong","songname":songname}
+                ))
+
+            elif data["method"] == "reqsongfile":
+                songname = data["songname"]
+                self.t.sendDataPickle({"method":"sendingsong", "songname": songname})
+                with open(self.server.player.PATH+songname, "rb") as f:
+                    data = f.read()
+                self.t.send(data)
+
+            elif data["method"] == "ready":
+                if self.server.player.current_playing:
+                    self.t.sendDataPickle(
+                        {
+                            "method":"playtime",
+                            "songname": self.server.player.current_playing,
+                            "time": time.perf_counter()-self.server.player.current_started_time
+                        }
+                    )
+                    continue
+                self.server.player.people_ready += 1
+                if self.server.player.people_ready == len(self.server.connections):
+                    self.server.player.current_playing = self.server.player.waiting_song
+                    self.server.player.current_started_time = time.perf_counter()
+                    self.server.sendAll(b"play"+self.server.player.waiting_song.encode())
+
+            elif data["method"] == "transmit":
+                self.server.transmitAllExceptMe(data["message"], data["color"], self.username)
+                
+
+        del self.server.connections[self.username]
+        self.server.snd_connections.remove(self.username)
+        self.server.sendAllExceptMe(pickle.dumps(
+            {"method":"connectionminus", "user":self.username}
+        ), self.username)
+        print(f"{self.username} has disconnected from the server.")
 
 class Server:
     os.makedirs("sharedmusic/", exist_ok=True)
@@ -50,13 +108,13 @@ class Server:
         self.connthreads = []
         self.snd_connections = []
 
-        self.player = ServerPlayer(self)
-
     def runServer(self):
         self.s.bind(self.addr)
         self.s.listen()
 
         print(f"Server started on {self.addr[0]}:{self.addr[1]}")
+        self.ft = ServerFT(self, self.ip, self.port+1)
+        self.player = ServerPlayer(self)
         self.acceptThread()
 
     def acceptThread(self):
@@ -79,91 +137,26 @@ class Server:
         response = t.recvData()
         if response != b"gotall": return
 
-        self.connections[username] = [conn, addr, t]
+        client = ClientHandler(self, username, conn, t)
+        self.connections[username] = client
         self.snd_connections.append(username)
         print(f"{username} connected to the server!")
-        self.sendAll(pickle.dumps(
-            {"method":"connectionplus", "user":username}
-        ))
 
         if self.player.current_playing:
             t.sendDataPickle({"method": "checksong", "songname":self.player.current_playing})
 
-        while True:
-            dataraw = t.recvData()
-            if not dataraw or dataraw == b"drop":
-                break
-
-            data = pickle.loads(dataraw)
-            
-            if data["method"] == "song":
-                self.transmitAllExceptMe(f"{username} is uploading a song!", "blue", username)
-                songname = data["songname"]
-                song = t.recvData()
-                if not song or song == b"drop":
-                    break
-                with open(self.player.PATH+songname, "wb") as f:
-                    f.write(song)
-                self.player.addTrack(songname)
-                t.sendDataPickle({"method": "songrecvd"})
-                self.transmitAllExceptMe(f"{username} has uploaded a song!", "blue", username)
-
-            elif data["method"] == "gettracks":
-                t.sendDataPickle({"method": "returnTracks", "data":self.player.tracks})
-
-            elif data["method"] == "req":
-                self.player.current_playing = None
-                self.player.people_ready = 0
-                songname = data["songname"]
-                self.player.waiting_song = songname
-                self.sendAll(pickle.dumps(
-                    {"method":"checksong","songname":songname}
-                ))
-
-            elif data["method"] == "reqsongfile":
-                songname = data["songname"]
-                t.sendDataPickle({"method":"sendingsong", "songname": songname})
-                with open(self.player.PATH+songname, "rb") as f:
-                    data = f.read()
-                t.send(data)
-
-            elif data["method"] == "ready":
-                if self.player.current_playing:
-                    t.sendDataPickle(
-                        {
-                            "method":"playtime",
-                            "songname": self.player.current_playing,
-                            "time": time.perf_counter()-self.player.current_started_time
-                        }
-                    )
-                    continue
-                self.player.people_ready += 1
-                if self.player.people_ready == len(self.connections):
-                    self.player.current_playing = self.player.waiting_song
-                    self.player.current_started_time = time.perf_counter()
-                    self.sendAll(b"play"+self.player.waiting_song.encode())
-
-            elif data["method"] == "transmit":
-                self.transmitAllExceptMe(data["message"], data["color"], username)
-                
-
-        del self.connections[username]
-        self.snd_connections.remove(username)
-        self.sendAllExceptMe(pickle.dumps(
-            {"method":"connectionminus", "user":username}
-        ), username)
-        print(f"{username} has disconnected from the server.")
+        client.mainThread()
 
     def sendAll(self, data):
         for username in self.connections:
-            self.connections[username][2].send(data)
+            self.connections[username].t.send(data)
 
     def sendAllExceptMe(self, data, senderUsername):
         for username in self.connections:
             if username == senderUsername:
                 continue
             else:
-               self.connections[username][2].send(data)
+               self.connections[username].t.send(data)
 
     def transmitAllExceptMe(self, message, color, username):
         self.sendAllExceptMe(pickle.dumps(
@@ -176,6 +169,12 @@ if __name__ == "__main__":
     main.title("Mync Server")
     main.geometry("255x100")
     main.resizable(False,False)
+
+    runInstantly = True
+    if runInstantly:
+        server = Server("192.168.0.33", 8888)
+        server.runServer()
+        quit()
 
     def help_(*args):
         messagebox.showinfo(title="How to use",message=
