@@ -525,6 +525,7 @@ class UploadTopLevel(Toplevel):
         self.destroy()
 
     def cancel(self):
+        if not self.winfo_exists(): return
         self.parent.connect_frame.client.ft.stopUploading = True
         self.parent.connect_frame.client.ft.suicide()
         self.onCancel()
@@ -595,7 +596,7 @@ class MainApplication(Frame):
         self.connections_frame.clear()
         self.player_frame.status_label["text"] = "Waiting for the track..."
         self.resetStatusLabel()
-        if self.log_frame.upload_win: self.log_frame.upload_win.cancel()
+        self.log_frame.upload_win.cancel()
 
         root.focus()
 
