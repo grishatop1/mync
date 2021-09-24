@@ -96,7 +96,7 @@ class Client:
             return
         try:
             users = pickle.loads(connections)
-        except pickle.UnpicklingError:
+        except:
             self.app.connect_frame.setNormalState()
             showwarning("Connection", "Couldn't connect to the server.")
             return
@@ -106,6 +106,7 @@ class Client:
         threading.Thread(target=self.mainThread, daemon=True).start()
 
         self.app.connections_frame.addUsers(users)
+        self.app.connections_frame.addUser(self.username)
         self.app.connect_frame.setConnectedState()
         showinfo("Connection", "Connected to the server!")
 

@@ -145,6 +145,10 @@ class Server:
         if self.player.current_playing:
             t.sendDataPickle({"method": "checksong", "songname":self.player.current_playing})
 
+        self.sendAllExceptMe(pickle.dumps(
+            {"method": "connectionplus", "user": username}
+        ), username)
+
         client.mainThread()
 
     def sendAll(self, data):

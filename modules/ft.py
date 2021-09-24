@@ -22,6 +22,7 @@ class SongHandler:
         self.started = time.perf_counter()
         self.done = False
 
+        self.server.transmitAllExceptMe(f"{self.username} is started uploading!", "blue", self.username)
         os.makedirs("sharedmusic/uploading/", exist_ok=True)
         self.f = open("sharedmusic/uploading/"+self.songname+".upload", "ab")
         threading.Thread(target=self.resultThread, daemon=True).start()
@@ -52,7 +53,7 @@ class SongHandler:
             os.remove("sharedmusic/uploading/" + self.songname + ".upload")
         except:
             pass
-        self.server.transmitAllExceptMe(f"{self.username} canceled upload...", "black", self.username)
+        self.server.transmitAllExceptMe(f"{self.username} has canceled upload...", "blue", self.username)
 
     def close(self):
         self.done = True
