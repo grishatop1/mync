@@ -47,7 +47,6 @@ class ClientHandler:
                 break
 
             data = pickle.loads(dataraw)
-        
 
             if data["method"] == "gettracks":
                 self.t.sendDataPickle({"method": "returnTracks", "data":self.server.player.tracks})

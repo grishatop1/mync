@@ -15,6 +15,7 @@ class SongHandler:
     def __init__(self, server, t, username, songname, songsize):
         self.server = server
         self.t = t
+
         self.username = username
         self.songname = songname
         self.songsize = songsize
@@ -32,15 +33,15 @@ class SongHandler:
             now = time.perf_counter() - self.started
             result = self.received/now
             self.t.sendDataPickle(
-                {
-                    "method":"songStatus",
-                    "speed": int(result),
-                    "received": self.received
-                }
+                [
+                    int(result),
+                    self.received
+                ]
             )
             time.sleep(0.5)
 
     def write(self, data):
+        if self.done: return
         self.f.write(data)
         self.received += len(data)
         if self.received == self.songsize:
@@ -53,9 +54,10 @@ class SongHandler:
             os.remove("sharedmusic/uploading/" + self.songname + ".upload")
         except:
             pass
-        self.server.transmitAllExceptMe(f"{self.username} has canceled upload...", "blue", self.username)
+        self.server.transmitAllExceptMe(f"{self.username} has canceled the upload...", "blue", self.username)
 
     def close(self):
+        self.t.send(b"receivedSuccess")
         self.done = True
         self.f.close()
         moveFile("sharedmusic/uploading/"+self.songname+".upload", "sharedmusic/"+self.songname)
@@ -101,11 +103,9 @@ class ServerFT:
 
         data = t.recvData()
         songname, songsize = pickle.loads(data)
-        client.songhandler = SongHandler(self.server, client.t, username, songname, songsize)
-        t.send(b"readyToReceive")
+        client.songhandler = SongHandler(self.server, t, username, songname, songsize)
 
         while True:
-            time.sleep(0.02)#20ms fake ping (bad)
             data = t.recvData()
             if not data or data == b"drop":
                 client.songhandler.abort()
@@ -139,6 +139,24 @@ class ClientFT:
             return
 
         return True
+    
+    def statusReceiver(self):
+        while True:
+            data = self.t.recvData()
+            if not data or data == b"drop":
+                break
+
+            if data == b"receivedSuccess":
+                self.client.app.log_frame.upload_win.onReceive()
+                break
+
+            speed, received = pickle.loads(data)
+            try:
+                self.client.app.log_frame.upload_win.updateStatus(speed, 
+                    received)
+            except:
+                pass
+        self.suicide()
 
     def upload(self, path):
         songname = os.path.basename(path)
@@ -146,9 +164,8 @@ class ClientFT:
         self.t.sendDataPickle(
             [songname, songsize]
         )
-        response = self.t.recvData()
-        if response != b"readyToReceive":
-            return False
+        self.t.recvData()
+        threading.Thread(target=self.statusReceiver, daemon=True).start()
         with open(path, "rb") as f:
             while not self.stopUploading:
                 song = f.read(1024*4)

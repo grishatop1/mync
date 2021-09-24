@@ -16,7 +16,6 @@ from modules.transfer import Transfer
 from modules.pypresence import Presence
 
 from shutil import copyfile
-from contextlib import suppress
 
 class CacheManager:
     def __init__(self):
@@ -135,30 +134,13 @@ class Client:
                 continue
 
             data = pickle.loads(data)
-            if data["method"] == "songStatus":
-                try:
-                    self.app.log_frame.upload_win.updateStatus(data["speed"], 
-                    data["received"])
-                except:
-                    pass
 
-            elif data["method"] == "songReceived":
+            if data["method"] == "songReceived":
                 self.app.log_frame.upload_win.onReceive()
             
             elif data["method"] == "returnTracks":
                 if self.app.log_frame.req_win:
                     self.app.log_frame.req_win.loadTracks(data["data"])
-            
-            elif data["method"] == "songrecvd":
-                self.app.log_frame.upload_btn.configure(
-                    state="normal",
-                    text="Upload"
-                )
-                self.app.resetStatusLabel()
-                self.app.log(
-                    "The song has been uploaded! You can now request it.",
-                    "green")
-                continue
 
             elif data["method"] == "checksong":
                 songname = data["songname"]
