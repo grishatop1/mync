@@ -29,7 +29,8 @@ class ServerPlayer:
         return tracks
 
     def addTrack(self, songname):
-        self.tracks.append(songname)
+        if not songname in self.tracks:
+            self.tracks.append(songname)
 
 class ClientHandler:
     def __init__(self, server, username, sock, transport):
