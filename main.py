@@ -402,6 +402,8 @@ class ChatSubFrame(Frame):
     def sendMsg(self, *args):
         self.input.focus()
         msg = self.input.get()
+        if not msg: return
+        if msg == "Enter message": return
         self.input.delete(0, "end")
         if self.parent.parent.connect_frame.client:
             self.parent.parent.connect_frame.client.transmitMsg(
