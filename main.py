@@ -1,4 +1,3 @@
-from modules.ft import ClientFT
 import os
 import time
 import socket
@@ -14,6 +13,7 @@ from tkinter import filedialog
 
 from modules.transfer import Transfer
 from modules.pypresence import Presence
+from modules.ft import ClientFT
 
 from shutil import copyfile
 
