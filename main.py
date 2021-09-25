@@ -293,8 +293,6 @@ class LogFrame(LabelFrame):
 
         self.log_text = Text(self, width=40, height=10, state="disabled")
         self.upload_win = None
-        #self.log_entry = Entry(self, width=45)
-        #self.log_entry.bind("<Return>", self.messageAction)
 
         self.log_text.tag_configure("green", foreground="green")
         self.log_text.tag_configure("red", foreground="red")
@@ -307,10 +305,13 @@ class LogFrame(LabelFrame):
         self.req_btn = Button(self, text="Request a song",
                               command=self.startRequestWindow)
 
-        self.log_text.grid(row=0, column=0, columnspan=2, padx=3, pady=3)
-        self.upload_btn.grid(row=1, column=0, columnspan=1, pady=3)
-        self.req_btn.grid(row=1, column=1, columnspan=1, pady=3)
-        #self.log_entry.grid(row=2, column=0, columnspan=2, padx=3, pady=3)
+        self.log_text.grid(row=1, column=0, columnspan=2, padx=3, pady=3)
+        self.upload_btn.grid(row=0, column=0, columnspan=1, pady=3)
+        self.req_btn.grid(row=0, column=1, columnspan=1, pady=3)
+
+        self.chat_subframe = ChatSubFrame(self)
+        self.chat_subframe.grid(row=2, column=0, columnspan=2, sticky="we")
+
 
     def startUploadThread(self):
         if not self.parent.connect_frame.client:
@@ -352,14 +353,36 @@ class LogFrame(LabelFrame):
         self.log_text.delete("1.0", "end")
         self.log_text["state"] = "disabled"
         
+class ChatSubFrame(Frame):
+    def __init__(self, parent, *args, **kwargs) -> None:
+        Frame.__init__(self, parent, *args, **kwargs)
+        self.parent = parent
 
+        self.message = StringVar()
+        
+        self.input = PlaceholderEntry(
+            self,
+            "Enter message",
+            style="TEntry",
+            placeholder_style="Placeholder.TEntry",
+            width=45
+        )
+        self.send_btn = Button(self, text="Send",
+                                  command=self.send_msg, width=5)
+
+        self.input.grid(row=0, column=0, padx=3, pady=3, ipady=1, sticky="we")
+        self.send_btn.grid(row=0, column=1, padx=3, pady=3, sticky="e")
+
+    def send_msg(self):
+        #needs backend!
+        pass
 
 class ConnectionsFrame(LabelFrame):
     def __init__(self, parent, *args, **kwargs) -> None:
         LabelFrame.__init__(self, parent, *args, **kwargs)
         self.parent = parent
 
-        self.connections_listbox = Listbox(self)
+        self.connections_listbox = Listbox(self, width=30)
         self.connections_listbox.pack(padx=3, pady=3)
 
     def addUser(self, username):
@@ -428,6 +451,32 @@ class PlayerFrame(LabelFrame):
         volume = self.volume_var.get()
         pygame.mixer.music.set_volume(volume/100)
         self.parent.cache.write("volume", volume)
+
+class PlaceholderEntry(Entry):
+    def __init__(self, container,placeholder,placeholder_style,*args, **kwargs):
+        super().__init__(container, *args, **kwargs)
+        self.placeholder = placeholder
+
+        self.field_style = kwargs.pop("style", "TEntry")
+        self.placeholder_style=kwargs.pop("placeholder_style",self.field_style)
+        self["style"] = self.placeholder_style
+
+        self.insert("0", self.placeholder)
+        self["foreground"] = "gray"
+        self.bind("<FocusIn>", self._clear_placeholder)
+        self.bind("<FocusOut>", self._add_placeholder)
+
+    def _clear_placeholder(self, e):
+        if self["style"] == self.placeholder_style:
+            self.delete("0", "end")
+            self["style"] = self.field_style
+            self["foreground"] = "black"
+
+    def _add_placeholder(self, e):
+        if not self.get():
+            self.insert("0", self.placeholder)
+            self["style"] = self.placeholder_style
+            self["foreground"] = "gray"
 
 class RequestTopLevel(Toplevel):
     def __init__(self, parent, *args, **kwargs) -> None:
@@ -661,6 +710,9 @@ got the program) at https://github.com/grishatop1/mync!
 ---------
 ''')
 
+def unfocus(self, *args, **kwargs):
+    root.focus()
+
 if __name__ == "__main__":
     root = Tk()
     root.title("Mync Client")
@@ -672,6 +724,7 @@ if __name__ == "__main__":
 
     app = MainApplication(root)
     app.pack(side="top", fill="both", expand=True)
+    app.bind("<Button-1>", unfocus)
 
     root.bind("<F1>",about)
     menu = Menu(root)
