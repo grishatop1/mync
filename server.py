@@ -91,10 +91,26 @@ class ClientHandler:
                     f"[{self.username}]: {data['message']}", 
                     data["color"],
                     self.username)
+
+            elif data["method"] == "im-muted":
+                self.server.renameSndUser(self.username, self.username+" (muted)")
+                self.server.sendAll(
+                    pickle.dumps(
+                        {"method":"in-mute", "user": self.username}
+                    )
+                )
+
+            elif data["method"] == "im-unmuted":
+                self.server.renameSndUser(self.username+" (muted)", self.username)
+                self.server.sendAll(
+                    pickle.dumps(
+                        {"method":"in-outmute", "user": self.username}
+                    )
+                )
                 
 
         del self.server.connections[self.username]
-        self.server.snd_connections.remove(self.username)
+        self.server.removeSndUser(self.username)
         self.server.sendAllExceptMe(pickle.dumps(
             {"method":"connectionminus", "user":self.username}
         ), self.username)
@@ -171,6 +187,18 @@ class Server:
         self.sendAllExceptMe(pickle.dumps(
             {"method":"transmit", "message": message, "color":color}
         ), username)
+
+    def renameSndUser(self, old, new):
+        try:
+            self.snd_connections.remove(old)
+            self.snd_connections.append(new)
+        except:pass
+
+    def removeSndUser(self, username):
+        try:
+            self.snd_connections.remove(username)
+        except:
+            self.snd_connections.remove(username+" (muted)")
 
 
 if __name__ == "__main__":

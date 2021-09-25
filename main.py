@@ -202,6 +202,18 @@ class Client:
                     "blue"
                 )
 
+            elif data["method"] == "in-mute":
+                self.app.connections_frame.renameUser(
+                    data["user"],
+                    data["user"] + " (muted)"
+                )
+
+            elif data["method"] == "in-outmute":
+                self.app.connections_frame.renameUser(
+                    data["user"] + " (muted)",
+                    data["user"]
+                )
+
         if not self.force_disconnect:
             self.alive = False
             self.s.close()
@@ -223,6 +235,16 @@ class Client:
     def transmitMsg(self, message, color="black"):
         self.t.sendDataPickle({"method":"transmit", "message":message,
                                "color": color}, blocking=False)
+
+    def transmitMuted(self, muted):
+        if muted:
+            self.t.sendDataPickle(
+                {"method": "im-muted"}
+            )
+        else:
+            self.t.sendDataPickle(
+                {"method": "im-unmuted"}
+            )
 
 class ConnectFrame(LabelFrame):
     def __init__(self, parent, *args, **kwargs) -> None:
@@ -407,9 +429,19 @@ class ConnectionsFrame(LabelFrame):
         for username in connections:
             self.addUser(username)
 
+    def renameUser(self, username, new):
+        try:
+            idx = self.removeUser(username)
+            self.connections_listbox.insert(idx, new)
+        except: pass
+
     def removeUser(self, username):
-        idx = self.connections_listbox.get(0, "end").index(username)
+        try:
+            idx = self.connections_listbox.get(0, "end").index(username)
+        except:
+            idx = self.connections_listbox.get(0, "end").index(username+" (muted)")
         self.connections_listbox.delete(idx)
+        return idx
 
     def clear(self):
         self.connections_listbox.delete(0, "end")
@@ -422,6 +454,7 @@ class PlayerFrame(LabelFrame):
 
         self.player = None
         self.start_time = 0
+        self.last_volume = int(self.parent.cache.read("volume"))
 
         self.status_label = Label(self, text="Waiting for the track...")
         self.volume_label = Label(self, text="Volume:")
@@ -466,6 +499,13 @@ class PlayerFrame(LabelFrame):
         volume = self.volume_var.get()
         pygame.mixer.music.set_volume(volume/100)
         self.parent.cache.write("volume", volume)
+        if self.parent.connect_frame.client:
+            if volume == 0 and self.last_volume > 0:
+                self.parent.connect_frame.client.transmitMuted(True)
+            elif self.last_volume == 0 and volume > 0:
+                self.parent.connect_frame.client.transmitMuted(False)
+
+        self.last_volume = volume
 
 class PlaceholderEntry(Entry):
     def __init__(self, container,placeholder,placeholder_style,*args, **kwargs):
@@ -660,7 +700,7 @@ class MainApplication(Frame):
         self.connections_frame.clear()
         self.player_frame.status_label["text"] = "Waiting for the track..."
         self.resetStatusLabel()
-        self.log_frame.upload_win.cancel()
+        if self.log_frame.upload_win:self.log_frame.upload_win.cancel()
 
         root.focus()
 
