@@ -208,7 +208,7 @@ if __name__ == "__main__":
     main.geometry("255x100")
     main.resizable(False,False)
 
-    runInstantly = True
+    runInstantly = False
     if runInstantly:
         server = Server("192.168.0.33", 8888)
         server.runServer()

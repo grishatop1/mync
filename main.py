@@ -721,7 +721,7 @@ class MainApplication(Frame):
 class DSPresence:
     def __init__(self):
         self.presence = None
-        #self.connect()
+        self.connect()
 
     def connect(self):
         try:
@@ -789,4 +789,5 @@ if __name__ == "__main__":
     menu.add_command(label='About', command=about, underline=0)
     root.config(menu=menu)
 
+    root.iconbitmap("media/iconica.ico")
     root.mainloop()
