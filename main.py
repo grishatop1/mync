@@ -300,8 +300,6 @@ class LogFrame(LabelFrame):
         self.parent = parent
 
         self.log_text = Text(self, width=40, height=10, state="disabled")
-        #self.log_entry = Entry(self, width=45)
-        #self.log_entry.bind("<Return>", self.messageAction)
 
         self.log_text.tag_configure("green", foreground="green")
         self.log_text.tag_configure("red", foreground="red")
@@ -317,25 +315,9 @@ class LogFrame(LabelFrame):
         self.log_text.grid(row=1, column=0, columnspan=2, padx=3, pady=3)
         self.upload_btn.grid(row=0, column=0, columnspan=1, pady=3)
         self.req_btn.grid(row=0, column=1, columnspan=1, pady=3)
-        #self.log_entry.grid(row=2, column=0, columnspan=2, padx=3, pady=3)
 
-        self.message = StringVar()
-        
-        self.input = PlaceholderEntry(
-            self,
-            "Enter message",
-            style="TEntry",
-            placeholder_style="Placeholder.TEntry",
-            width=40)
-        self.input.grid(row=2, column=0, padx=3, pady=3, sticky="we")
-        
-        self.send_btn = Button(self, text="➡️",
-                                  command=self.send_msg)
-        self.send_btn.grid(row=2, column=1, padx=3, pady=3, sticky="we")
-
-    def send_msg(*args):
-        #needs backend!
-        pass
+        self.chat_subframe = ChatSubFrame(self)
+        self.chat_subframe.grid(row=2, column=0, columnspan=2, sticky="we")
 
 
     def startUploadThread(self):
@@ -377,7 +359,29 @@ class LogFrame(LabelFrame):
         self.log_text.delete("1.0", "end")
         self.log_text["state"] = "disabled"
         
+class ChatSubFrame(Frame):
+    def __init__(self, parent, *args, **kwargs) -> None:
+        Frame.__init__(self, parent, *args, **kwargs)
+        self.parent = parent
 
+        self.message = StringVar()
+        
+        self.input = PlaceholderEntry(
+            self,
+            "Enter message",
+            style="TEntry",
+            placeholder_style="Placeholder.TEntry",
+            width=45
+        )
+        self.send_btn = Button(self, text="Send",
+                                  command=self.send_msg, width=5)
+
+        self.input.grid(row=0, column=0, padx=3, pady=3, ipady=1, sticky="we")
+        self.send_btn.grid(row=0, column=1, padx=3, pady=3, sticky="e")
+
+    def send_msg(self):
+        #needs backend!
+        pass
 
 class ConnectionsFrame(LabelFrame):
     def __init__(self, parent, *args, **kwargs) -> None:
@@ -569,7 +573,7 @@ class MainApplication(Frame):
 class DSPresence:
     def __init__(self):
         self.presence = None
-        self.connect()
+        #self.connect()
 
     def connect(self):
         try:
@@ -615,6 +619,9 @@ got the program) at https://github.com/grishatop1/mync!
 ---------
 ''')
 
+def unfocus(self, *args, **kwargs):
+    root.focus()
+
 if __name__ == "__main__":
     root = Tk()
     root.title("Mync Client")
@@ -626,6 +633,7 @@ if __name__ == "__main__":
 
     app = MainApplication(root)
     app.pack(side="top", fill="both", expand=True)
+    app.bind("<Button-1>", unfocus)
 
     root.bind("<F1>",about)
     menu = Menu(root)
