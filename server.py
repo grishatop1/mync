@@ -84,7 +84,13 @@ class ClientHandler:
                     self.server.sendAll(b"play"+self.server.player.waiting_song.encode())
 
             elif data["method"] == "transmit":
-                self.server.transmitAllExceptMe(data["message"], data["color"], self.username)
+                self.t.sendDataPickle(
+                    {"method":"echo", "msg": data["message"]}
+                )
+                self.server.transmitAllExceptMe(
+                    f"[{self.username}]: {data['message']}", 
+                    data["color"],
+                    self.username)
                 
 
         del self.server.connections[self.username]

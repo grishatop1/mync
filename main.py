@@ -195,6 +195,13 @@ class Client:
             elif data["method"] == "transmit":
                 self.app.log(data["message"], data["color"])
 
+            elif data["method"] == "echo":
+                msg = data["msg"]
+                self.app.log_frame.insertTextLine(
+                    f"[You]: {msg}",
+                    "blue"
+                )
+
         if not self.force_disconnect:
             self.alive = False
             self.s.close()
@@ -294,11 +301,9 @@ class LogFrame(LabelFrame):
         self.log_text = Text(self, width=40, height=10, state="disabled")
         self.upload_win = None
 
-        self.log_text.tag_configure("green", foreground="green")
-        self.log_text.tag_configure("red", foreground="red")
-        self.log_text.tag_configure("black", foreground="black")
-        self.log_text.tag_configure("orange", foreground="orange")
-        self.log_text.tag_configure("blue", foreground="blue")
+        colors = ["green", "red", "blue", "black", "orange", "pink"]
+        for color in colors:
+            self.log_text.tag_configure(color, foreground=color)
 
         self.upload_btn = Button(self, text="Upload",
                                  command=self.startUploadThread)
@@ -357,25 +362,35 @@ class ChatSubFrame(Frame):
     def __init__(self, parent, *args, **kwargs) -> None:
         Frame.__init__(self, parent, *args, **kwargs)
         self.parent = parent
-
-        self.message = StringVar()
         
         self.input = PlaceholderEntry(
             self,
             "Enter message",
             style="TEntry",
             placeholder_style="Placeholder.TEntry",
-            width=45
+            width=45,
         )
+        self.input.bind("<Return>", self.sendMsg)
         self.send_btn = Button(self, text="Send",
-                                  command=self.send_msg, width=5)
+                                  command=self.sendMsg, width=5)
 
         self.input.grid(row=0, column=0, padx=3, pady=3, ipady=1, sticky="we")
         self.send_btn.grid(row=0, column=1, padx=3, pady=3, sticky="e")
 
-    def send_msg(self):
-        #needs backend!
-        pass
+    def sendMsg(self, *args):
+        self.input.focus()
+        msg = self.input.get()
+        self.input.delete(0, "end")
+        if self.parent.parent.connect_frame.client:
+            self.parent.parent.connect_frame.client.transmitMsg(
+                msg, 
+                "blue"
+            )
+        else:
+           self.parent.insertTextLine(
+               f"[Offline]: {msg}",
+               "black"
+           )
 
 class ConnectionsFrame(LabelFrame):
     def __init__(self, parent, *args, **kwargs) -> None:
