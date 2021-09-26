@@ -72,9 +72,10 @@ class ClientHandler:
                 if self.server.player.current_playing:
                     self.t.sendDataPickle(
                         {
-                            "method":"playtime",
+                            "method": "play",
                             "songname": self.server.player.current_playing,
-                            "time": time.perf_counter()-self.server.player.current_started_time
+                            "play_at": time.time(),
+                            "starttime": time.perf_counter()-self.server.player.current_started_time
                         }
                     )
                     continue
@@ -87,7 +88,8 @@ class ClientHandler:
                         {
                             "method": "play",
                             "songname": self.server.player.waiting_song,
-                            "play_at": play_at
+                            "play_at": play_at,
+                            "starttime": 0
                         }
                     ))
 
@@ -215,7 +217,7 @@ if __name__ == "__main__":
     main.geometry("255x100")
     main.resizable(False,False)
 
-    runInstantly = False
+    runInstantly = True
     if runInstantly:
         server = Server("192.168.0.33", 8888)
         server.runServer()

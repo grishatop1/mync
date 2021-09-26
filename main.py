@@ -130,8 +130,9 @@ class Client:
             if data["method"] == "play":
                 play_at = data["play_at"]
                 songname = data["songname"]
+                starttime = data["starttime"]
                 try:
-                    self.app.player_frame.playTrack(songname, play_at)
+                    self.app.player_frame.playTrack(songname, play_at, starttime)
                     self.app.log(f"Playing {songname}", "green")
                 except:
                     showerror("Player", "Error playing track!")
@@ -184,15 +185,6 @@ class Client:
             elif data["method"] == "connectionminus":
                 user = data["user"]
                 self.app.connections_frame.removeUser(user)
-
-            elif data["method"] == "playtime":
-                songname = data["songname"]
-                start_time = data["time"]
-                try:
-                    self.app.player_frame.playTrack(songname, start_time)
-                    self.app.log(f"Playing {songname}", "green")
-                except:
-                    showerror("Player", "Error playing track!")
 
             elif data["method"] == "transmit":
                 self.app.log(data["message"], data["color"])

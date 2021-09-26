@@ -45,7 +45,7 @@ class SongHandler:
         self.f.write(data)
         self.received += len(data)
         if self.received == self.songsize:
-            self.close()
+            self.success()
 
     def abort(self):
         self.done = True
@@ -56,10 +56,9 @@ class SongHandler:
             pass
         self.server.transmitAllExceptMe(f"{self.username} has canceled the upload...", "blue", self.username)
 
-    def close(self):
+    def success(self):
+        self.close()
         self.t.send(b"receivedSuccess")
-        self.done = True
-        self.f.close()
         moveFile("servermusic/uploading/"+self.songname+".upload", "servermusic/"+self.songname)
         self.server.player.addTrack(self.songname)
         self.t.sendDataPickle(
@@ -69,6 +68,10 @@ class SongHandler:
         )
         self.server.transmitAllExceptMe(f"{self.username} has uploaded the song!!!",
                 "blue", self.username)
+
+    def close(self):
+        self.done = True
+        self.f.close()
 
 class ServerFT:
     def __init__(self, server, ip, port):
@@ -108,9 +111,8 @@ class ServerFT:
         while True:
             data = t.recvData()
             if not data or data == b"drop":
-                client.songhandler.abort()
                 break
-   
+
             client.songhandler.write(data)
 
 class ClientFT:
