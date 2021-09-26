@@ -13,8 +13,8 @@ from modules.transfer import Transfer
 from modules.ft import ServerFT
 
 class ServerPlayer:
-    PATH = "sharedmusic/"
-    UPLOAD_PATH = "sharedmusic/uploading/"
+    PATH = "servermusic/"
+    UPLOAD_PATH = "servermusic/uploading/"
     def __init__(self, server) -> None:
         self.server = server
         self.waiting_song = None
@@ -25,7 +25,7 @@ class ServerPlayer:
         self.tracks = self.loadTracks()
 
     def loadTracks(self):
-        tracks = [f for f in os.listdir('sharedmusic/') if os.path.isfile("sharedmusic/"+f)]
+        tracks = [f for f in os.listdir('servermusic/') if os.path.isfile("servermusic/"+f)]
         return tracks
 
     def addTrack(self, songname):
@@ -118,7 +118,7 @@ class ClientHandler:
         print(f"{self.username} has disconnected from the server.")
 
 class Server:
-    os.makedirs("sharedmusic/", exist_ok=True)
+    os.makedirs("servermusic/", exist_ok=True)
     def __init__(self, ip, port) -> None:
         self.ip = ip
         self.port = port

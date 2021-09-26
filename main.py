@@ -22,6 +22,7 @@ class CacheManager:
         self.appdata = os.getenv('APPDATA').replace("\\", "/")
         self.cache_path = self.appdata+"/.mync/"
         self.cache_file = self.cache_path+"cache.temp"
+        self.sharedmusic = self.cache_path+"/sharedmusic/"
         self._checkInitial()
 
     def _checkInitial(self):
@@ -144,7 +145,7 @@ class Client:
 
             elif data["method"] == "checksong":
                 songname = data["songname"]
-                tracks = os.listdir("./sharedmusic/")
+                tracks = os.listdir(self.app.cache.sharedmusic)
                 if not songname in tracks:
                     self.t.sendDataPickle(
                         {"method": "reqsongfile", "songname": songname}
@@ -165,7 +166,7 @@ class Client:
                 data = self.t.recvData()
                 if not data or data == b"drop":
                     break
-                with open("./sharedmusic/"+songname, "wb") as f:
+                with open(self.parent.cache.sharedmusic+songname, "wb") as f:
                     f.write(data)
                 self.t.sendDataPickle(
                         {"method": "ready", "songname": songname}
@@ -351,7 +352,7 @@ class LogFrame(LabelFrame):
                                           filetypes=(("Music Files","*.mp3"),))
         if not file: return
 
-        copyfile(file, "./sharedmusic/"+os.path.basename(file))
+        copyfile(file, self.parent.cache.sharedmusic+os.path.basename(file))
         self.parent.setStatusLabel(f"Uploading {os.path.basename(file)}")
         self.parent.log(f"Uploading {os.path.basename(file)}")        
         self.upload_btn.config(state="disabled", text="Uploading...")
@@ -476,7 +477,7 @@ class PlayerFrame(LabelFrame):
         self.volume_scale.grid(row=1, column=1, padx=3, pady=3)
 
     def playTrack(self, songname, start_time=0):
-        pygame.mixer.music.load("sharedmusic\\"+songname)
+        pygame.mixer.music.load(f"{self.parent.cache.sharedmusic}\\"+songname)
         pygame.mixer.music.play(start=start_time, loops=0)
         root.deiconify()
         root.title(f"Mync Client - Playing {songname[:100]}")
@@ -614,7 +615,7 @@ class UploadTopLevel(Toplevel):
         self.updateGraph(bps)
 
     def start(self):
-        copyfile(self.file, "./sharedmusic/"+os.path.basename(self.file))
+        copyfile(self.file, self.parent.cache.sharedmusic+os.path.basename(self.file))
         threading.Thread(
             target=self.parent.connect_frame.client.uploadSong, args=(self.file,)
         ).start()
@@ -775,13 +776,12 @@ if __name__ == "__main__":
     root.title("Mync Client")
     root.resizable(0,0)
 
-    os.makedirs("sharedmusic/", exist_ok=True)
-
     pygame.mixer.init()
 
     app = MainApplication(root)
     app.pack(side="top", fill="both", expand=True)
     app.bind("<Button-1>", unfocus)
+    os.makedirs(app.cache.sharedmusic, exist_ok=True)
 
     root.bind("<F1>",about)
     menu = Menu(root)
