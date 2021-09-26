@@ -167,7 +167,7 @@ class Client:
                 data = self.t.recvData()
                 if not data or data == b"drop":
                     break
-                with open(self.parent.cache.sharedmusic+songname, "wb") as f:
+                with open(self.app.cache.sharedmusic+songname, "wb") as f:
                     f.write(data)
                 self.t.sendDataPickle(
                         {"method": "ready", "songname": songname}
