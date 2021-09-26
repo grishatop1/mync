@@ -352,7 +352,6 @@ class LogFrame(LabelFrame):
                                           filetypes=(("Music Files","*.mp3"),))
         if not file: return
 
-        copyfile(file, self.parent.cache.sharedmusic+os.path.basename(file))
         self.parent.setStatusLabel(f"Uploading {os.path.basename(file)}")
         self.parent.log(f"Uploading {os.path.basename(file)}")        
         self.upload_btn.config(state="disabled", text="Uploading...")
@@ -615,7 +614,9 @@ class UploadTopLevel(Toplevel):
         self.updateGraph(bps)
 
     def start(self):
-        copyfile(self.file, self.parent.cache.sharedmusic+os.path.basename(self.file))
+        try:
+            copyfile(self.file, self.parent.cache.sharedmusic+os.path.basename(self.file))
+        except:pass
         threading.Thread(
             target=self.parent.connect_frame.client.uploadSong, args=(self.file,)
         ).start()
@@ -738,20 +739,20 @@ class DSPresence:
                 self.presence.update(
                     pid=os.getpid(),
                     state=text,
-                    large_image="mync",
+                    large_image="myncimage",
                     large_text="Mync!",
                     start=start_time,
                     buttons=[{"label": "Get mync", "url":
-                              "https://github.com/grishatop1/mync"}]
+                              "https://github.com/grishatop1/mync/releases"}]
                 )
             else:
                 self.presence.update(
                     pid=os.getpid(),
                     state=text,
-                    large_image="mync",
+                    large_image="myncimage",
                     large_text="Mync!",
                     buttons=[{"label": "Get mync", "url":
-                              "https://github.com/grishatop1/mync"}]
+                              "https://github.com/grishatop1/mync/releases"}]
                 )
         except:
             pass

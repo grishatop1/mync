@@ -8,8 +8,8 @@ from typing import SupportsComplex
 from modules.transfer import Transfer
 from shutil import move as moveFile
 
-SONG_PATH = "sharedmusic/"
-UPLOAD_PATH = "sharedmusic/upload/"
+SONG_PATH = "servermusic/"
+UPLOAD_PATH = "servermusic/upload/"
 
 class SongHandler:
     def __init__(self, server, t, username, songname, songsize):
@@ -24,8 +24,8 @@ class SongHandler:
         self.done = False
 
         self.server.transmitAllExceptMe(f"{self.username} is started uploading!", "blue", self.username)
-        os.makedirs("sharedmusic/uploading/", exist_ok=True)
-        self.f = open("sharedmusic/uploading/"+self.songname+".upload", "ab")
+        os.makedirs("servermusic/uploading/", exist_ok=True)
+        self.f = open("servermusic/uploading/"+self.songname+".upload", "ab")
         threading.Thread(target=self.resultThread, daemon=True).start()
 
     def resultThread(self):
@@ -51,7 +51,7 @@ class SongHandler:
         self.done = True
         self.f.close()
         try:
-            os.remove("sharedmusic/uploading/" + self.songname + ".upload")
+            os.remove("servermusic/uploading/" + self.songname + ".upload")
         except:
             pass
         self.server.transmitAllExceptMe(f"{self.username} has canceled the upload...", "blue", self.username)
@@ -60,7 +60,7 @@ class SongHandler:
         self.t.send(b"receivedSuccess")
         self.done = True
         self.f.close()
-        moveFile("sharedmusic/uploading/"+self.songname+".upload", "sharedmusic/"+self.songname)
+        moveFile("servermusic/uploading/"+self.songname+".upload", "servermusic/"+self.songname)
         self.server.player.addTrack(self.songname)
         self.t.sendDataPickle(
             {
