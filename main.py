@@ -124,17 +124,18 @@ class Client:
             data = self.t.recvData()
             if not data or data == b"drop":
                 break
-            
-            if data[:4] == b"play":
-                songname = data[4:].decode()
+
+            data = pickle.loads(data)
+
+            if data["method"] == "play":
+                play_at = data["play_at"]
+                songname = data["songname"]
                 try:
-                    self.app.player_frame.playTrack(songname)
+                    self.app.player_frame.playTrack(songname, play_at)
                     self.app.log(f"Playing {songname}", "green")
                 except:
                     showerror("Player", "Error playing track!")
                 continue
-
-            data = pickle.loads(data)
 
             if data["method"] == "songReceived":
                 self.app.log_frame.upload_win.onReceive()
@@ -475,7 +476,7 @@ class PlayerFrame(LabelFrame):
         self.volume_label.grid(row=1, column=0, padx=3, pady=3)
         self.volume_scale.grid(row=1, column=1, padx=3, pady=3)
 
-    def playTrack(self, songname, start_time=0):
+    def playTrack(self, songname, play_at, start_time=0):
         pygame.mixer.music.load(f"{self.parent.cache.sharedmusic}\\"+songname)
         pygame.mixer.music.play(start=start_time, loops=0)
         root.deiconify()
@@ -486,7 +487,7 @@ class PlayerFrame(LabelFrame):
         )
         self.parent.ds_presence.update(
             f"{os.path.splitext(songname[:110])[0]}",
-            time.time()
+            play_at
             )
 
     def stopTrack(self):

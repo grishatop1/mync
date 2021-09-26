@@ -82,7 +82,14 @@ class ClientHandler:
                 if self.server.player.people_ready == len(self.server.connections):
                     self.server.player.current_playing = self.server.player.waiting_song
                     self.server.player.current_started_time = time.perf_counter()
-                    self.server.sendAll(b"play"+self.server.player.waiting_song.encode())
+                    play_at = time.time()
+                    self.server.sendAll(pickle.dumps(
+                        {
+                            "method": "play",
+                            "songname": self.server.player.waiting_song,
+                            "play_at": play_at
+                        }
+                    ))
 
             elif data["method"] == "transmit":
                 self.t.sendDataPickle(
