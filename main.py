@@ -535,15 +535,26 @@ class RequestTopLevel(Toplevel):
 
         self.title("Choose a song...")
         self.resizable(0,0)
-        self.geometry("400x250")
         self.grab_set() #get the all controls from root muahaha
+        self.bind("<Return>", self.play)
+
+        self.tracks = []
         
         self.status_label = Label(self,
-                                  text="Requesting songlist from server...")
+                                  text="Requesting songs from server...")
+        self.search_entry = PlaceholderEntry(
+            self, 
+            "Search for the song...",
+            style="TEntry",
+            placeholder_style="Placeholder.TEntry",
+            width=70)
         self.tracks_list = Listbox(self, width=100)
         self.choose_btn = Button(self, text="Play!", command=self.play)
 
+        self.search_entry.bind("<KeyRelease>", self.search)
+
         self.status_label.pack(padx=5, pady=5)
+        self.search_entry.pack(padx=5, pady=5)
         self.tracks_list.pack(padx=5, pady=5)
         self.choose_btn.pack(padx=5, pady=10)
 
@@ -561,13 +572,35 @@ class RequestTopLevel(Toplevel):
             self.tracks_list.insert("end", track)
         self.status_label["text"] = "Pick a song... (scrollable)"
 
-    def play(self):
+    def reloadTracks(self):
+        self.tracks_list.delete(0, "end")
+        for track in self.tracks:
+            self.tracks_list.insert("end", track)
+
+    def play(self, *args):
         try:
             songname = self.tracks_list.get(self.tracks_list.curselection())
         except:
             return
         self.parent.connect_frame.client.reqSong(songname)
         self.destroy()
+
+    def search(self, *args):
+        srch = self.search_entry.get()
+        if not srch or self.search_entry["foreground"] == "gray":
+            self.reloadTracks()
+            return
+        
+        closest = []
+        for song in self.tracks:
+            if srch.lower() in song.lower():
+                closest.append(song)
+
+        self.tracks_list.delete(0, "end")
+        for item in closest:
+            self.tracks_list.insert(END, item)
+
+        self.tracks_list.select_set(0)
 
 class UploadTopLevel(Toplevel):
     def __init__(self, parent, file, *args, **kwargs) -> None:
