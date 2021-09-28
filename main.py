@@ -570,10 +570,12 @@ class RequestTopLevel(Toplevel):
         ).start()
 
     def loadTracks(self, tracks):
-        self.tracks = tracks
-        for track in tracks:
-            self.tracks_list.insert("end", track)
-        self.status_label["text"] = "Pick a song... (scrollable)"
+        try:
+            self.tracks = tracks
+            for track in tracks:
+                self.tracks_list.insert("end", track)
+            self.status_label["text"] = "Pick a song... (scrollable)"
+        except:pass
 
     def reloadTracks(self):
         self.tracks_list.delete(0, "end")
