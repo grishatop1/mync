@@ -155,8 +155,11 @@ class Server:
         self.acceptThread()
 
     def publicIp(self):
-        ip = get('https://api.ipify.org').text
-        print(f"Your public IP: {ip}")
+        try:
+            ip = get('https://api.ipify.org').text
+            print(f"Your public IP: {ip}")
+        except:
+            pass
 
     def acceptThread(self):
         while True:
