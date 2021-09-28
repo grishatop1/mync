@@ -11,6 +11,9 @@ from tkinter.ttk import *
 from tkinter.messagebox import *
 from tkinter import filedialog
 
+from ttkbootstrap import Style
+import ttkbootstrap
+
 from modules.transfer import Transfer
 from modules.pypresence import Presence
 from modules.ft import ClientFT
@@ -317,7 +320,7 @@ class LogFrame(LabelFrame):
         LabelFrame.__init__(self, parent, *args, **kwargs)
         self.parent = parent
 
-        self.log_text = Text(self, width=40, height=10, state="disabled")
+        self.log_text = Text(self, width=50, height=10, state="disabled")
         self.upload_win = None
 
         colors = ["green", "red", "blue", "black", "orange", "pink"]
@@ -334,7 +337,7 @@ class LogFrame(LabelFrame):
         self.req_btn.grid(row=0, column=1, columnspan=1, pady=3)
 
         self.chat_subframe = ChatSubFrame(self)
-        self.chat_subframe.grid(row=2, column=0, columnspan=2, sticky="we")
+        self.chat_subframe.grid(row=2, column=0, columnspan=2)
 
 
     def startUploadThread(self):
@@ -386,7 +389,7 @@ class ChatSubFrame(Frame):
             "Enter message",
             style="TEntry",
             placeholder_style="Placeholder.TEntry",
-            width=45,
+            width=30,
         )
         self.input.bind("<Return>", self.sendMsg)
         self.send_btn = Button(self, text="Send",
@@ -478,7 +481,7 @@ class PlayerFrame(LabelFrame):
         root.title(f"Mync Client - Playing {songname[:100]}")
         self.status_label.configure(
             text=f"Playing {songname[:80]}",
-            foreground="green"
+            foreground="#c89cff"
         )
         self.parent.ds_presence.update(
             f"{os.path.splitext(songname[:110])[0]}",
@@ -490,7 +493,7 @@ class PlayerFrame(LabelFrame):
         root.title("Mync Client")
         self.status_label.configure(
             text=f"Waiting for the track...",
-            foreground="black"
+            foreground="white"
         )
 
     def setvolume(self, event=None):
@@ -742,13 +745,13 @@ class MainApplication(Frame):
     def setStatusLabel(self, text):
         self.mainstatus_label.configure(
             text=text,
-            foreground="green"
+            foreground="#c89cff"
         )
 
     def resetStatusLabel(self):
         self.mainstatus_label.configure(
             text="NETWORK IDLE",
-            foreground="black"
+            foreground="white"
         )
 
 class DSPresence:
@@ -807,6 +810,9 @@ if __name__ == "__main__":
     root = Tk()
     root.title("Mync Client")
     root.resizable(0,0)
+
+    style = Style('material-dark', "media/themes.json")
+    style.colors.set("primary", "#BB86FC")
 
     pygame.mixer.init()
 
