@@ -259,14 +259,14 @@ class LauncherGUI(Tk):
         messagebox.showinfo(title="How to use",message=
             """0) Please read before use:
 
-            1) The default port is 8888, but you can also set a custom port. First
-            check the 'Custom Port' checbox, and then type in the preferred
-            port. The checkbox must remain checked in order to use the custom
-            port.
+1) The default port is 8888, but you can also set a custom port. First
+check the 'Custom Port' checbox, and then type in the preferred
+port. The checkbox must remain checked in order to use the custom
+port.
 
-            2) Pressing the 'Start Server' button will start the server on the
-            custom port or port 8888. Pressing it again will stop the server and
-            close the launcher. You can also press F3 to launch the server.""")
+2) Pressing the 'Start Server' button will start the server on the
+custom port or port 8888. Pressing it again will stop the server and
+close the launcher. You can also press F3 to launch the server.""")
 
     #checkbox toggler for entry box
     def entrytog(self, *args):
