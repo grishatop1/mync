@@ -108,6 +108,7 @@ class Client:
         self.app.connections_frame.addUsers(users)
         self.app.connections_frame.addUser(self.username)
         self.app.connect_frame.setConnectedState()
+        self.app.ds_presence.update("Waiting for the track...")
         showinfo("Connection", "Connected to the server!")
 
         self.app.cache.write("ip", f"{self.addr[0]}:{self.addr[1]}")
@@ -117,6 +118,7 @@ class Client:
         self.force_disconnect = True
         self.alive = False
         self.t.send(b"drop")
+        self.app.ds_presence.update("Not connected.")
         self.s.close()
 
     def mainThread(self):
@@ -135,7 +137,7 @@ class Client:
                     self.app.player_frame.playTrack(songname, play_at, starttime)
                     self.app.log(f"Playing {songname}", "green")
                 except:
-                    showerror("Player", "Error playing track!")
+                    showerror("Player", f"Error playing track!\n{songname}")
                 continue
 
             if data["method"] == "songReceived":
@@ -212,6 +214,7 @@ class Client:
             self.alive = False
             self.s.close()
             self.app.resetAll()
+            self.app.ds_presence.update("Not connected.")
             showerror("Connection", "Connection has been lost.")
 
     def uploadSong(self, path):
@@ -755,7 +758,7 @@ class DSPresence:
         try:
             self.presence = Presence(889166597476982804)
             self.presence.connect()
-            self.update("Not connected")
+            self.update("Not connected.")
         except:
             pass
 

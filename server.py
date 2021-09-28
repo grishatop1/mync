@@ -20,6 +20,7 @@ class ServerPlayer:
         self.waiting_song = None
         self.current_playing = None
         self.current_started_time = 0
+        self.current_started_timetime = None
         self.people_ready = 0
 
         self.tracks = self.loadTracks()
@@ -74,7 +75,7 @@ class ClientHandler:
                         {
                             "method": "play",
                             "songname": self.server.player.current_playing,
-                            "play_at": time.time(),
+                            "play_at": self.server.current_started_timetime,
                             "starttime": time.perf_counter()-self.server.player.current_started_time
                         }
                     )
@@ -83,12 +84,12 @@ class ClientHandler:
                 if self.server.player.people_ready == len(self.server.connections):
                     self.server.player.current_playing = self.server.player.waiting_song
                     self.server.player.current_started_time = time.perf_counter()
-                    play_at = time.time()
+                    self.server.current_started_timetime = time.time()
                     self.server.sendAll(pickle.dumps(
                         {
                             "method": "play",
                             "songname": self.server.player.waiting_song,
-                            "play_at": play_at,
+                            "play_at": self.server.current_started_timetime,
                             "starttime": 0
                         }
                     ))
