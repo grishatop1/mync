@@ -12,6 +12,8 @@ from tkinter.ttk import *
 from modules.transfer import Transfer
 from modules.ft import ServerFT
 
+from requests import get
+
 class ServerPlayer:
     PATH = "servermusic/"
     UPLOAD_PATH = "servermusic/uploading/"
@@ -147,7 +149,14 @@ class Server:
         print(f"Server started on {self.addr[0]}:{self.addr[1]}")
         self.ft = ServerFT(self, self.ip, self.port+1)
         self.player = ServerPlayer(self)
+
+        threading.Thread(target=self.publicIp, daemon=True).start()
+
         self.acceptThread()
+
+    def publicIp(self):
+        ip = get('https://api.ipify.org').text
+        print(f"Your public IP: {ip}")
 
     def acceptThread(self):
         while True:
