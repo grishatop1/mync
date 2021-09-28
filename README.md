@@ -5,9 +5,13 @@
 Listen to music together in sync! Request from server's songlist or upload your own songs.
 
 ## Requirements
-**mync** requires **pygame** because it uses pygame's mixer module for playing audio.
+**mync** requires **pygame** because it uses pygame's mixer module for playing audio. **ttkbootstrap** is used for the stylised interface.
 
-Run `pip install pygame` in your CLI and that's all you need to run the app.
+Run the following commands in your CLI to get the requirements.
+
+`pip install pygame`
+
+`pip install ttkbootstrap`
 
 ## Usage
 In order to serve music as server, you need to copy your .mp3 files to the `sharedmusic` folder, and then run `server.py`. Share the IP from the console with your friends.
