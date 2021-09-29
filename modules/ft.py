@@ -104,16 +104,36 @@ class ServerFT:
         client = self.server.connections[username]
         t.send(b"gotall")
 
-        data = t.recvData()
-        songname, songsize = pickle.loads(data)
-        client.songhandler = SongHandler(self.server, t, username, songname, songsize)
+        response = t.recvData()
+        data = pickle.loads(response)
+        if data["method"] == "upload":
+            songname, songsize = data["songname"], data["songsize"]
+            client.songhandler = SongHandler(self.server, t, username, songname, songsize)
 
-        while True:
-            data = t.recvData()
-            if not data or data == b"drop":
-                break
+            while True:
+                data = t.recvData()
+                if not data or data == b"drop":
+                    break
+                client.songhandler.write(data)
 
-            client.songhandler.write(data)
+        elif data["method"] == "download":
+            songname = data["songname"]
+            songpath = "servermusic/" + songname
+            with open(songpath, "rb") as f:
+                while True:
+                    data = f.read(1024*4)
+                    if not data: break
+                    try:
+                        t.send(data)
+                    except:
+                        break
+            try:
+                response = t.recvData()
+            except:
+                pass
+        
+        conn.shutdown(2)
+        conn.close()
 
 class ClientFT:
     def __init__(self, client, ip, port):
@@ -121,6 +141,8 @@ class ClientFT:
         self.ip = ip
         self.port = port
         self.addr = (ip,port)
+
+        self.running = False
 
         self.s = socket.socket()
         self.stopUploading = False
@@ -161,10 +183,16 @@ class ClientFT:
         self.suicide()
 
     def upload(self, path):
+        if self.running: return
+        self.running = True
         songname = os.path.basename(path)
         songsize = os.path.getsize(path)
         self.t.sendDataPickle(
-            [songname, songsize]
+            {
+                "method": "upload",
+                "songname": songname,
+                "songsize": songsize
+            }
         )
         self.t.recvData()
         threading.Thread(target=self.statusReceiver, daemon=True).start()
@@ -176,7 +204,13 @@ class ClientFT:
                 self.t.send(song)
             else:
                 self.suicide()
+
+        self.running = False
         return True
+
+    def download(self, songname):
+        if self.running: return
+        self.running = True
 
     def suicide(self):
         self.s.close()

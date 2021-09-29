@@ -320,5 +320,5 @@ close the launcher. You can also press F3 to launch the server.""")
 
 
 if __name__ == "__main__":
-    app = LauncherGUI(debug=False)
+    app = LauncherGUI(debug=True)
     app.mainloop()
