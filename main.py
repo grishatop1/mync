@@ -1,5 +1,5 @@
 import os
-import time
+import sys
 import socket
 import pickle
 import threading
@@ -807,6 +807,10 @@ def unfocus(self, *args, **kwargs):
     root.focus()
 
 if __name__ == "__main__":
+    if sys.platform != "win32" and sys.platform != "win64":
+        print("Mync client supports only windows for now :/")
+        sys.exit()
+
     root = Tk()
     root.title("Mync Client")
     root.resizable(0,0)
