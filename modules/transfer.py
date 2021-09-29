@@ -67,8 +67,11 @@ class Transfer:
 				header += data
 				if len(header) < self.header:
 					recv_size = self.header - len(header)
-					continue					
-				actual_len = int(header)
+					continue
+				try:					
+					actual_len = int(header)
+				except:
+					return
 				recv_size = min(actual_len, self.buffer)
 				new = False
 				continue
