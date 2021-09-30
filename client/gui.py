@@ -20,7 +20,7 @@ class MainApplication(Tk):
         style.colors.set("primary", "#BB86FC")        
         self.iconbitmap("media/iconica.ico")
 
-        self.top = TopLevels(self)
+        self.top = TopLevelControl(self)
 
         #self.bind("<F1>",about)
         menu = Menu(self)
@@ -61,7 +61,7 @@ class MainApplication(Tk):
 
         self.focus()
 
-class TopLevels:
+class TopLevelControl:
     def __init__(self, parent) -> None:
         self.parent = parent
 
