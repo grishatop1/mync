@@ -172,7 +172,9 @@ class Server:
         print(f"Handling {addr[0]}:{addr[1]}")
         conn.ioctl(socket.SIO_KEEPALIVE_VALS, (1, 10000, 3000))
         t = Transfer(conn)
-        username = t.recvData().decode()
+        try:
+            username = t.recvData().decode()
+        except: return
 
         if username in self.connections:
             t.send(b"usernametaken")
