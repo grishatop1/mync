@@ -20,6 +20,8 @@ class MainApplication(Tk):
         style.colors.set("primary", "#BB86FC")        
         self.iconbitmap("media/iconica.ico")
 
+        self.top = TopLevels(self)
+
         #self.bind("<F1>",about)
         menu = Menu(self)
         help_menu = Menu(menu, tearoff=0)
@@ -58,6 +60,39 @@ class MainApplication(Tk):
         self.player_frame.status_label["text"] = "Waiting for the track..."
 
         self.focus()
+
+class TopLevels:
+    def __init__(self, parent) -> None:
+        self.parent = parent
+
+        self.req_win = None
+        self.upload_win = None
+
+    def checkClient(self):
+        return self.parent.controller.isClientAlive()
+
+    def openRequestWindow(self):
+        if not self.checkClient(): return
+        if self.req_win: return
+        self.req_win = RequestTopLevel(self.parent)
+
+    def closeRequestWindow(self):
+        if not self.req_win: return
+        self.req_win.close()
+        self.req_win = None
+
+    def openUploadWindow(self):
+        if not self.checkClient(): return
+        if self.upload_win: return
+
+        filepath = filedialog.askopenfilename(title="Open music file",
+                        filetypes=(("Music Files","*.mp3"),))
+        self.upload_win = UploadTopLevel(self.parent, filepath)
+
+    def closeRequestWindow(self):
+        if not self.upload_win: return
+        self.upload_win.close()
+        self.upload_win = None
 
 class ConnectFrame(LabelFrame):
     def __init__(self, parent, *args, **kwargs) -> None:
@@ -145,8 +180,12 @@ class LogFrame(LabelFrame):
         for color in colors:
             self.log_text.tag_configure(color, foreground=color)
 
-        self.upload_btn = Button(self, text="Upload")
-        self.req_btn = Button(self, text="Request a song")
+        self.upload_btn = Button(self, text="Upload",
+            command=self.openUploadCommand
+        )
+        self.req_btn = Button(self, text="Request a song", 
+            command=self.openRequestCommand
+        )
 
         self.log_text.grid(row=1, column=0, columnspan=2, padx=3, pady=3)
         self.upload_btn.grid(row=0, column=0, columnspan=1, pady=3)
@@ -165,6 +204,13 @@ class LogFrame(LabelFrame):
         self.log_text["state"] = "normal"
         self.log_text.delete("1.0", "end")
         self.log_text["state"] = "disabled"
+
+    def openRequestCommand(self):
+        self.parent.top.openRequestWindow()
+
+    def openUploadCommand(self):
+        self.parent.top.openUploadWindow()
+
         
 class ChatSubFrame(Frame):
     def __init__(self, parent, *args, **kwargs) -> None:
@@ -286,18 +332,20 @@ class RequestTopLevel(Toplevel):
         self.title("Choose a song...")
         self.resizable(0,0)
         self.grab_set() #get the all controls from root muahaha
-        self.bind("<Return>", self.play)
+        #self.bind("<Return>", self.play)
 
         self.tracks = []
         
         self.status_label = Label(self,
-                                  text="Requesting songs from server...")
+            text="Loading..."
+        )
         self.search_entry = PlaceholderEntry(
             self, 
             "Search for the song...",
             style="TEntry",
             placeholder_style="Placeholder.TEntry",
-            width=70)
+            width=70
+        )
         self.tracks_list = Listbox(self, width=100)
         self.choose_btn = Button(self, text="Play!")
 
@@ -308,15 +356,40 @@ class RequestTopLevel(Toplevel):
         self.tracks_list.pack(padx=5, pady=5)
         self.choose_btn.pack(padx=5, pady=10)
 
+    def search(self, *args):
+        srch = self.search_entry.get()
+        if not srch or self.search_entry["foreground"] == "gray":
+            self.reloadTracks()
+            return
+        
+        closest = []
+        for song in self.tracks:
+            if srch.lower() in song.lower():
+                closest.append(song)
+
+        self.tracks_list.delete(0, "end")
+        for item in closest:
+            self.tracks_list.insert(END, item)
+
+        self.tracks_list.select_set(0)
+
+    def reloadTracks(self):
+        self.tracks_list.delete(0, "end")
+        for track in self.tracks:
+            self.tracks_list.insert("end", track)
+
+    def close(self):
+        self.destroy()
+
 class UploadTopLevel(Toplevel):
-    def __init__(self, parent, file, *args, **kwargs) -> None:
+    def __init__(self, parent, filepath, *args, **kwargs) -> None:
         Toplevel.__init__(self, parent, *args, **kwargs)
         self.parent = parent
-        self.file = file
+        self.filepath = filepath
 
         self.title("Upload Window")
         self.resizable(0,0)
-        self.protocol("WM_DELETE_WINDOW", self.cancel)
+        #self.protocol("WM_DELETE_WINDOW", self.cancel)
 
         self.canv_w = 300
         self.canv_h = 80
@@ -343,6 +416,9 @@ class UploadTopLevel(Toplevel):
         self.speed_label["text"] = f"{round(bps/1024, 1)}kbps"
         #self.percent_label["text"] = f"Sent: {round(received/1024/1024, 1)}MB/{songsize}MB"
         self.updateGraph(bps)
+
+    def close(self):
+        self.destroy()
 
     # /////CANVAS GRAPH//////
     def drawGraph(self):

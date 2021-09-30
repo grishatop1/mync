@@ -66,7 +66,6 @@ class Controller:
             self.gui.connect_frame.setNormalState()
             self.gui.showDialog("Couldn't connect.", "Connection", "warning")
     
-
     def removeClientInstance(self):
         self.gui.resetAll()
         self.client.disconnect()
@@ -76,6 +75,9 @@ class Controller:
         self.removeClientInstance()
         self.gui.connect_frame.setNormalState()
         self.gui.showDialog("Connection lost.", "Connection", "warning")
+
+    def isClientAlive(self):
+        if self.client: return True
 
     def writeToCache(self, key, value):
         self.cache.write(key, value)
