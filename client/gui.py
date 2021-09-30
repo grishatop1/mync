@@ -89,10 +89,14 @@ class TopLevels:
                         filetypes=(("Music Files","*.mp3"),))
         self.upload_win = UploadTopLevel(self.parent, filepath)
 
-    def closeRequestWindow(self):
+    def closeUploadWindow(self):
         if not self.upload_win: return
         self.upload_win.close()
         self.upload_win = None
+
+    def loadTracksInReq(self, tracks):
+        if not self.req_win: return
+        self.req_win.loadTracks(tracks)
 
 class ConnectFrame(LabelFrame):
     def __init__(self, parent, *args, **kwargs) -> None:
@@ -237,7 +241,7 @@ class ChatSubFrame(Frame):
         if not msg: return
         if self.input["foreground"] == "gray": return
         self.input.delete(0, "end")
-        self.parent.parent.controller.net.sendMessage(msg)
+        self.parent.parent.controller.sendMessage(msg)
 
 class ConnectionsFrame(LabelFrame):
     def __init__(self, parent, *args, **kwargs) -> None:
@@ -355,6 +359,16 @@ class RequestTopLevel(Toplevel):
         self.search_entry.pack(padx=5, pady=5)
         self.tracks_list.pack(padx=5, pady=5)
         self.choose_btn.pack(padx=5, pady=10)
+
+        self.parent.controller.requestTracksForReq()
+
+    def loadTracks(self, tracks):
+        try:
+            self.tracks = tracks
+            for track in tracks:
+                self.tracks_list.insert("end", track)
+            self.status_label["text"] = "Pick a song... (scrollable)"
+        except:pass
 
     def search(self, *args):
         srch = self.search_entry.get()

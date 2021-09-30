@@ -43,8 +43,8 @@ class Client:
         except:
             return
 
-        self.controller.net.addUser(self.username)
-        self.controller.net.addUsers(users)
+        self.controller.addUser(self.username)
+        self.controller.addUsers(users)
 
         self.t.send(b"gotall")
         self.s.settimeout(None)
@@ -77,8 +77,7 @@ class Client:
                 continue
 
             elif data["method"] == "returnTracks":
-                if self.app.log_frame.req_win:
-                    self.app.log_frame.req_win.loadTracks(data["data"])
+                self.controller.loadTracksForReq(data["data"])
 
             elif data["method"] == "checksong":
                 songname = data["songname"]
@@ -101,17 +100,17 @@ class Client:
                         "Ready for the next song! Waiting for others...")
 
             elif data["method"] == "connectionplus":
-                self.controller.net.addUser(data["user"])
+                self.controller.addUser(data["user"])
 
             elif data["method"] == "connectionminus":
-                self.controller.net.removeUser(data["user"])
+                self.controller.removeUser(data["user"])
 
             elif data["method"] == "transmit":
-                self.controller.net.recvMessage(data["message"])
+                self.controller.recvMessage(data["message"])
 
             elif data["method"] == "echo":
                 message = f"[You]: {data['msg']}"
-                self.controller.net.recvMessage(message)
+                self.controller.recvMessage(message)
 
             elif data["method"] == "in-mute":
                 self.app.connections_frame.renameUser(
