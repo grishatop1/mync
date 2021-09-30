@@ -59,9 +59,10 @@ class ClientHandler:
                 self.server.player.current_playing = None
                 self.server.player.people_ready = 0
                 songname = data["songname"]
+                songsize = os.path.getsize("servermusic/"+songname)
                 self.server.player.waiting_song = songname
                 self.server.sendAll(pickle.dumps(
-                    {"method":"checksong","songname":songname}
+                    {"method":"checksong","songname":songname, "songsize": songsize}
                 ))
 
             elif data["method"] == "reqsongfile":
@@ -157,7 +158,7 @@ class Server:
     def publicIp(self):
         try:
             ip = get('https://api.ipify.org').text
-            print(f"Your public IP: {ip}")
+            print(f"Your public IP: {ip}:{self.port}")
         except:
             pass
 
@@ -187,7 +188,15 @@ class Server:
         print(f"{username} connected to the server!")
 
         if self.player.current_playing:
-            t.sendDataPickle({"method": "checksong", "songname":self.player.current_playing})
+            songpath = "servermusic/"+self.player.current_playing
+            songsize = os.path.getsize(songpath)
+            t.sendDataPickle(
+                {
+                    "method": "checksong", 
+                    "songname":self.player.current_playing,
+                    "songsize": songsize
+                }
+            )
 
         self.sendAllExceptMe(pickle.dumps(
             {"method": "connectionplus", "user": username}

@@ -117,6 +117,11 @@ class ServerFT:
                 client.songhandler.write(data)
 
         elif data["method"] == "download":
+            self.server.transmitAllExceptMe(
+                f"{username} is downloading...",
+                "blue",
+                username    
+            )
             songname = data["songname"]
             songpath = "servermusic/" + songname
             with open(songpath, "rb") as f:
@@ -208,9 +213,32 @@ class ClientFT:
         self.running = False
         return True
 
-    def download(self, songname):
+    def download(self, songname, songsize):
         if self.running: return
         self.running = True
+        self.t.sendDataPickle({
+            "method": "download",
+            "songname": songname
+        })
+
+        f = open(self.client.app.cache.sharedmusic + songname, "wb")
+        recvd = 0
+        success = False
+
+        while True:
+            time.sleep(0.05)
+            data = self.t.recvData()
+            if not data or data == b"drop":
+                break
+            f.write(data)
+            recvd += len(data)
+
+            if recvd == songsize:
+                success = True
+                break
+
+        self.suicide()
+        return success
 
     def suicide(self):
         self.s.close()

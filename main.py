@@ -152,36 +152,23 @@ class Client:
 
             elif data["method"] == "checksong":
                 songname = data["songname"]
+                songsize = data["songsize"] #used if client has not track
                 tracks = os.listdir(self.app.cache.sharedmusic)
                 if not songname in tracks:
-                    self.t.sendDataPickle(
-                        {"method": "reqsongfile", "songname": songname}
-                    )
-                    self.app.log("Missing song :( Requesting it...", "red")
+                    self.app.log_frame.upload_btn["state"] = "disabled"
+                    self.app.log("Missing song! Requesting it...", "red")
+                    self.app.setStatusLabel(f"Downloading {songname}")
+                    threading.Thread(
+                        target=self.downloadSong, 
+                        daemon=True,
+                        args=(songname,songsize)
+                        ).start()
                 else:
                     self.t.sendDataPickle(
                         {"method": "ready", "songname": songname}
                     )
                     self.app.log(
                         "Ready for the next song! Waiting for others...")
-
-            elif data["method"] == "sendingsong":
-                songname = data["songname"]
-                self.app.mainstatus_label["text"] = f"Downloading {songname}"
-                self.app.mainstatus_label["foreground"] = "green"
-                self.app.log(f"Downloading {songname}")
-                data = self.t.recvData()
-                if not data or data == b"drop":
-                    break
-                with open(self.app.cache.sharedmusic+songname, "wb") as f:
-                    f.write(data)
-                self.t.sendDataPickle(
-                        {"method": "ready", "songname": songname}
-                    )
-                self.app.mainstatus_label["text"] = f"NETWORK IDLE"
-                self.app.mainstatus_label["foreground"] = "black"
-                self.app.log(songname + " has been downloaded!", "green")
-                self.app.log("Ready for the song! Waiting for others...")
 
             elif data["method"] == "connectionplus":
                 user = data["user"]
@@ -224,6 +211,18 @@ class Client:
         self.ft = ClientFT(self, self.ip, self.port+1)
         if self.ft.connect():
             self.ft.upload(path)
+
+    def downloadSong(self, songname, songsize):
+        self.ft = ClientFT(self, self.ip, self.port+1)
+        if self.ft.connect():
+            if self.ft.download(songname, songsize):
+                self.t.sendDataPickle(
+                    {"method":"ready"}
+                )
+                self.app.resetStatusLabel()
+                self.app.log("Ready for the song!\nWaiting for others...", "green")
+
+            self.app.log_frame.upload_btn["state"] = "normal"
 
     def getTracks(self):
         self.t.sendDataPickle({"method":"gettracks"})
