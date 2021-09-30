@@ -15,3 +15,7 @@ class Player:
     def stopTrack(self):
         mixer.music.stop()
         self.playing = None
+
+    def setVolume(self, value):
+        volume = value/100
+        mixer.music.set_volume(volume)

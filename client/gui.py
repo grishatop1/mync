@@ -131,7 +131,6 @@ class LogFrame(LabelFrame):
         self.parent = parent
 
         self.log_text = Text(self, width=50, height=10, state="disabled")
-        self.upload_win = None
 
         colors = ["green", "red", "blue", "black", "orange"]
         for color in colors:
@@ -183,6 +182,7 @@ class ChatSubFrame(Frame):
         if not msg: return
         if self.input["foreground"] == "gray": return
         self.input.delete(0, "end")
+        self.parent.parent.controller.net.sendMessage(msg)
 
 class ConnectionsFrame(LabelFrame):
     def __init__(self, parent, *args, **kwargs) -> None:

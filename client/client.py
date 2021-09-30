@@ -43,6 +43,9 @@ class Client:
         except:
             return
 
+        self.controller.net.addUser(self.username)
+        self.controller.net.addUsers(users)
+
         self.t.send(b"gotall")
         self.s.settimeout(None)
         threading.Thread(target=self.mainThread, daemon=True).start()
@@ -98,22 +101,17 @@ class Client:
                         "Ready for the next song! Waiting for others...")
 
             elif data["method"] == "connectionplus":
-                user = data["user"]
-                self.app.connections_frame.addUser(user)
+                self.controller.net.addUser(data["user"])
 
             elif data["method"] == "connectionminus":
-                user = data["user"]
-                self.app.connections_frame.removeUser(user)
+                self.controller.net.removeUser(data["user"])
 
             elif data["method"] == "transmit":
-                self.app.log(data["message"], data["color"])
+                self.controller.net.recvMessage(data["message"])
 
             elif data["method"] == "echo":
-                msg = data["msg"]
-                self.app.log_frame.insertTextLine(
-                    f"[You]: {msg}",
-                    "blue"
-                )
+                message = f"[You]: {data['msg']}"
+                self.controller.net.recvMessage(message)
 
             elif data["method"] == "in-mute":
                 self.app.connections_frame.renameUser(
