@@ -220,7 +220,7 @@ class ClientFT:
         recvd = 0
         success = False
 
-        while True:
+        while not self.stopUploading:
             data = self.t.recvData()
             if not data or data == b"drop":
                 break

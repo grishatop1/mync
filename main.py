@@ -70,6 +70,7 @@ class Client:
         self.addr = (ip,port)
         self.username = username
         self.s = socket.socket()
+        self.ft = None
 
         self.force_disconnect = False
         self.alive = False
@@ -208,6 +209,7 @@ class Client:
         self.ft = ClientFT(self, self.ip, self.port+1)
         if self.ft.connect():
             self.ft.upload(path)
+        self.ft = None
 
     def downloadSong(self, songname, songsize):
         self.ft = ClientFT(self, self.ip, self.port+1)
@@ -220,6 +222,7 @@ class Client:
                 self.app.log("Ready for the song!\nWaiting for others...", "green")
 
             self.app.log_frame.upload_btn["state"] = "normal"
+        self.ft = None
 
     def getTracks(self):
         self.t.sendDataPickle({"method":"gettracks"})
@@ -735,6 +738,7 @@ class MainApplication(Frame):
         self.player_frame.status_label["text"] = "Waiting for the track..."
         self.resetStatusLabel()
         if self.log_frame.upload_win:self.log_frame.upload_win.cancel()
+        if self.connect_frame.client.ft:self.connect_frame.client.ft.stopUploading=True
 
         root.focus()
 
