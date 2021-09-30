@@ -61,11 +61,6 @@ class SongHandler:
         self.t.send(b"receivedSuccess")
         moveFile("servermusic/uploading/"+self.songname+".upload", "servermusic/"+self.songname)
         self.server.player.addTrack(self.songname)
-        self.t.sendDataPickle(
-            {
-                "method":"songReceived"
-            }
-        )
         self.server.transmitAllExceptMe(f"{self.username} has uploaded the song!!!",
                 "blue", self.username)
 
@@ -226,7 +221,6 @@ class ClientFT:
         success = False
 
         while True:
-            time.sleep(0.05)
             data = self.t.recvData()
             if not data or data == b"drop":
                 break
@@ -236,7 +230,8 @@ class ClientFT:
             if recvd == songsize:
                 success = True
                 break
-
+        
+        f.close()
         self.suicide()
         return success
 

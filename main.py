@@ -143,9 +143,6 @@ class Client:
                     showerror("Player", f"Error playing track!\n{songname}")
                 continue
 
-            if data["method"] == "songReceived":
-                self.app.log_frame.upload_win.onReceive()
-            
             elif data["method"] == "returnTracks":
                 if self.app.log_frame.req_win:
                     self.app.log_frame.req_win.loadTracks(data["data"])
