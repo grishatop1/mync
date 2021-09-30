@@ -4,6 +4,7 @@ class Player:
     def __init__(self, controller) -> None:
         self.controller = controller
         mixer.init()
+        self.setVolume(self.controller.getFromCache("volume"))
 
         self.playing = None
 
@@ -19,3 +20,4 @@ class Player:
     def setVolume(self, value):
         volume = value/100
         mixer.music.set_volume(volume)
+        self.controller.writeToCache("volume", value)

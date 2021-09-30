@@ -50,6 +50,15 @@ class MainApplication(Tk):
         else:
             showerror(title, message)
 
+    def resetAll(self):
+        self.connect_frame.setNormalState()
+        self.log_frame.clearLogs()
+        self.log_frame.upload_btn.configure(text="Upload", state="normal")
+        self.connections_frame.clear()
+        self.player_frame.status_label["text"] = "Waiting for the track..."
+
+        self.focus()
+
 class ConnectFrame(LabelFrame):
     def __init__(self, parent, *args, **kwargs) -> None:
         LabelFrame.__init__(self, parent, *args, **kwargs)

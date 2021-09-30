@@ -171,7 +171,7 @@ class Server:
             url = "https://ports.yougetsignal.com/check-port.php"
             response = post(url, data=data, headers=headers)
             soup = BeautifulSoup(response.text, "html.parser")
-            print(soup.get_text())
+            print(soup.get_text()[1:])
         except Exception as e:
             print(str(e))
 

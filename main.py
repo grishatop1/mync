@@ -54,22 +54,34 @@ class Controller:
         self.client = Client(self, ip, port, username)
         result = self.client.connect()
         if result == True:
+            self.writeToCache("ip", f"{ip}:{port}")
+            self.writeToCache("username", username)
             self.gui.connect_frame.setConnectedState(dialog=True)
         elif result == "badusername":
+            self.client = None
             self.gui.connect_frame.setNormalState()
             self.gui.showDialog("Username already taken.", "Connection", "warning")
         else:
+            self.client = None
             self.gui.connect_frame.setNormalState()
             self.gui.showDialog("Couldn't connect.", "Connection", "warning")
     
+
     def removeClientInstance(self):
+        self.gui.resetAll()
         self.client.disconnect()
         self.client = None
 
     def lostClientConnection(self):
+        self.removeClientInstance()
         self.gui.connect_frame.setNormalState()
         self.gui.showDialog("Connection lost.", "Connection", "warning")
-        self.client = None
+
+    def writeToCache(self, key, value):
+        self.cache.write(key, value)
+
+    def getFromCache(self, key):
+        return self.cache.read(key)
 
 if __name__ == "__main__":
     if sys.platform != "win32" and sys.platform != "win64":
