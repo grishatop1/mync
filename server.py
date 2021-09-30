@@ -12,7 +12,8 @@ from tkinter.ttk import *
 from modules.transfer import Transfer
 from modules.ft import ServerFT
 
-from requests import get
+from requests import get, post
+from bs4 import BeautifulSoup
 
 class ServerPlayer:
     PATH = "servermusic/"
@@ -159,8 +160,20 @@ class Server:
         try:
             ip = get('https://api.ipify.org').text
             print(f"Your public IP: {ip}:{self.port}")
+            self.portCheck(ip)
         except:
             pass
+
+    def portCheck(self, ip):
+        try:
+            headers = {'Content-Type': 'application/x-www-form-urlencoded'}
+            data = {"remoteAddress":ip, "portNumber":self.port}
+            url = "https://ports.yougetsignal.com/check-port.php"
+            response = post(url, data=data, headers=headers)
+            soup = BeautifulSoup(response.text, "html.parser")
+            print(soup.get_text())
+        except Exception as e:
+            print(str(e))
 
     def acceptThread(self):
         while True:
