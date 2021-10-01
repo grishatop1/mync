@@ -86,6 +86,26 @@ class Controller:
     def removeUser(self, user):
         self.gui.connections_frame.removeUser(user)
 
+    def sendPlaytrackRequest(self, songname):
+        threading.Thread(target=self.client.reqSong, args=(songname,), daemon=True).start()
+
+    def getCacheMusic(self):
+        return os.listdir(self.cache.sharedmusic)
+
+    def startSongRequesting(self, songname):
+        self.gui.log_frame.upload_btn["state"] = "disabled"
+        self.gui.log("Missing song! Requesting it...", "red")
+        self.gui.netstatus_label.set(f"Downloading {songname}")
+        self.gui.top.closeRequestWindow()
+
+    def readyForTheSong(self, songname):
+        self.client.t.sendDataPickle(
+            {"method": "ready", "songname": songname}
+        )
+        self.gui.log(
+            "Ready for the next song! Waiting for others..."
+        )
+
 if __name__ == "__main__":
     if sys.platform != "win32" and sys.platform != "win64":
         print("Mync client supports only windows for now :/")

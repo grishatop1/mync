@@ -82,22 +82,11 @@ class Client:
             elif data["method"] == "checksong":
                 songname = data["songname"]
                 songsize = data["songsize"] #used if client has not track
-                tracks = os.listdir(self.app.cache.sharedmusic)
+                tracks = self.controller.getCacheMusic()
                 if not songname in tracks:
-                    self.app.log_frame.upload_btn["state"] = "disabled"
-                    self.app.log("Missing song! Requesting it...", "red")
-                    self.app.setStatusLabel(f"Downloading {songname}")
-                    threading.Thread(
-                        target=self.downloadSong, 
-                        daemon=True,
-                        args=(songname,songsize)
-                        ).start()
+                    self.controller.startSongRequesting(songname)
                 else:
-                    self.t.sendDataPickle(
-                        {"method": "ready", "songname": songname}
-                    )
-                    self.app.log(
-                        "Ready for the next song! Waiting for others...")
+                    self.controller.readyForTheSong(songname)
 
             elif data["method"] == "connectionplus":
                 self.controller.addUser(data["user"])

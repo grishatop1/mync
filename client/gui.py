@@ -41,8 +41,10 @@ class MainApplication(Tk):
         self.player_frame = PlayerFrame(self, text="PLAYER")
         self.player_frame.grid(row=1, column=0, columnspan=3, padx=5, pady=10)
 
-        self.mainstatus_label = Label(self, text="NETWORK IDLE")
-        self.mainstatus_label.grid(row=2, columnspan=3, padx=5, pady=5)
+        self.netstatus_label = NetworkStatusLabel(self)
+        self.netstatus_label.grid(row=2, columnspan=3, padx=5, pady=5)
+
+
 
     def showDialog(self, message, title="Mync client", _type="info"):
         if _type == "info":
@@ -171,7 +173,7 @@ class ConnectFrame(LabelFrame):
             command=self.disconnectCommand
         )
         if dialog:
-            showinfo("Connection", "Successfully connected to the server!")
+            showinfo("Connection", "Connected!")
 
 class LogFrame(LabelFrame):
     def __init__(self, parent, *args, **kwargs) -> None:
@@ -336,7 +338,7 @@ class RequestTopLevel(Toplevel):
         self.title("Choose a song...")
         self.resizable(0,0)
         self.grab_set() #get the all controls from root muahaha
-        #self.bind("<Return>", self.play)
+        self.bind("<Return>", self.playCommand)
 
         self.tracks = []
         
@@ -351,7 +353,7 @@ class RequestTopLevel(Toplevel):
             width=70
         )
         self.tracks_list = Listbox(self, width=100)
-        self.choose_btn = Button(self, text="Play!")
+        self.choose_btn = Button(self, text="Play!", command=self.playCommand)
 
         self.search_entry.bind("<KeyRelease>", self.search)
 
@@ -361,6 +363,13 @@ class RequestTopLevel(Toplevel):
         self.choose_btn.pack(padx=5, pady=10)
 
         self.parent.controller.requestTracksForReq()
+
+    def playCommand(self, *args):
+        try:
+            songname = self.tracks_list.get(self.tracks_list.curselection())
+        except:
+            return
+        self.parent.controller.sendPlaytrackRequest(songname)
 
     def loadTracks(self, tracks):
         try:
@@ -459,3 +468,16 @@ class UploadTopLevel(Toplevel):
             prevoriusXY = (x,y)
 
         self.graph_canvas.create_rectangle(prevoriusXY[0]-3, prevoriusXY[1]-3, prevoriusXY[0]+3, prevoriusXY[1]+3, fill="red", outline="red")
+
+class NetworkStatusLabel(Label):
+    def __init__(self, parent, *args, **kwargs) -> None:
+        Label.__init__(self, parent, text="NETWORK IDLE", foreground="white")
+        self.parent = parent
+
+    def set(self, text):
+        self["text"] = text
+        self["foreground"] = "#c89cff"
+
+    def reset(self):
+        self["text"] = "NETWORK IDLE"
+        self["foreground"] = "white"
