@@ -6,7 +6,7 @@ class CacheManager:
         self.appdata = os.getenv('APPDATA').replace("\\", "/")
         self.cache_path = self.appdata+"/.mync/"
         self.cache_file = self.cache_path+"cache.temp"
-        self.sharedmusic = self.cache_path+"/sharedmusic/"
+        self.sharedmusic = self.cache_path+"sharedmusic/"
         self._checkInitial()
 
     def _checkInitial(self):
