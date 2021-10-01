@@ -294,15 +294,19 @@ class PlayerFrame(LabelFrame):
                                     orient="horizontal",
                                     length=300,
                                     variable=self.volume_var)
-        #self.volume_scale.bind("<B1-Motion>", self.setvolume)
+        self.volume_scale.bind("<B1-Motion>", self.changeVolume)
         #self.volume_var.set(
         #    self.parent.cache.read("volume")
         #)
-        #self.setvolume()
+        self.changeVolume()
 
         self.status_label.grid(row=0, column=0, columnspan=2, padx=3, pady=3)
         self.volume_label.grid(row=1, column=0, padx=3, pady=3)
         self.volume_scale.grid(row=1, column=1, padx=3, pady=3)
+
+    def changeVolume(self, *args):
+        volume = self.volume_var.get()
+        self.parent.controller.player.setVolume(volume)
 
     def setPlayingState(self, songname):
         self.status_label["text"] = f"Playing - {songname}"

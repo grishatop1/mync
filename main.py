@@ -101,12 +101,10 @@ class Controller:
         threading.Thread(target=self.client.downloadSong, args=(songname,), daemon=True).start()
 
     def readyForTheSong(self, songname):
-        self.client.t.sendDataPickle(
-            {"method": "ready", "songname": songname}
-        )
         self.gui.log(
             "Ready for the next song! Waiting for others..."
         )
+        self.gui.top.closeRequestWindow()
 
     def playTrack(self, songname, time_time, start):
         songpath = self.cache.sharedmusic + songname
@@ -115,7 +113,8 @@ class Controller:
             songname,
             start
         )
-        self.gui.player_frame.setPlayingState(songname[70:]+"...")
+        self.gui.player_frame.setPlayingState(songname[:70]+"...")
+        self.gui.log("Playing next track!", "green")
 
     def updateDownloadStatus(self, songname, percent):
         self.gui.netstatus_label.set(f"[{percent}%] Downloading {songname[:70]}")

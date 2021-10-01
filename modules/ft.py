@@ -171,6 +171,7 @@ class ClientFT:
 
             if self.handler.write(data):
                 self.client.controller.downloadSuccess()
+                self.client.sendReady()
                 break
 
         self.kill()

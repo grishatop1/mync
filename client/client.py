@@ -82,6 +82,7 @@ class Client:
                 if not songname in tracks:
                     self.controller.startSongRequesting(songname)
                 else:
+                    self.sendReady()
                     self.controller.readyForTheSong(songname)
 
             elif data["method"] == "connectionplus":
@@ -133,6 +134,11 @@ class Client:
     def reqSong(self, songname):
         self.t.sendDataPickle({"method": "req", "songname": songname},
                               blocking=False)
+
+    def sendReady(self):
+        self.t.sendDataPickle(
+            {"method": "ready"}
+        )
 
     def transmitMsg(self, message, color="black"):
         self.t.sendDataPickle({"method":"transmit", "message":message,
