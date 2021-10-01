@@ -304,6 +304,14 @@ class PlayerFrame(LabelFrame):
         self.volume_label.grid(row=1, column=0, padx=3, pady=3)
         self.volume_scale.grid(row=1, column=1, padx=3, pady=3)
 
+    def setPlayingState(self, songname):
+        self.status_label["text"] = f"Playing - {songname}"
+        self.status_label["foreground"] = "#c89cff"
+
+    def resetState(self):
+        self.status_label["text"] = f"Waiting for the track..."
+        self.status_label["foreground"] = "white"
+
 class PlaceholderEntry(Entry):
     def __init__(self, container,placeholder,placeholder_style,*args, **kwargs):
         super().__init__(container, *args, **kwargs)

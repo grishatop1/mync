@@ -70,11 +70,7 @@ class Client:
                 play_at = data["play_at"]
                 songname = data["songname"]
                 starttime = data["starttime"]
-                try:
-                    self.app.player_frame.playTrack(songname, play_at, starttime)
-                    self.app.log(f"Playing {songname}", "green")
-                except:pass
-                continue
+                self.controller.playTrack(songname, play_at, starttime)
 
             elif data["method"] == "returnTracks":
                 self.controller.loadTracksForReq(data["data"])

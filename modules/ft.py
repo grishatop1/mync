@@ -11,63 +11,6 @@ from shutil import move as moveFile
 SONG_PATH = "servermusic/"
 UPLOAD_PATH = "servermusic/upload/"
 
-class SongHandler:
-    def __init__(self, server, t, username, songname, songsize):
-        self.server = server
-        self.t = t
-
-        self.username = username
-        self.songname = songname
-        self.songsize = songsize
-        self.received = 0
-        self.started = time.perf_counter()
-        self.done = False
-
-        self.server.transmitAllExceptMe(f"{self.username} is started uploading!", "blue", self.username)
-        os.makedirs("servermusic/uploading/", exist_ok=True)
-        self.f = open("servermusic/uploading/"+self.songname+".upload", "ab")
-        threading.Thread(target=self.resultThread, daemon=True).start()
-
-    def resultThread(self):
-        while not self.done:
-            now = time.perf_counter() - self.started
-            result = self.received/now
-            self.t.sendDataPickle(
-                [
-                    int(result),
-                    self.received
-                ]
-            )
-            time.sleep(0.5)
-
-    def write(self, data):
-        if self.done: return
-        self.f.write(data)
-        self.received += len(data)
-        if self.received == self.songsize:
-            self.success()
-
-    def abort(self):
-        self.done = True
-        self.f.close()
-        try:
-            os.remove("servermusic/uploading/" + self.songname + ".upload")
-        except:
-            pass
-        self.server.transmitAllExceptMe(f"{self.username} has canceled the upload...", "blue", self.username)
-
-    def success(self):
-        self.close()
-        self.t.send(b"receivedSuccess")
-        moveFile("servermusic/uploading/"+self.songname+".upload", "servermusic/"+self.songname)
-        self.server.player.addTrack(self.songname)
-        self.server.transmitAllExceptMe(f"{self.username} has uploaded the song!!!",
-                "blue", self.username)
-
-    def close(self):
-        self.done = True
-        self.f.close()
-
 class ServerFT:
     def __init__(self, server, ip, port):
         self.server = server
@@ -135,105 +78,105 @@ class ServerFT:
         conn.shutdown(2)
         conn.close()
 
+class SongReceiver:
+    def __init__(self, songpath, songname, songsize) -> None:
+        self.songname = songname
+        self.songpath = songpath
+        self.songsize = songsize
+        
+        self.recvd = 0
+        self.f = open(self.songpath, "ab")
+        self.closed = False
+
+    def write(self, data):
+        try:
+            self.f.write(data)
+        except:
+            self.close()
+            return
+        
+        self.recvd += len(data)
+
+        if self.recvd == self.songsize:
+            return True
+
+    def getPercent(self):
+        percent = round((self.recvd/self.songsize)*100, 1)
+        return percent
+
+    def close(self):
+        self.closed = True
+        self.f.close()
+
 class ClientFT:
-    def __init__(self, client, ip, port):
+    def __init__(self, client, ip, port) -> None:
         self.client = client
         self.ip = ip
         self.port = port
         self.addr = (ip,port)
+        self.s = socket.socket()
 
+        self.t = None
+        self.handler = None
+        self.songname = None
+        self.start_time = None
+        self.connected = False
         self.running = False
 
-        self.s = socket.socket()
-        self.stopUploading = False
-
-    def connect(self):
+    def createConnection(self):
         try:
             self.s.settimeout(5)
             self.s.connect(self.addr)
-            self.s.settimeout(None)
-            self.s.ioctl(socket.SIO_KEEPALIVE_VALS, (1, 10000, 3000))
         except socket.error:
-            pass
+            return
 
         self.t = Transfer(self.s)
         self.t.send(self.client.username.encode())
         response = self.t.recvData()
-        if response != b"gotall":
+        if not response == b"success":
+            return
+        
+        self.s.ioctl(socket.SIO_KEEPALIVE_VALS, (1, 10000, 3000))
+        self.connected = True
+        return True
+
+    def downloadThread(self, songname):
+        if not self.connected: return
+        self.start_time = time.perf_counter()
+        self.songname = songname
+        songpath = self.client.controller.cache.sharedmusic + songname
+        self.t.send(songname.encode())
+        try:
+            songsize = int(self.t.recvData())
+        except:
             return
 
-        return True
-    
-    def statusReceiver(self):
-        while True:
-            data = self.t.recvData()
-            if not data or data == b"drop":
-                break
-
-            if data == b"receivedSuccess":
-                self.client.app.log_frame.upload_win.onReceive()
-                break
-
-            speed, received = pickle.loads(data)
-            try:
-                self.client.app.log_frame.upload_win.updateStatus(speed, 
-                    received)
-            except:
-                pass
-        self.suicide()
-
-    def upload(self, path):
-        if self.running: return
         self.running = True
-        songname = os.path.basename(path)
-        songsize = os.path.getsize(path)
-        self.t.sendDataPickle(
-            {
-                "method": "upload",
-                "songname": songname,
-                "songsize": songsize
-            }
-        )
-        self.t.recvData()
-        threading.Thread(target=self.statusReceiver, daemon=True).start()
-        with open(path, "rb") as f:
-            while not self.stopUploading:
-                song = f.read(1024*4)
-                if not song:
-                    break
-                self.t.send(song)
-            else:
-                self.suicide()
+        self.handler = SongReceiver(songpath, songname, songsize)
+        threading.Thread(target=self.downloadStatusThread, daemon=True).start()
 
+        while self.running:
+            data = self.t.recvData()
+            if not data:
+                break
+
+            if self.handler.write(data):
+                self.client.controller.downloadSuccess()
+                self.kill()
+                break
+
+    def downloadStatusThread(self):
+        while self.running:
+            if not self.handler: return
+            percent = self.handler.getPercent()
+            self.client.controller.updateDownloadStatus(self.songname, percent)
+            time.sleep(0.5)
+
+    def kill(self):
+        self.connected = False
         self.running = False
-        return True
-
-    def download(self, songname, songsize):
-        if self.running: return
-        self.running = True
-        self.t.sendDataPickle({
-            "method": "download",
-            "songname": songname
-        })
-
-        f = open(self.client.app.cache.sharedmusic + songname, "wb")
-        recvd = 0
-        success = False
-
-        while not self.stopUploading:
-            data = self.t.recvData()
-            if not data or data == b"drop":
-                break
-            f.write(data)
-            recvd += len(data)
-
-            if recvd == songsize:
-                success = True
-                break
-        
-        f.close()
-        self.suicide()
-        return success
-
-    def suicide(self):
-        self.s.close()
+        if self.handler: self.handler.close()
+        try:
+            self.s.shutdown(2)
+            self.s.close()
+        except: pass

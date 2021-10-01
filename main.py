@@ -95,7 +95,7 @@ class Controller:
     def startSongRequesting(self, songname):
         self.gui.log_frame.upload_btn["state"] = "disabled"
         self.gui.log("Missing song! Requesting it...", "red")
-        self.gui.netstatus_label.set(f"Downloading {songname}")
+        self.gui.netstatus_label.set(f"[0%] Downloading {songname[70:]}")
         self.gui.top.closeRequestWindow()
 
     def readyForTheSong(self, songname):
@@ -105,6 +105,22 @@ class Controller:
         self.gui.log(
             "Ready for the next song! Waiting for others..."
         )
+
+    def playTrack(self, songname, time_time, start):
+        songpath = self.cache.sharedmusic + songname
+        self.player.playTrack(
+            songpath,
+            songname,
+            start
+        )
+        self.gui.player_frame.setPlayingState(songname[70:]+"...")
+
+    def updateDownloadStatus(self, songname, percent):
+        self.gui.netstatus_label.set(f"[{percent}%] Downloading {songname[70:]}")
+
+    def downloadSuccess(self):
+        self.gui.netstatus_label.reset()
+        self.gui.log("Song has been downloaded, waiting for others!", "green")
 
 if __name__ == "__main__":
     if sys.platform != "win32" and sys.platform != "win64":
