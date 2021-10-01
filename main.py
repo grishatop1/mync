@@ -95,8 +95,10 @@ class Controller:
     def startSongRequesting(self, songname):
         self.gui.log_frame.upload_btn["state"] = "disabled"
         self.gui.log("Missing song! Requesting it...", "red")
-        self.gui.netstatus_label.set(f"[0%] Downloading {songname[70:]}")
+        self.gui.netstatus_label.set(f"[0%] Downloading {songname[:70]}")
         self.gui.top.closeRequestWindow()
+
+        threading.Thread(target=self.client.downloadSong, args=(songname,), daemon=True).start()
 
     def readyForTheSong(self, songname):
         self.client.t.sendDataPickle(
@@ -116,11 +118,19 @@ class Controller:
         self.gui.player_frame.setPlayingState(songname[70:]+"...")
 
     def updateDownloadStatus(self, songname, percent):
-        self.gui.netstatus_label.set(f"[{percent}%] Downloading {songname[70:]}")
+        self.gui.netstatus_label.set(f"[{percent}%] Downloading {songname[:70]}")
 
     def downloadSuccess(self):
         self.gui.netstatus_label.reset()
         self.gui.log("Song has been downloaded, waiting for others!", "green")
+
+    def downloadFail(self):
+        self.gui.netstatus_label.reset()
+        self.gui.log("Download failed.", "red")
+        self.gui.showDialog(
+            "Failed to download the song :(",
+            "File Transfer", "warning"
+        )
 
 if __name__ == "__main__":
     if sys.platform != "win32" and sys.platform != "win64":

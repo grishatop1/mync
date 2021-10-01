@@ -120,18 +120,12 @@ class Client:
             self.ft.upload(path)
         self.ft = None
 
-    def downloadSong(self, songname, songsize):
+    def downloadSong(self, songname):
         self.ft = ClientFT(self, self.ip, self.port+1)
-        if self.ft.connect():
-            if self.ft.download(songname, songsize):
-                self.t.sendDataPickle(
-                    {"method":"ready"}
-                )
-                self.app.resetStatusLabel()
-                self.app.log("Ready for the song!\nWaiting for others...", "green")
-
-            self.app.log_frame.upload_btn["state"] = "normal"
-        self.ft = None
+        if self.ft.createConnection():
+            self.ft.downloadThread(songname)
+        else:
+            self.controller.downloadFail()
 
     def getTracks(self):
         self.t.sendDataPickle({"method":"gettracks"})

@@ -35,16 +35,19 @@ class ServerFT:
     def clientHandler(self, conn, addr):
         conn.ioctl(socket.SIO_KEEPALIVE_VALS, (1, 10000, 3000))
         t = Transfer(conn)
-        username = t.recvData().decode()
+        try:
+            username = t.recvData().decode()
+        except: return
         if not username in self.server.connections:
             t.send(b"badusername")
             return
         client = self.server.connections[username]
-        t.send(b"gotall")
+        t.send(b"success")
 
         response = t.recvData()
         data = pickle.loads(response)
         if data["method"] == "upload":
+            return
             songname, songsize = data["songname"], data["songsize"]
             client.songhandler = SongHandler(self.server, t, username, songname, songsize)
 
@@ -62,6 +65,7 @@ class ServerFT:
             )
             songname = data["songname"]
             songpath = "servermusic/" + songname
+            t.send(str(os.path.getsize(songpath)).encode())
             with open(songpath, "rb") as f:
                 while True:
                     data = f.read(1024*4)
@@ -145,10 +149,14 @@ class ClientFT:
         self.start_time = time.perf_counter()
         self.songname = songname
         songpath = self.client.controller.cache.sharedmusic + songname
-        self.t.send(songname.encode())
+        self.t.sendDataPickle(
+            {"method": "download", "songname": songname}
+        )
         try:
             songsize = int(self.t.recvData())
         except:
+            self.client.controller.downloadFail()
+            self.kill()
             return
 
         self.running = True
@@ -157,13 +165,15 @@ class ClientFT:
 
         while self.running:
             data = self.t.recvData()
-            if not data:
+            if not data and self.running:
+                self.client.controller.downloadFail()
                 break
 
             if self.handler.write(data):
                 self.client.controller.downloadSuccess()
-                self.kill()
                 break
+
+        self.kill()
 
     def downloadStatusThread(self):
         while self.running:
