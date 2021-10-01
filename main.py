@@ -107,6 +107,7 @@ class Controller:
         self.gui.top.closeRequestWindow()
 
     def playTrack(self, songname, time_time, start):
+        self.gui.player_frame.resetState()
         songpath = self.cache.sharedmusic + songname
         try:
             self.player.playTrack(
@@ -116,9 +117,14 @@ class Controller:
             )
         except:
             self.gui.log("Can't play this track, sorry.", "red")
+            return
 
         self.gui.player_frame.setPlayingState(songname[:70]+"...")
         self.gui.log("Playing next track!", "green")
+
+    def stopTrack(self):
+        self.player.stopTrack()
+        self.gui.player_frame.resetState()
 
     def updateDownloadStatus(self, songname, percent):
         self.gui.netstatus_label.set(f"[{percent}%] Downloading {songname[:70]}")
@@ -138,7 +144,7 @@ class Controller:
         )
 
     def resetAll(self):
-        self.player.stopTrack()
+        self.stopTrack()
 
         self.gui.connect_frame.setNormalState()
         self.gui.log_frame.clearLogs()
