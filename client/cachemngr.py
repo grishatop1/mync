@@ -23,6 +23,7 @@ class CacheManager:
     
     def _check(self):
         os.makedirs(self.cache_path, exist_ok=True)
+        os.makedirs(self.sharedmusic, exist_ok=True)
         open(self.cache_file, "ab").close()
 
     def _load(self):
