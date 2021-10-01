@@ -35,7 +35,7 @@ class Controller:
             self.gui.showDialog("Couldn't connect.", "Connection", "warning")
     
     def removeClientInstance(self):
-        self.gui.resetAll()
+        self.resetAll()
         self.client.disconnect()
         self.client = None
 
@@ -108,11 +108,15 @@ class Controller:
 
     def playTrack(self, songname, time_time, start):
         songpath = self.cache.sharedmusic + songname
-        self.player.playTrack(
-            songpath,
-            songname,
-            start
-        )
+        try:
+            self.player.playTrack(
+                songpath,
+                songname,
+                start
+            )
+        except:
+            self.gui.log("Can't play this track, sorry.", "red")
+
         self.gui.player_frame.setPlayingState(songname[:70]+"...")
         self.gui.log("Playing next track!", "green")
 
@@ -121,15 +125,28 @@ class Controller:
 
     def downloadSuccess(self):
         self.gui.netstatus_label.reset()
+        self.gui.log_frame.upload_btn["state"] = "normal"
         self.gui.log("Song has been downloaded, waiting for others!", "green")
 
     def downloadFail(self):
         self.gui.netstatus_label.reset()
+        self.gui.log_frame.upload_btn["state"] = "normal"
         self.gui.log("Download failed.", "red")
         self.gui.showDialog(
             "Failed to download the song :(",
             "File Transfer", "warning"
         )
+
+    def resetAll(self):
+        self.player.stopTrack()
+
+        self.gui.connect_frame.setNormalState()
+        self.gui.log_frame.clearLogs()
+        self.gui.log_frame.upload_btn.configure(text="Upload", state="normal")
+        self.gui.connections_frame.clear()
+        self.gui.player_frame.status_label["text"] = "Waiting for the track..."
+
+        self.gui.focus()
 
 if __name__ == "__main__":
     if sys.platform != "win32" and sys.platform != "win64":

@@ -54,15 +54,6 @@ class MainApplication(Tk):
         else:
             showerror(title, message)
 
-    def resetAll(self):
-        self.connect_frame.setNormalState()
-        self.log_frame.clearLogs()
-        self.log_frame.upload_btn.configure(text="Upload", state="normal")
-        self.connections_frame.clear()
-        self.player_frame.status_label["text"] = "Waiting for the track..."
-
-        self.focus()
-
 class TopLevelControl:
     def __init__(self, parent) -> None:
         self.parent = parent
@@ -295,9 +286,9 @@ class PlayerFrame(LabelFrame):
                                     length=300,
                                     variable=self.volume_var)
         self.volume_scale.bind("<B1-Motion>", self.changeVolume)
-        #self.volume_var.set(
-        #    self.parent.cache.read("volume")
-        #)
+        self.volume_var.set(
+            20
+        )
         self.changeVolume()
 
         self.status_label.grid(row=0, column=0, columnspan=2, padx=3, pady=3)
@@ -351,6 +342,7 @@ class RequestTopLevel(Toplevel):
         self.resizable(0,0)
         self.grab_set() #get the all controls from root muahaha
         self.bind("<Return>", self.playCommand)
+        self.protocol("WM_DELETE_WINDOW", self.exit)
 
         self.tracks = []
         
@@ -375,6 +367,9 @@ class RequestTopLevel(Toplevel):
         self.choose_btn.pack(padx=5, pady=10)
 
         self.parent.controller.requestTracksForReq()
+
+    def exit(self):
+        self.parent.top.closeRequestWindow()
 
     def playCommand(self, *args):
         try:
