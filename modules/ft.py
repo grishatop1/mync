@@ -69,6 +69,8 @@ class ServerFT:
                             "blue", username)
                     break
 
+            client.songhandler.close()
+
         elif data["method"] == "download":
             self.server.transmitAllExceptMe(
                 f"{username} is downloading...",

@@ -164,9 +164,12 @@ class Controller:
     def cancelUpload(self):
         if self.client.ft:
             self.client.ft.kill()
+        self.gui.top.closeUploadWindow()
+        self.gui.netstatus_label.reset()
 
     def resetAll(self):
         self.stopTrack()
+        self.cancelUpload()
 
         self.gui.connect_frame.setNormalState()
         self.gui.log_frame.clearLogs()
