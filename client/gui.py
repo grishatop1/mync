@@ -1,3 +1,4 @@
+import os
 import threading
 
 from tkinter import *
@@ -80,6 +81,7 @@ class TopLevelControl:
 
         filepath = filedialog.askopenfilename(title="Open music file",
                         filetypes=(("Music Files","*.mp3"),))
+        if not filepath: return
         self.upload_win = UploadTopLevel(self.parent, filepath)
 
     def closeUploadWindow(self):
@@ -416,6 +418,8 @@ class UploadTopLevel(Toplevel):
         Toplevel.__init__(self, parent, *args, **kwargs)
         self.parent = parent
         self.filepath = filepath
+        self.filename = os.path.basename(filepath)
+        self.filesize = os.path.getsize(filepath)
 
         self.title("Upload Window")
         self.resizable(0,0)
@@ -441,10 +445,13 @@ class UploadTopLevel(Toplevel):
         self.drawGraph()
         self.start()
 
+    def start(self):
+        self.parent.controller.startUploading(self.filepath)
+
     def updateStatus(self, bps, received):
-        #songsize = round(os.path.getsize(self.file)/1024/1024, 1)
-        self.speed_label["text"] = f"{round(bps/1024, 1)}kbps"
-        #self.percent_label["text"] = f"Sent: {round(received/1024/1024, 1)}MB/{songsize}MB"
+        songsize = round(self.filesize/1024/1024, 1)
+        self.speed_label["text"] = f"Flow: {round(bps/1024, 1)}kbps"
+        self.percent_label["text"] = f"Sent: {round(received/1024/1024, 1)}MB/{songsize}MB"
         self.updateGraph(bps)
 
     def close(self):

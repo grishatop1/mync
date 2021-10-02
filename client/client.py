@@ -115,11 +115,12 @@ class Client:
             self.s.close()
             self.controller.lostClientConnection()
 
-    def uploadSong(self, path):
+    def uploadSong(self, songpath):
         self.ft = ClientFT(self, self.ip, self.port+1)
-        if self.ft.connect():
-            self.ft.upload(path)
-        self.ft = None
+        if self.ft.createConnection():
+            self.ft.uploadThread(songpath)
+        else:
+            self.controller.uploadFail()
 
     def downloadSong(self, songname):
         self.ft = ClientFT(self, self.ip, self.port+1)

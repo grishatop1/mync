@@ -145,6 +145,7 @@ class ClientFT:
         return True
 
     def downloadThread(self, songname):
+        if self.running: return
         if not self.connected: return
         self.start_time = time.perf_counter()
         self.songname = songname
@@ -183,11 +184,55 @@ class ClientFT:
             self.client.controller.updateDownloadStatus(self.songname, percent)
             time.sleep(0.5)
 
+    def uploadThread(self, songpath):
+        if self.running: return
+        if not self.connected: return
+        self.start_time = time.perf_counter()
+        self.songname = os.path.basename(songpath)
+        songsize = os.path.getsize(songpath)
+
+        self.t.sendDataPickle(
+            {"method": "upload", "songname": self.songname, "songsize": songsize}
+        )
+
+        response = self.t.recvData()
+        if not response == b"ready":
+            self.client.controller.uploadFail()
+            self.kill()
+            return
+
+        self.running = True
+        threading.Thread(target=self.uploadStatusThread, daemon=True).start()
+
+        with open(songpath, "rb") as f:
+            while self.running:
+                data = f.read(1024*4)
+                if not data:
+                    break
+                self.t.send(data)
+
+    def uploadStatusThread(self):
+        while self.running:
+            data = self.t.recvData()
+            if not data:
+                break
+            if data == b"done":
+                self.client.controller.uploadSuccess()
+                break
+
+            speed, recvd = data.decode().split(":")
+            try:
+                ispeed, irecvd = int(speed), int(recvd)
+            except:continue
+            self.client.controller.updateUploadStatus(
+                ispeed, irecvd
+            )
+
     def kill(self):
         self.connected = False
         self.running = False
         if self.handler: self.handler.close()
         try:
             self.s.shutdown(2)
-            self.s.close()
         except: pass
+        self.s.close()

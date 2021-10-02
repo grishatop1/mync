@@ -138,10 +138,28 @@ class Controller:
         self.gui.netstatus_label.reset()
         self.gui.log_frame.upload_btn["state"] = "normal"
         self.gui.log("Download failed.", "red")
-        self.gui.showDialog(
-            "Failed to download the song :(",
-            "File Transfer", "warning"
-        )
+
+    def startUploading(self, songpath):
+        self.gui.log_frame.upload_btn["state"] = "disabled"
+        self.gui.log("Uploading the song...")
+        self.gui.netstatus_label.set(f"Uploading...")
+
+        threading.Thread(target=self.client.uploadSong, args=(songpath,), daemon=True).start()
+
+    def uploadSuccess(self):
+        self.gui.top.closeUploadWindow()
+        self.gui.netstatus_label.reset()
+        self.gui.log_frame.upload_btn["state"] = "normal"
+        self.gui.log("Song has been uploaded! You can now request it.", "green")
+
+    def uploadFail(self):
+        self.gui.top.closeUploadWindow()
+        self.gui.netstatus_label.reset()
+        self.gui.log_frame.upload_btn["state"] = "normal"
+        self.gui.log("Upload failed.", "red")
+
+    def updateUploadStatus(self, bps, recvd):
+        self.gui.top.upload_win.updateStatus(bps, recvd)
 
     def resetAll(self):
         self.stopTrack()
