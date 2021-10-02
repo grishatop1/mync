@@ -92,14 +92,6 @@ class Controller:
     def getCacheMusic(self):
         return os.listdir(self.cache.sharedmusic)
 
-    def startSongRequesting(self, songname):
-        self.gui.log_frame.upload_btn["state"] = "disabled"
-        self.gui.log("Missing song! Requesting it...", "red")
-        self.gui.netstatus_label.set(f"[0%] Downloading {songname[:70]}")
-        self.gui.top.closeRequestWindow()
-
-        threading.Thread(target=self.client.downloadSong, args=(songname,), daemon=True).start()
-
     def readyForTheSong(self, songname):
         self.gui.log(
             "Ready for the next song! Waiting for others..."
@@ -126,8 +118,13 @@ class Controller:
         self.player.stopTrack()
         self.gui.player_frame.resetState()
 
-    def updateDownloadStatus(self, songname, percent):
-        self.gui.netstatus_label.set(f"[{percent}%] Downloading {songname[:70]}")
+    def startSongRequesting(self, songname):
+        self.gui.log_frame.upload_btn["state"] = "disabled"
+        self.gui.log("Missing song! Requesting it...", "red")
+        self.gui.netstatus_label.set(f"[0%] Downloading {songname[:70]}")
+        self.gui.top.closeRequestWindow()
+
+        threading.Thread(target=self.client.downloadSong, args=(songname,), daemon=True).start()
 
     def downloadSuccess(self):
         self.gui.netstatus_label.reset()
@@ -138,6 +135,9 @@ class Controller:
         self.gui.netstatus_label.reset()
         self.gui.log_frame.upload_btn["state"] = "normal"
         self.gui.log("Download failed.", "red")
+
+    def updateDownloadStatus(self, songname, percent):
+        self.gui.netstatus_label.set(f"[{percent}%] Downloading {songname[:70]}")
 
     def startUploading(self, songpath):
         self.gui.log_frame.upload_btn["state"] = "disabled"
@@ -161,6 +161,10 @@ class Controller:
     def updateUploadStatus(self, bps, recvd):
         self.gui.top.upload_win.updateStatus(bps, recvd)
 
+    def cancelUpload(self):
+        if self.client.ft:
+            self.client.ft.kill()
+
     def resetAll(self):
         self.stopTrack()
 
@@ -168,7 +172,7 @@ class Controller:
         self.gui.log_frame.clearLogs()
         self.gui.log_frame.upload_btn.configure(text="Upload", state="normal")
         self.gui.connections_frame.clear()
-        self.gui.player_frame.status_label["text"] = "Waiting for the track..."
+        self.gui.player_frame.resetState()
 
         self.gui.focus()
 

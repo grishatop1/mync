@@ -423,7 +423,7 @@ class UploadTopLevel(Toplevel):
 
         self.title("Upload Window")
         self.resizable(0,0)
-        #self.protocol("WM_DELETE_WINDOW", self.cancel)
+        self.protocol("WM_DELETE_WINDOW", self.cancel)
 
         self.canv_w = 300
         self.canv_h = 80
@@ -434,7 +434,7 @@ class UploadTopLevel(Toplevel):
         self.graph_canvas = Canvas(self, width=self.canv_w, height=self.canv_h, background="white")
         self.speed_label = Label(self, text="Loading...")
         self.percent_label = Label(self, text="Loading...")
-        self.cancel_btn = Button(self, text="Cancel")
+        self.cancel_btn = Button(self, text="Cancel", command=self.cancel)
 
         self.title_label.grid(row=0, column=0, columnspan=2, pady=(10,0))
         self.graph_canvas.grid(row=1, column=0, columnspan=2, padx=15, pady=8)
@@ -453,6 +453,9 @@ class UploadTopLevel(Toplevel):
         self.speed_label["text"] = f"Flow: {round(bps/1024, 1)}kbps"
         self.percent_label["text"] = f"Sent: {round(received/1024/1024, 1)}MB/{songsize}MB"
         self.updateGraph(bps)
+
+    def cancel(self):
+        self.parent.controller.cancelUpload()
 
     def close(self):
         self.destroy()
