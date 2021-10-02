@@ -154,6 +154,7 @@ class ClientFT:
         try:
             self.s.settimeout(5)
             self.s.connect(self.addr)
+            self.s.settimeout(None)
         except socket.error:
             return
 

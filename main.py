@@ -153,20 +153,24 @@ class Controller:
         self.gui.log("Song has been uploaded! You can now request it.", "green")
 
     def uploadFail(self):
-        self.gui.top.closeUploadWindow()
-        self.gui.netstatus_label.reset()
-        self.gui.log_frame.upload_btn["state"] = "normal"
+        self.closeUpload()
         self.gui.log("Upload failed.", "red")
 
     def updateUploadStatus(self, bps, recvd):
-        if self.gui.top.upload_win:
-            self.gui.top.upload_win.updateStatus(bps, recvd)
+        try:
+            if self.gui.top.upload_win:
+                self.gui.top.upload_win.updateStatus(bps, recvd)
+        except: pass
 
-    def cancelUpload(self):
-        if self.client.ft:
-            self.client.ft.kill()
+    def closeUpload(self):
         self.gui.top.closeUploadWindow()
         self.gui.netstatus_label.reset()
+        self.gui.log_frame.upload_btn["state"] = "normal"
+
+    def cancelUpload(self):
+        self.closeUpload()
+        if self.client.ft:
+            self.client.ft.kill()
 
     def resetAll(self):
         self.stopTrack()
