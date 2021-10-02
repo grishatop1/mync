@@ -58,7 +58,7 @@ class ServerFT:
                 daemon=True
             ).start()
             while True:
-                time.sleep(0.05) #bad net simulator
+                #time.sleep(0.05) #bad net simulator
                 data = t.recvData()
                 if not data or data == b"drop":
                     break

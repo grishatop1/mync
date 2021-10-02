@@ -171,6 +171,7 @@ class Controller:
         self.closeUpload()
         if self.client.ft:
             self.client.ft.kill()
+        self.gui.log("Upload has been canceled.", "red")
 
     def resetAll(self):
         self.stopTrack()
