@@ -47,15 +47,27 @@ class ServerFT:
         response = t.recvData()
         data = pickle.loads(response)
         if data["method"] == "upload":
-            return
             songname, songsize = data["songname"], data["songsize"]
-            client.songhandler = SongHandler(self.server, t, username, songname, songsize)
-
+            songpath = "servermusic/"+songname
+            client.started = time.perf_counter()
+            client.songhandler = SongReceiver(songpath, songname, songsize)
+            t.send(b"ready")
+            threading.Thread(
+                target=self.getterStatus,
+                args=(client, t, client.songhandler),
+                daemon=True
+            ).start()
             while True:
+                time.sleep(0.05) #bad net simulator
                 data = t.recvData()
                 if not data or data == b"drop":
                     break
-                client.songhandler.write(data)
+                if client.songhandler.write(data):
+                    t.send(b"done")
+                    self.server.player.addTrack(songname)
+                    self.server.transmitAllExceptMe(f"{username} has uploaded the song!!!",
+                            "blue", username)
+                    break
 
         elif data["method"] == "download":
             self.server.transmitAllExceptMe(
@@ -82,6 +94,14 @@ class ServerFT:
         conn.shutdown(2)
         conn.close()
 
+    def getterStatus(self, client, t, songhandler):
+        while not songhandler.closed:
+            now = time.perf_counter() - client.started
+            result = songhandler.recvd/now
+            snd = f"{result}:{songhandler.recvd}"
+            t.send(snd.encode())
+            time.sleep(0.5)
+
 class SongReceiver:
     def __init__(self, songpath, songname, songsize) -> None:
         self.songname = songname
@@ -102,6 +122,7 @@ class SongReceiver:
         self.recvd += len(data)
 
         if self.recvd == self.songsize:
+            self.close()
             return True
 
     def getPercent(self):
@@ -215,15 +236,15 @@ class ClientFT:
         while self.running:
             data = self.t.recvData()
             if not data:
+                self.kill()
                 break
             if data == b"done":
+                self.kill()
                 self.client.controller.uploadSuccess()
                 break
 
             speed, recvd = data.decode().split(":")
-            try:
-                ispeed, irecvd = int(speed), int(recvd)
-            except:continue
+            ispeed, irecvd = float(speed), float(recvd)
             self.client.controller.updateUploadStatus(
                 ispeed, irecvd
             )
