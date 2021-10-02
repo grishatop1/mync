@@ -159,7 +159,8 @@ class Controller:
         self.gui.log("Upload failed.", "red")
 
     def updateUploadStatus(self, bps, recvd):
-        self.gui.top.upload_win.updateStatus(bps, recvd)
+        if self.gui.top.upload_win:
+            self.gui.top.upload_win.updateStatus(bps, recvd)
 
     def cancelUpload(self):
         if self.client.ft:
