@@ -245,6 +245,7 @@ class ChatSubFrame(Frame):
         self.input.focus()
         msg = self.input.get()
         if not msg: return
+        if self.input == "Enter message or YouTube URL": return
         if self.input["foreground"] == "gray": return
         self.input.delete(0, "end")
         self.parent.parent.controller.sendMessage(msg)
