@@ -6,6 +6,7 @@ from tkinter import messagebox
 from tkinter.ttk import *
 from tkinter.messagebox import *
 from tkinter import filedialog
+from tkinter import Scale as ScaleDefault
 
 from ttkbootstrap import Style
 
@@ -297,7 +298,7 @@ class PlayerFrame(LabelFrame):
         self.status_label = Label(self, text="Waiting for the track...")
         self.volume_label = Label(self, text="Volume:")
         self.volume_var = IntVar()
-        self.volume_scale = Scale(self, from_=0, to=100, 
+        self.volume_scale = ScaleDefault(self, from_=0, to=100, 
                                     orient="horizontal",
                                     length=300,
                                     variable=self.volume_var)
