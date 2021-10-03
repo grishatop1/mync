@@ -16,6 +16,7 @@ class Client:
         self.addr = (ip,port)
         self.username = username
 
+        self.ft_addr = None
         self.ft = None
 
         self.force_disconnect = False
@@ -35,15 +36,18 @@ class Client:
         self.s.ioctl(socket.SIO_KEEPALIVE_VALS, (1, 10000, 3000))
         self.t = Transfer(self.s)
         self.t.send(self.username.encode())
-        connections = self.t.recvData()
-        if connections == b"usernametaken":
+
+        response = self.t.recvData()
+        if response == b"badusername":
             return "badusername"
         try:
-            users = pickle.loads(connections)
+            data = pickle.loads(response)
+            connections = data["connections"]
+            self.ft_addr = data["ft-address"]
         except:
             return
 
-        self.controller.addUsers(users)
+        self.controller.addUsers(connections)
         self.controller.addUser(self.username)
 
         self.t.send(b"gotall")
@@ -108,14 +112,14 @@ class Client:
             self.controller.lostClientConnection()
 
     def uploadSong(self, songpath):
-        self.ft = ClientFT(self, self.ip, self.port+1)
+        self.ft = ClientFT(self, *self.ft_addr)
         if self.ft.createConnection():
             self.ft.uploadThread(songpath)
         else:
             self.controller.uploadFail()
 
     def downloadSong(self, songname):
-        self.ft = ClientFT(self, self.ip, self.port+1)
+        self.ft = ClientFT(self, *self.ft_addr)
         if self.ft.createConnection():
             self.ft.downloadThread(songname)
         else:

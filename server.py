@@ -222,7 +222,11 @@ class Server:
             t.send(b"usernametaken")
             return
 
-        t.sendDataPickle(self.snd_connections)
+        data = {
+            "connections": self.snd_connections,
+            "ft-address": [self.ft.ip, self.ft.port]
+        }
+        t.sendDataPickle(data)
         response = t.recvData()
         if response != b"gotall": return
 
