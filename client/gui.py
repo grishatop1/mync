@@ -218,10 +218,10 @@ class ChatSubFrame(Frame):
         
         self.input = PlaceholderEntry(
             self,
-            "Enter message",
+            "Enter message or YouTube URL",
             style="TEntry",
             placeholder_style="Placeholder.TEntry",
-            width=30,
+            width=36,
         )
         self.input.bind("<Return>", self.sendMsg)
         self.send_btn = Button(self, text="Send",
