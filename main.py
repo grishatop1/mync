@@ -89,6 +89,10 @@ class Controller:
     def userSuffix(self, user, sfx):
         self.gui.connections_frame.changeSuffix(user, sfx)
 
+    def transmitSuffix(self, sfx):
+        if self.client:
+            self.client.transmitSuffix(sfx)
+
     def sendPlaytrackRequest(self, songname):
         threading.Thread(target=self.client.reqSong, args=(songname,), daemon=True).start()
 

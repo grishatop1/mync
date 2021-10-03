@@ -43,8 +43,8 @@ class Client:
         except:
             return
 
-        self.controller.addUser(self.username)
         self.controller.addUsers(users)
+        self.controller.addUser(self.username)
 
         self.t.send(b"gotall")
         self.s.settimeout(None)
@@ -92,7 +92,7 @@ class Client:
 
             elif data["method"] == "set-suffix":
                 self.controller.userSuffix(
-                    data["user"], data["suffix"]
+                    data["username"], data["suffix"]
                 )
 
             elif data["method"] == "transmit":
@@ -137,12 +137,7 @@ class Client:
         self.t.sendDataPickle({"method":"transmit", "message":message,
                                "color": color}, blocking=False)
 
-    def transmitMuted(self, muted):
-        if muted:
-            self.t.sendDataPickle(
-                {"method": "im-muted"}
-            )
-        else:
-            self.t.sendDataPickle(
-                {"method": "im-unmuted"}
-            )
+    def transmitSuffix(self, sfx):
+        self.t.sendDataPickle(
+            {"method": "suffix", "suffix": sfx}
+        )

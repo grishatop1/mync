@@ -249,7 +249,7 @@ class ConnectionsFrame(LabelFrame):
         self.clients = {}
         # {"username" : ""} <- suffix
 
-    def addUser(self, username, suffix = "", idx=None):
+    def addUser(self, username, suffix="", idx=None):
         self.clients[username] = suffix
         self.connections_listbox.insert(
             "end" if not idx else idx, username + suffix
@@ -260,11 +260,9 @@ class ConnectionsFrame(LabelFrame):
             self.addUser(username, suffix)
 
     def changeSuffix(self, username, new_suffix):
-        try:
-            suffix = self.clients[username]
-            idx = self.removeUser(username)
-            self.addUser(username, suffix, idx)
-        except: pass
+        suffix = self.clients[username]
+        idx = self.removeUser(username)
+        self.addUser(username, new_suffix, idx)
 
     def removeUser(self, username):
         suffix = self.clients[username]
@@ -284,7 +282,6 @@ class PlayerFrame(LabelFrame):
 
         self.player = None
         self.start_time = 0
-        #self.last_volume = int(self.parent.cache.read("volume"))
 
         self.status_label = Label(self, text="Waiting for the track...")
         self.volume_label = Label(self, text="Volume:")
@@ -294,14 +291,14 @@ class PlayerFrame(LabelFrame):
                                     length=300,
                                     variable=self.volume_var)
         self.volume_scale.bind("<B1-Motion>", self.changeVolume)
-        self.volume_var.set(
-            20
-        )
-        self.changeVolume()
 
         self.status_label.grid(row=0, column=0, columnspan=2, padx=3, pady=3)
         self.volume_label.grid(row=1, column=0, padx=3, pady=3)
         self.volume_scale.grid(row=1, column=1, padx=3, pady=3)
+
+        self.volume_var.set(self.parent.controller.player.loadCacheVolume())
+        self.changeVolume()
+        
 
     def changeVolume(self, *args):
         volume = self.volume_var.get()

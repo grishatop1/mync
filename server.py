@@ -107,14 +107,10 @@ class ClientHandler:
                     data["color"],
                     self.username)
 
-            elif data["method"] == "im-muted":
+            elif data["method"] == "suffix":
+                sfx = data["suffix"]
                 self.server.changeConnectionSuffix(
-                    self.username, "(muted)"
-                )
-
-            elif data["method"] == "im-unmuted":
-                self.server.changeConnectionSuffix(
-                    self.username, ""
+                    self.username, sfx
                 )
                 
 
@@ -230,7 +226,7 @@ class Server:
 
     def changeConnectionSuffix(self, username, suffix):
         self.snd_connections[username] = suffix
-        self.sendAllExceptMe(pickle.dumps(
+        self.sendAll(pickle.dumps(
             {"method": "set-suffix", "username": username, "suffix": suffix}
         ))
 
