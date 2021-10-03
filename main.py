@@ -131,6 +131,9 @@ class Controller:
         self.gui.netstatus_label.set(f"[0%] Downloading {songname[:70]}")
         self.gui.top.closeRequestWindow()
 
+        if self.client.ft and self.client.ft.running:
+            self.client.ft.kill()
+
         threading.Thread(target=self.client.downloadSong, args=(songname,), daemon=True).start()
 
     def downloadSuccess(self):
@@ -142,6 +145,10 @@ class Controller:
         self.gui.netstatus_label.reset()
         self.gui.log_frame.upload_btn["state"] = "normal"
         self.gui.log("Download failed.", "red")
+
+    def cancelDownload(self):
+        if self.client.ft:
+            self.client.ft.kill(fail=True)
 
     def updateDownloadStatus(self, songname, percent):
         self.gui.netstatus_label.set(f"[{percent}%] Downloading {songname[:70]}")
@@ -183,6 +190,7 @@ class Controller:
     def resetAll(self):
         self.stopTrack()
         self.cancelUpload()
+        self.cancelDownload()
 
         self.gui.connect_frame.setNormalState()
         self.gui.log_frame.clearLogs()

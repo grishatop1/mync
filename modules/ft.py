@@ -61,15 +61,15 @@ class ServerFT:
                 #time.sleep(0.05) #bad net simulator
                 data = t.recvData()
                 if not data or data == b"drop":
+                    client.songhandler.close(fail=True)
                     break
                 if client.songhandler.write(data):
                     t.send(b"done")
                     self.server.player.addTrack(songname)
                     self.server.transmitAllExceptMe(f"{username} has uploaded the song!!!",
                             "blue", username)
+                    client.songhandler.close()
                     break
-
-            client.songhandler.close()
 
         elif data["method"] == "download":
             self.server.transmitAllExceptMe(
@@ -131,9 +131,14 @@ class SongReceiver:
         percent = round((self.recvd/self.songsize)*100, 1)
         return percent
 
-    def close(self):
+    def close(self, fail=False):
         self.closed = True
         self.f.close()
+        if fail:
+            try:
+                os.remove(self.songpath)
+            except:
+                pass
 
 class ClientFT:
     def __init__(self, client, ip, port) -> None:
@@ -189,17 +194,19 @@ class ClientFT:
         threading.Thread(target=self.downloadStatusThread, daemon=True).start()
 
         while self.running:
+            #time.sleep(0.01) # bad net simulator
             data = self.t.recvData()
             if not data and self.running:
                 self.client.controller.downloadFail()
+                self.kill(fail=True)
                 break
 
             if self.handler.write(data):
                 self.client.controller.downloadSuccess()
                 self.client.sendReady()
+                self.kill()
                 break
-
-        self.kill()
+        
 
     def downloadStatusThread(self):
         while self.running:
@@ -252,10 +259,10 @@ class ClientFT:
                 ispeed, irecvd
             )
 
-    def kill(self):
+    def kill(self, fail=False):
         self.connected = False
         self.running = False
-        if self.handler: self.handler.close()
+        if self.handler: self.handler.close(fail)
         try:
             self.s.shutdown(2)
         except: pass
