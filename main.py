@@ -87,9 +87,11 @@ class Controller:
         self.gui.connections_frame.addUsers(users)
 
     def addUser(self, user):
+        self.gui.log(f"{user} joined.", "#d97000")
         self.gui.connections_frame.addUser(user)
 
     def removeUser(self, user):
+        self.gui.log(f"{user} left.", "#d97000")
         self.gui.connections_frame.removeUser(user)
 
     def userSuffix(self, user, sfx):

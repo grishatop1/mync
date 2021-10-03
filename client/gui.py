@@ -186,7 +186,7 @@ class LogFrame(LabelFrame):
 
         self.log_text = Text(self, width=50, height=10, state="disabled")
 
-        colors = ["green", "red", "blue", "black", "orange"]
+        colors = ["green", "red", "blue", "black", "orange", "#d97000"]
         for color in colors:
             self.log_text.tag_configure(color, foreground=color)
 

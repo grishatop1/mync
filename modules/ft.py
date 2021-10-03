@@ -57,6 +57,11 @@ class ServerFT:
                 args=(client, t, client.songhandler),
                 daemon=True
             ).start()
+            self.server.transmitAllExceptMe(
+                f"{username} is uploading...",
+                "blue",
+                username    
+            )
             while True:
                 #time.sleep(0.05) #bad net simulator
                 data = t.recvData()
