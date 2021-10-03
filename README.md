@@ -5,7 +5,7 @@
 Listen to music together in sync! Request from server's songlist or upload your own songs.
 
 ## Requirements
-**mync** requires **pygame** because it uses pygame's mixer module for playing audio. **ttkbootstrap** is used for the stylised interface.
+**mync** requires **pygame** (at least 2.0.0) because it uses pygame's mixer module for playing audio. **ttkbootstrap** is used for the stylised interface.
 
 Run the following commands in your CLI to get the requirements.
 
