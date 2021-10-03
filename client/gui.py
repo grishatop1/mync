@@ -23,10 +23,10 @@ class MainApplication(Tk):
 
         self.top = TopLevelControl(self)
 
-        #self.bind("<F1>",about)
+        self.bind("<F1>",self.about)
         menu = Menu(self)
         help_menu = Menu(menu, tearoff=0)
-        menu.add_command(label='About', underline=0)
+        menu.add_command(label='About', command=self.about, underline=0)
         self.config(menu=menu)
 
         self.connect_frame = ConnectFrame(self, text="Connection")
@@ -54,6 +54,17 @@ class MainApplication(Tk):
             showwarning(title, message)
         else:
             showerror(title, message)
+
+    def about(*args):
+        '''Shows an About box'''
+        messagebox.showinfo(title='About Mync',message=
+'''Mync - Music Sync
+---------
+Have a suggestion, found a typo or a bug, wanna just chat about the
+program? Report the problem on the GitHub page (where you probably
+got the program) at https://github.com/grishatop1/mync!
+---------
+''')
 
 class TopLevelControl:
     def __init__(self, parent) -> None:
