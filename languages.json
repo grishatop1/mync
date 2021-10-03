@@ -2,6 +2,31 @@
     "en": {
         "title":"Mync Client",
         "title_playing":"Mync Client - Playing ",
-        "connection":"Connection"
+        "connection":"Connection",
+        "username":"Username:",
+        "server_ip":"Server IP:",
+        "connect":"Connect",
+        "logs":"Logs",
+        "upload":"Upload",
+        "upl_title":"Upload Window",
+        "upl_uploading":"Uploading ",
+        "upl_loading":"Loading...",
+        "upl_cancel":"Cancel",
+        "upl_flow":"Flow: ",
+        "upl_sent":"Sent: ",
+        "request":"Request a song",
+        "req_title":"Choose a song...",
+        "req_pick":"Pick a song... (scrollable)",
+        "req_search":"Search for the song...",
+        "chat_placeholder":"Enter message or YouTube URL",
+        "chat_send":"Send",
+        "player":"PLAYER",
+        "waiting":"Waiting for the track...",
+        "volume":"Volume",
+        "muted":"(muted)",
+        "netw_idle":"NETWORK IDLE",
+        "connections":"Connections",
+        "about_menu":"About Mync",
+        "about_info":"Mync - Music Sync\n---------\nHave a suggestion, found a typo or a bug, wanna just chat about the\nprogram? Report the problem on the GitHub page (where you probably\ngot the program) at https://github.com/grishatop1/mync!\n---------"
     }
 }

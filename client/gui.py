@@ -27,7 +27,7 @@ class MainApplication(Tk):
         self.bind("<F1>",self.about)
         menu = Menu(self)
         help_menu = Menu(menu, tearoff=0)
-        menu.add_command(label='About', command=self.about, underline=0)
+        menu.add_command(label='About Mync', command=self.about, underline=0)
         self.config(menu=menu)
 
         self.connect_frame = ConnectFrame(self, text="Connection")
@@ -48,7 +48,7 @@ class MainApplication(Tk):
 
 
 
-    def showDialog(self, message, title="Mync client", _type="info"):
+    def showDialog(self, message, title="Mync Client", _type="info"):
         if _type == "info":
             showinfo(title, message)
         elif _type == "warning":
