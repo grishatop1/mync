@@ -108,27 +108,18 @@ class ClientHandler:
                     self.username)
 
             elif data["method"] == "im-muted":
-                self.server.renameSndUser(self.username, self.username+" (muted)")
-                self.server.sendAll(
-                    pickle.dumps(
-                        {"method":"in-mute", "user": self.username}
-                    )
+                self.server.changeConnectionSuffix(
+                    self.username, "(muted)"
                 )
 
             elif data["method"] == "im-unmuted":
-                self.server.renameSndUser(self.username+" (muted)", self.username)
-                self.server.sendAll(
-                    pickle.dumps(
-                        {"method":"in-outmute", "user": self.username}
-                    )
+                self.server.changeConnectionSuffix(
+                    self.username, ""
                 )
                 
 
         del self.server.connections[self.username]
-        self.server.removeSndUser(self.username)
-        self.server.sendAllExceptMe(pickle.dumps(
-            {"method":"connectionminus", "user":self.username}
-        ), self.username)
+        self.server.removeConnection(self.username)
         print(f"{self.username} has disconnected from the server.")
 
 class Server:
@@ -142,7 +133,7 @@ class Server:
 
         self.connections = {}
         self.connthreads = []
-        self.snd_connections = []
+        self.snd_connections = {}
 
     def runServer(self):
         self.s.bind(self.addr)
@@ -199,7 +190,6 @@ class Server:
 
         client = ClientHandler(self, username, conn, t)
         self.connections[username] = client
-        self.snd_connections.append(username)
         print(f"{username} connected to the server!")
 
         if self.player.current_playing:
@@ -213,10 +203,7 @@ class Server:
                 }
             )
 
-        self.sendAllExceptMe(pickle.dumps(
-            {"method": "connectionplus", "user": username}
-        ), username)
-
+        self.addUserToConnections(username)
         client.mainThread()
 
     def sendAll(self, data):
@@ -235,17 +222,23 @@ class Server:
             {"method":"transmit", "message": message, "color":color}
         ), username)
 
-    def renameSndUser(self, old, new):
-        try:
-            self.snd_connections.remove(old)
-            self.snd_connections.append(new)
-        except:pass
+    def addUserToConnections(self, username):
+        self.snd_connections[username] = ""
+        self.sendAllExceptMe(pickle.dumps(
+            {"method": "connectionplus", "user": username}
+        ), username)
 
-    def removeSndUser(self, username):
-        try:
-            self.snd_connections.remove(username)
-        except:
-            self.snd_connections.remove(username+" (muted)")
+    def changeConnectionSuffix(self, username, suffix):
+        self.snd_connections[username] = suffix
+        self.sendAllExceptMe(pickle.dumps(
+            {"method": "set-suffix", "username": username, "suffix": suffix}
+        ))
+
+    def removeConnection(self, username):
+        del self.snd_connections[username]
+        self.sendAllExceptMe(pickle.dumps(
+            {"method":"connectionminus", "user":username}
+        ), username)
 
 class LauncherGUI(Tk):
     def __init__(self, debug=False, *args, **kwargs) -> None:

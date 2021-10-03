@@ -86,6 +86,9 @@ class Controller:
     def removeUser(self, user):
         self.gui.connections_frame.removeUser(user)
 
+    def userSuffix(self, user, sfx):
+        self.gui.connections_frame.changeSuffix(user, sfx)
+
     def sendPlaytrackRequest(self, songname):
         threading.Thread(target=self.client.reqSong, args=(songname,), daemon=True).start()
 

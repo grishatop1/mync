@@ -90,6 +90,11 @@ class Client:
             elif data["method"] == "connectionminus":
                 self.controller.removeUser(data["user"])
 
+            elif data["method"] == "set-suffix":
+                self.controller.userSuffix(
+                    data["user"], data["suffix"]
+                )
+
             elif data["method"] == "transmit":
                 self.controller.recvMessage(data["message"])
 

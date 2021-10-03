@@ -246,25 +246,31 @@ class ConnectionsFrame(LabelFrame):
         self.connections_listbox = Listbox(self, width=30)
         self.connections_listbox.pack(padx=3, pady=3)
 
-    def addUser(self, username):
-        self.connections_listbox.insert("end", username)
+        self.clients = {}
+        # {"username" : ""} <- suffix
+
+    def addUser(self, username, suffix = "", idx=None):
+        self.clients[username] = suffix
+        self.connections_listbox.insert(
+            "end" if not idx else idx, username + suffix
+        )
 
     def addUsers(self, connections):
-        for username in connections:
-            self.addUser(username)
+        for username, suffix in connections.items():
+            self.addUser(username, suffix)
 
-    def renameUser(self, username, new):
+    def changeSuffix(self, username, new_suffix):
         try:
+            suffix = self.clients[username]
             idx = self.removeUser(username)
-            self.connections_listbox.insert(idx, new)
+            self.addUser(username, suffix, idx)
         except: pass
 
     def removeUser(self, username):
-        try:
-            idx = self.connections_listbox.get(0, "end").index(username)
-        except:
-            idx = self.connections_listbox.get(0, "end").index(username+" (muted)")
+        suffix = self.clients[username]
+        idx = self.connections_listbox.get(0, "end").index(username + suffix)
         self.connections_listbox.delete(idx)
+        del self.clients[username]
         return idx
 
     def clear(self):
