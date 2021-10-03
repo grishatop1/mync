@@ -77,7 +77,6 @@ class Client:
 
             elif data["method"] == "checksong":
                 songname = data["songname"]
-                songsize = data["songsize"] #used if client has not track
                 tracks = self.controller.getCacheMusic()
                 if not songname in tracks:
                     self.controller.startSongRequesting(songname)
@@ -97,18 +96,6 @@ class Client:
             elif data["method"] == "echo":
                 message = f"[You]: {data['msg']}"
                 self.controller.recvMessage(message)
-
-            elif data["method"] == "in-mute":
-                self.app.connections_frame.renameUser(
-                    data["user"],
-                    data["user"] + " (muted)"
-                )
-
-            elif data["method"] == "in-outmute":
-                self.app.connections_frame.renameUser(
-                    data["user"] + " (muted)",
-                    data["user"]
-                )
 
         if not self.force_disconnect:
             self.alive = False
