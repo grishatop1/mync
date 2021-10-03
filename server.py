@@ -14,6 +14,36 @@ from modules.ft import ServerFT
 
 from requests import get, post
 from bs4 import BeautifulSoup
+from pytube import YouTube
+from moviepy.editor import AudioFileClip
+
+class YTHandler:
+    def __init__(self, client, link) -> None:
+        self.client = client
+        self.link = link
+        threading.Thread(target=self.downloadMP3, daemon=True).start()
+
+    def downloadMP3(self):
+        yt = YouTube(self.link).streams.filter(only_audio=True).first()
+        yt.download("servermusic/")
+        songname, songext = os.path.splitext(yt.default_filename)
+        songnamefull = yt.default_filename
+
+        video = AudioFileClip(
+            os.path.join("servermusic", songnamefull)
+        )
+        video.write_audiofile(
+            os.path.join("servermusic", songname+".mp3"), logger=None
+        )
+        self.client.server.player.addTrack(
+            songname + ".mp3"
+        )
+        os.remove("servermusic/"+songnamefull)
+
+        self.client.transmitMe(
+            "Server has downloaded the track. You can now request it.",
+            "green"
+        )
 
 class ServerPlayer:
     PATH = "servermusic/"
@@ -66,6 +96,13 @@ class ClientHandler:
                     {"method":"checksong","songname":songname, "songsize": songsize}
                 ))
 
+            elif data["method"] == "req-yt":
+                self.transmitMe(
+                    "Server is downloading the track from YouTube.",
+                    "black"
+                )
+                YTHandler(self, data["link"])
+
             elif data["method"] == "reqsongfile":
                 songname = data["songname"]
                 self.t.sendDataPickle({"method":"sendingsong", "songname": songname})
@@ -117,6 +154,11 @@ class ClientHandler:
         del self.server.connections[self.username]
         self.server.removeConnection(self.username)
         print(f"{self.username} has disconnected from the server.")
+
+    def transmitMe(self, text, color):
+        self.t.sendDataPickle(
+            {"method": "transmit", "message":text, "color": color}
+        )
 
 class Server:
     os.makedirs("servermusic/", exist_ok=True)

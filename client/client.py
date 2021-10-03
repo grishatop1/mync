@@ -96,11 +96,11 @@ class Client:
                 )
 
             elif data["method"] == "transmit":
-                self.controller.recvMessage(data["message"])
+                self.controller.recvMessage(data["message"], data["color"])
 
             elif data["method"] == "echo":
                 message = f"[You]: {data['msg']}"
-                self.controller.recvMessage(message)
+                self.controller.recvMessage(message, "blue")
 
         if not self.force_disconnect:
             self.alive = False
@@ -127,6 +127,11 @@ class Client:
     def reqSong(self, songname):
         self.t.sendDataPickle({"method": "req", "songname": songname},
                               blocking=False)
+
+    def reqYoutube(self, link):
+        self.t.sendDataPickle(
+            {"method": "req-yt", "link": link}
+        )
 
     def sendReady(self):
         self.t.sendDataPickle(

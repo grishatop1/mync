@@ -7,6 +7,8 @@ from client.client import Client
 from client.cachemngr import CacheManager
 from client.player import Player
 
+from modules.utils import youtube_url_validation
+
 class Controller:
     def __init__(self) -> None:
         self.gui = None
@@ -55,6 +57,10 @@ class Controller:
 
     def sendMessage(self, message):
         if self.client:
+            if youtube_url_validation(message):
+                self.gui.log("YouTube URL Accepted.")
+                self.client.reqYoutube(message)
+                return
             self.client.transmitMsg(
                 message,
                 "blue"
@@ -64,10 +70,10 @@ class Controller:
                 f"[Offline]: {message}"
             )
 
-    def recvMessage(self, message):
+    def recvMessage(self, message, color):
         self.gui.log_frame.insertTextLine(
             message,
-            "blue"
+            color
         )
 
     def requestTracksForReq(self):
