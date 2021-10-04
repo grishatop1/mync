@@ -58,7 +58,7 @@ class Controller:
     def sendMessage(self, message):
         if self.client:
             if youtube_url_validation(message):
-                self.gui.log("YouTube URL Accepted.")
+                self.gui.log("YouTube URL accepted.")
                 self.client.reqYoutube(message)
                 return
             self.client.transmitMsg(
@@ -127,7 +127,7 @@ class Controller:
             return
 
         self.gui.player_frame.setPlayingState(songname[:70]+"...")
-        self.gui.log("Playing next track!", "green")
+        self.gui.log("Playing the track!", "green")
 
     def stopTrack(self):
         self.player.stopTrack()

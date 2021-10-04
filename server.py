@@ -307,7 +307,7 @@ class LauncherGUI(Tk):
                                 state="readonly",width=20,foreground="grey")
         self.custom_port_entry.grid(column=0,row=1,sticky="we",padx=50)
 
-        self.startB=Button(self, text="Start Server",command=self.thread)
+        self.startB=Button(self, text="Start server",command=self.thread)
         self.startB.grid(column=0,row=2,columnspan=3,sticky="we",padx=50,pady=10)
 
         self.bind("<F1>",self.help_)
