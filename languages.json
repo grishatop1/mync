@@ -30,7 +30,6 @@
         "logs_upload_canceled":"Upload has been canceled.",
 
         "server_ft":"File transfer server started on ",
-
         "server_downloaded":"Server has downloaded the track. You can now request it.",
         "server_downloading":"Server is downloading the track from YouTube.",
         "server_user_left":" has disconnected from the server.",
@@ -43,7 +42,7 @@
         "server_start_bttn":"Start server",
         "server_help_bttn":"How to Use",
         "server_help_title":"How to Use",
-        "server_help_msg":"0) Please read before use:\n\n1) The default port is 8888, but you can also set a custom port. First\ncheck the 'Custom Port' checbox, and then type in the preferred\nport. The checkbox must remain checked in order to use the custom\nport.\n\n2) Pressing the 'Start Server' button will start the server on the\ncustom port or port 8888. Pressing it again will stop the server and\nclose the launcher. You can also press F3 to launch the server.",
+        "server_help_msg":"0) Please read before use:\n\n1) The default port is 8888, but you can also set a custom port. First\ncheck the 'Custom Port' checkbox, and then type in the preferred\nport. The checkbox must remain checked in order to use the custom\nport.\n\n2) Pressing the 'Start Server' button will start the server on the\ncustom port or port 8888. Pressing it again will stop the server and\nclose the launcher. You can also press F3 to launch the server.",
         "server_close_bttn":"Close server",
         "server_close_title":"Are you sure?",
         "server_close_ask":"Close server?",
@@ -81,5 +80,87 @@
 
         "about_menu":"About Mync",
         "about_info":"Mync - Music Sync\n---------\nHave a suggestion, found a typo or a bug, wanna just chat about the\nprogram? Report the problem on the GitHub page (where you probably\ngot the program) at https://github.com/grishatop1/mync!\n---------"
+    },
+    "sr": {
+        "title":"Mync Klijent",
+        "title_playing":"Mync Client - Svira ",
+        "connection":"Povezivanje",
+        "username":"Ime:",
+        "server_ip":"Serverski IP:",
+        "connect":"Poveži se",
+        "conn_err_alreadytaken":"Ime je zauzeto.",
+        "conn_err_couldnt":"Veza neuspješna.",
+        "conn_err_lost":"Veza izgubljena.",
+
+        "logs":"Dopisivanje",
+        "logs_isuploading":" postavlja...",
+        "logs_hasuploaded":" je postavio pjesmu!!!",
+        "logs_isdownloading":" preuzima...",
+        "logs_yt_accepted":"Jutjub poveznica prihvaćena.",
+        "logs_offline_msg":"Nepovezan",
+        "logs_user_joined":" se povezao",
+        "logs_user_left":" je otišao",
+        "logs_track_ready":"Spreman za iduću pjesmu! Čekam ostale...",
+        "logs_cant_play":"Ne mogu pustiti ovu pjesmu.",
+        "logs_playing_now":"Puštam pjesmu!",
+        "logs_requesting":"Nemam pjesmu! Tražim od servera...",
+        "logs_downloaded":"Pjesma je preuzeta, čekam ostale!",
+        "logs_dl_failed":"Preuzimanje neuspješno.",
+        "logs_uploading":"Postavljam pjesmu...",
+        "logs_uploaded":"Pjesma je postavljena! Sad je možeš zatražiti.",
+        "logs_upload_failed":"Postavljanje neuspješno.",
+        "logs_upload_canceled":"Postavljanje otkazano.",
+
+        "server_ft":"Server za transfer datoteka radi na ",
+        "server_downloaded":"Server je preuzeo pjesmu. Sad je možeš zatražiti.",
+        "server_downloading":"Server preuzima pjesmu sa Jutjuba.",
+        "server_user_left":" je napustio server.",
+        "server_user_joined":" se povezao na server!",
+        "server_started_on":"Server radi na ",
+        "server_public_ip":"Tvoj javni IP: ",
+        "server_handling":"Rukovanje ",
+        "server_title":"Mync Server",
+        "server_custom_port":"Podesi port (napredno)",
+        "server_start_bttn":"Pokreni server",
+        "server_help_bttn":"Kako koristiti",
+        "server_help_title":"Kako koristiti",
+        "server_help_msg":"0) Pročitati prije upotrebe:\n\n1) Podrazumijevani port je 8888, ali se može podesiti i drugi. Prvo\nčekiraj 'Podesi Port' kockicu, a zatim unesi željeni\nport. Kockica mora ostati čekirana da bi se koristio željeni\nport.\n\n2) Pritisni 'Pokreni Server' da pokreneš server na\nželjenom ili portu 8888. Pritisni ponovo da ugasiš server i\nzatvoriš prozor. Server se takođe može pokrenut pritiskom na dugme F3.",
+        "server_close_bttn":"Ugasi server",
+        "server_close_title":"Sigurno?",
+        "server_close_ask":"Ugasi server?",
+        "server_error_title":"Greška!",
+        "server_error_text":"Sljedeća greška se desila:\n\n\"{}\"",
+
+        "only_win":"Mync klijent za sada radi samo na Windowsu:/",
+
+        "upload":"Postavi",
+        "upl_title":"Postavljanje",
+        "upl_uploading":"Postavljam ",
+        "upl_loading":"Učitavam...",
+        "upl_cancel":"Otkaži",
+        "upl_flow":"Protok: ",
+        "upl_sent":"Poslato: ",
+
+        "request":"Zatraži pjesmu",
+        "req_title":"Odaberi pjesmu...",
+        "req_pick":"Odaberi pjesmu... (lista se može skrolati)",
+        "req_search":"Traži pjesmu...",
+
+        "chat_placeholder":"Unesi poruku ili Jutjub poveznicu",
+        "chat_send":"Pošalji",
+
+        "player":"PLEJER",
+        "waiting":"Čekam pjesmu...",
+        "volume":"Jačina tona",
+        "muted":" (ugašen ton)",
+        
+        "netw_idle":"Mreža na čekanju",
+        "netw_downloading":"[0%] Preuzimam ",
+        "netw_uploading":"Postavljam...",
+
+        "connections":"Veze",
+
+        "about_menu":"O Mync",
+        "about_info":"Mync - Music Sync\n---------\nImate prijedlog, našli ste grešku, želite porazgovarati o\nprogramu? Prijavite problem na GitHub stranici (gdje ste vjerovatno\nnašli program) na https://github.com/grishatop1/mync!\n---------"
     }
 }
