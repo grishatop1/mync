@@ -10,11 +10,15 @@ from tkinter import Scale as ScaleDefault
 
 from ttkbootstrap import Style
 
+lng = None
+
 class MainApplication(Tk):
     def __init__(self, controller, *args, **kwargs) -> None:
         Tk.__init__(self, *args, **kwargs)
+        global lng
 
         self.controller = controller
+        lng = self.controller.lng
 
         self.title("Mync Client")
         self.resizable(0,0)
@@ -111,7 +115,7 @@ class ConnectFrame(LabelFrame):
         self.parent = parent
         self.client = None
 
-        self.username_label = Label(self, text="Username:")
+        self.username_label = Label(self, text=lng.str("username"))
         self.username_entry = Entry(self)
         self.ip_label = Label(self, text="Server IP:")
         self.ip_entry = Entry(self)
@@ -317,7 +321,7 @@ class PlayerFrame(LabelFrame):
         self.parent.controller.player.setVolume(volume)
 
     def setPlayingState(self, songname):
-        self.status_label["text"] = f"Playing - {songname}"
+        self.status_label["text"] = lng.str("player-playing", songname)
         self.status_label["foreground"] = "#c89cff"
 
     def resetState(self):

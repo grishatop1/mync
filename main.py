@@ -7,6 +7,7 @@ from client.client import Client
 from client.cachemngr import CacheManager
 from client.player import Player
 
+from modules.langs import LanguageSupport
 from modules.utils import youtube_url_validation
 
 class Controller:
@@ -15,6 +16,7 @@ class Controller:
         self.client = None
         self.cache = CacheManager()
         self.player = Player(self)
+        self.lng = LanguageSupport(self, "languages.json")
 
     def runGUI(self):
         self.gui = MainApplication(self)
