@@ -298,11 +298,12 @@ class PlayerFrame(LabelFrame):
         self.status_label = Label(self, text="Waiting for the track...")
         self.volume_label = Label(self, text="Volume:")
         self.volume_var = IntVar()
+        self.volume_var.trace('w', self.changeVolume)
         self.volume_scale = ScaleDefault(self, from_=0, to=100, 
                                     orient="horizontal",
                                     length=300,
                                     variable=self.volume_var)
-        self.volume_scale.bind("<B1-Motion>", self.changeVolume)
+        #self.volume_scale.bind("<B1-Motion>", self.changeVolume)
 
         self.status_label.grid(row=0, column=0, columnspan=2, padx=3, pady=3)
         self.volume_label.grid(row=1, column=0, padx=3, pady=3)
