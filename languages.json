@@ -23,7 +23,7 @@
         "player":"PLAYER",
         "waiting":"Waiting for the track...",
         "volume":"Volume",
-        "muted":"(muted)",
+        "muted":" (muted)",
         "netw_idle":"NETWORK IDLE",
         "connections":"Connections",
         "about_menu":"About Mync",
