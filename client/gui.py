@@ -115,7 +115,7 @@ class ConnectFrame(LabelFrame):
         self.parent = parent
         self.client = None
 
-        self.username_label = Label(self, text=lng.str("username"))
+        self.username_label = Label(self, text=lng("username"))
         self.username_entry = Entry(self)
         self.ip_label = Label(self, text="Server IP:")
         self.ip_entry = Entry(self)
@@ -321,7 +321,7 @@ class PlayerFrame(LabelFrame):
         self.parent.controller.player.setVolume(volume)
 
     def setPlayingState(self, songname):
-        self.status_label["text"] = lng.str("player-playing", songname)
+        self.status_label["text"] = lng("player-playing", songname)
         self.status_label["foreground"] = "#c89cff"
 
     def resetState(self):

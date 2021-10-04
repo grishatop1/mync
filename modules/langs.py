@@ -11,7 +11,7 @@ class LanguageSupport:
             data = json.load(f)
         return data[self.lng_code]
 
-    def str(self, _id, *args):
+    def __call__(self, _id, *args):
         if not _id in self.data:
             return "Not translated!"
 

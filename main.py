@@ -32,7 +32,7 @@ class Controller:
         elif result == "badusername":
             self.client = None
             self.gui.connect_frame.setNormalState()
-            self.gui.showDialog("Username already taken.", "Connection", "warning")
+            self.gui.showDialog(self.lng("conn_err_alreadytaken"), "Connection", "warning")
         else:
             self.client = None
             self.gui.connect_frame.setNormalState()
