@@ -370,7 +370,7 @@ class RequestTopLevel(Toplevel):
         Toplevel.__init__(self, parent, *args, **kwargs)
         self.parent = parent
 
-        self.title("Choose a song...")
+        self.title(lng("req_title"))
         self.resizable(0,0)
         self.grab_set() #get the all controls from root muahaha
         self.bind("<Return>", self.playCommand)
@@ -451,7 +451,7 @@ class UploadTopLevel(Toplevel):
         self.filename = os.path.basename(filepath)
         self.filesize = os.path.getsize(filepath)
 
-        self.title("Upload Window")
+        self.title(lng("upl_title"))
         self.resizable(0,0)
         self.protocol("WM_DELETE_WINDOW", self.cancel)
 
