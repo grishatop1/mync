@@ -188,7 +188,7 @@
         "en": "Server has downloaded the track. You can now request it.",
         "sr": "Server je preuzeo pjesmu. Sad je možeš zatražiti.",
         "jp": "サーバーが曲をダウンロードしました。リクエストできるようになりました。",
-        "ru": "Сервер скачал трек. Теперь его можно запросить."
+        "ru": "Сервер скачал трек. Теперь его можешь запросить."
     },
     "server_downloading": {
         "en": "Server is downloading the track from YouTube.",
@@ -236,7 +236,7 @@
         "en": "Custom port (advanced)",
         "sr": "Podesi port (napredno)",
         "jp": "カスタムポート（詳細）",
-        "ru": "Другой порт (продвинуто)"
+        "ru": "Настрой порт (продвинуто)"
     },
     "server_start_bttn": {
         "en": "Start server",
@@ -260,7 +260,7 @@
         "en": "0) Please read before use:\n\n1) The default port is 8888, but you can also set a custom port. First\ncheck the 'Custom Port' checkbox, and then type in the preferred\nport. The checkbox must remain checked in order to use the custom\nport.\n\n2) Pressing the 'Start Server' button will start the server on the\ncustom port or port 8888. Pressing it again will stop the server and\nclose the launcher. You can also press F3 to launch the server.",
         "sr": "0) Pročitati prije upotrebe:\n\n1) Podrazumijevani port je 8888, ali se može podesiti i drugi. Prvo\nčekiraj 'Podesi Port' kockicu, a zatim unesi željeni\nport. Kockica mora ostati čekirana da bi se koristio željeni\nport.\n\n2) Pritisni 'Pokreni Server' da pokreneš server na\nželjenom ili portu 8888. Pritisni ponovo da ugasiš server i\nzatvoriš prozor. Server se takođe može pokrenut pritiskom na dugme F3.",
         "jp": "0) 使用前にお読みください：\n\n1) デフォルトのポートは8888ですが、カスタムポートを設定することもできます。 最初に\n [カスタムポート]チェックボックスをオンにしてから、\n優先ポートを入力します。 カスタムポートを使用するには、チェックボックスをオンのままにする必要があります。\n \n2）[サーバーの開始]ボタンを押すと、\nカスタムポートまたはポート8888でサーバーが起動します。もう一度押すと、サーバーが停止し、\nサーバーが閉じます。 ランチャー。 F3を押してサーバーを起動することもできます。",
-        "ru": "0) Пожалуйста прочтите перед использованием:\n\n1) По умолчанию порт 8888, но его можно изменить. Сначала выбери `Настрой порт` галочку, а потом введи желаемый порт. Галочка должна быть установлена чтобы использовался желаемый порт\n.\n\n2) Нажми `Запусти сервер` чтобы запустить сервер на требуемом или порту 8888. Нажми снова ту же кнопку чтобы выключить сервер. Так же сервер может быть запущен нажимая клавишу F3."
+        "ru": "0) Пожалуйста прочтите перед использованием:\n\n1) По умолчанию порт 8888, но его можно изменить. Сначала выбери `Настрой порт` галочку, а потом введи желаемый порт. Галочка должна быть установлена чтобы использовался желаемый порт.\n\n2) Нажми `Запусти сервер` чтобы запустить сервер на требуемом или порту 8888. Нажми снова ту же кнопку чтобы выключить сервер. Так же сервер может быть запущен нажимая клавишу F3."
     },
     "server_close_bttn": {
         "en": "Close server",
