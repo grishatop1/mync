@@ -36,6 +36,7 @@ class MainApplication(Tk):
         lang_menu = Menu(menu, tearoff=0)
         lang_menu.add_command(label='English',command=self.nothing,underline=0)
         lang_menu.add_command(label='Srpski',command=self.nothing,underline=0)
+        lang_menu.add_command(label='日本語',command=self.nothing)
         lang_menu.add_command(label='Русский',command=self.nothing,underline=0)
         menu.add_cascade(label='Language', menu=lang_menu, underline=0)
         menu.add_cascade(label='Help', menu=help_menu, underline=0)

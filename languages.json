@@ -7,7 +7,7 @@
     "title_playing": {
         "en": "Mync Client - Playing {0}",
         "sr": "Mync Client - Svira {0}",
-        "jp": "ミンク - 同期音楽プレーヤーは{0}演奏します"
+        "jp": "ミンク - 同期音楽プレーヤーは{0}を演奏します"
     },
     "connection": {
         "en": "Connection",
@@ -102,12 +102,12 @@
     "logs_cant_play": {
         "en": "Can't play this track, sorry.",
         "sr": "Ne mogu pustiti ovu pjesmu.",
-        "jp": "申し訳ありませんが、このトラックを演奏できません。"
+        "jp": "申し訳ありませんが、この曲を演奏できません。"
     },
     "logs_playing_now": {
         "en": "Playing the track!",
         "sr": "Puštam pjesmu!",
-        "jp": "トラックを演奏します！"
+        "jp": "曲を演奏します！"
     },
     "logs_requesting": {
         "en": "Missing song! Requesting it...",
@@ -122,202 +122,202 @@
     "logs_dl_failed": {
         "en": "Download failed.",
         "sr": "Preuzimanje neuspješno.",
-        "jp": ""
+        "jp": "ダウンロードに失敗しました。"
     },
     "logs_uploading": {
         "en": "Uploading the song...",
         "sr": "Postavljam pjesmu...",
-        "jp": ""
+        "jp": "曲をアップロードしています..."
     },
     "logs_uploaded": {
         "en": "Song has been uploaded! You can now request it.",
         "sr": "Pjesma je postavljena! Sad je možeš zatražiti.",
-        "jp": ""
+        "jp": "曲がアップしました！リクエストできるようになりました。"
     },
     "logs_upload_failed": {
         "en": "Upload failed.",
         "sr": "Postavljanje neuspješno.",
-        "jp": ""
+        "jp": "アップロードに失敗しました。"
     },
     "logs_upload_canceled": {
         "en": "Upload has been canceled.",
         "sr": "Postavljanje otkazano.",
-        "jp": ""
+        "jp": "アップロードはキャンセルされました。"
     },
     "server_ft": {
-        "en": "File transfer server started on ",
+        "en": "File transfer server started on {0}",
         "sr": "Server za transfer datoteka radi na {0}",
-        "jp": ""
+        "jp": "ファイル転送サーバーは{0}で起動しました。"
     },
     "server_downloaded": {
         "en": "Server has downloaded the track. You can now request it.",
         "sr": "Server je preuzeo pjesmu. Sad je možeš zatražiti.",
-        "jp": ""
+        "jp": "サーバーが曲をダウンロードしました。リクエストできるようになりました。"
     },
     "server_downloading": {
         "en": "Server is downloading the track from YouTube.",
         "sr": "Server preuzima pjesmu sa Jutjuba.",
-        "jp": ""
+        "jp": "サーバーがYouTubeから曲をダウンロードしています。"
     },
     "server_user_left": {
         "en": "{0} has disconnected from the server.",
         "sr": "{0} je napustio server.",
-        "jp": ""
+        "jp": "{0}はサーバーから切断しました。"
     },
     "server_user_joined": {
         "en": "{0} connected to the server!",
         "sr": "{0} se povezao na server!",
-        "jp": ""
+        "jp": "{0}はサーバーに接続しました！"
     },
     "server_started_on": {
         "en": "Server started on {0}",
-        "sr": "Server radi na ",
-        "jp": ""
+        "sr": "Server radi na {0}",
+        "jp": "サーバーは{0}で起動しました。"
     },
     "server_public_ip": {
         "en": "Your public IP: {0}",
-        "sr": "Tvoj javni IP: ",
-        "jp": ""
+        "sr": "Tvoj javni IP: {0}",
+        "jp": "パブリックIP: {0}"
     },
     "server_handling": {
         "en": "Handling {0}",
         "sr": "Rukovanje {0}",
-        "jp": ""
+        "jp": "{0}の処理"
     },
     "server_title": {
         "en": "Mync Server",
         "sr": "Mync Server",
-        "jp": ""
+        "jp": "ミンクサーバー"
     },
     "server_custom_port": {
         "en": "Custom port (advanced)",
         "sr": "Podesi port (napredno)",
-        "jp": ""
+        "jp": "カスタムポート（詳細）"
     },
     "server_start_bttn": {
         "en": "Start server",
         "sr": "Pokreni server",
-        "jp": ""
+        "jp": "サーバーを起動します"
     },
     "server_help_bttn": {
         "en": "How to Use",
         "sr": "Kako koristiti",
-        "jp": ""
+        "jp": "使い方"
     },
     "server_help_title": {
         "en": "How to Use",
         "sr": "Kako koristiti",
-        "jp": ""
+        "jp": "使い方"
     },
     "server_help_msg": {
         "en": "0) Please read before use:\n\n1) The default port is 8888, but you can also set a custom port. First\ncheck the 'Custom Port' checkbox, and then type in the preferred\nport. The checkbox must remain checked in order to use the custom\nport.\n\n2) Pressing the 'Start Server' button will start the server on the\ncustom port or port 8888. Pressing it again will stop the server and\nclose the launcher. You can also press F3 to launch the server.",
         "sr": "0) Pročitati prije upotrebe:\n\n1) Podrazumijevani port je 8888, ali se može podesiti i drugi. Prvo\nčekiraj 'Podesi Port' kockicu, a zatim unesi željeni\nport. Kockica mora ostati čekirana da bi se koristio željeni\nport.\n\n2) Pritisni 'Pokreni Server' da pokreneš server na\nželjenom ili portu 8888. Pritisni ponovo da ugasiš server i\nzatvoriš prozor. Server se takođe može pokrenut pritiskom na dugme F3.",
-        "jp": ""
+        "jp": "0) 使用前にお読みください：\n\n1) デフォルトのポートは8888ですが、カスタムポートを設定することもできます。 最初に\n [カスタムポート]チェックボックスをオンにしてから、\n優先ポートを入力します。 カスタムポートを使用するには、チェックボックスをオンのままにする必要があります。\n \n2）[サーバーの開始]ボタンを押すと、\nカスタムポートまたはポート8888でサーバーが起動します。もう一度押すと、サーバーが停止し、\nサーバーが閉じます。 ランチャー。 F3を押してサーバーを起動することもできます。"
     },
     "server_close_bttn": {
         "en": "Close server",
         "sr": "Ugasi server",
-        "jp": ""
+        "jp": "サーバーを閉じる"
     },
     "server_close_title": {
         "en": "Are you sure?",
         "sr": "Sigurno?",
-        "jp": ""
+        "jp": "よろしいですか？？"
     },
     "server_close_ask": {
         "en": "Close server?",
         "sr": "Ugasi server?",
-        "jp": ""
+        "jp": "サーバーを閉じてもよろしいですか？"
     },
     "server_error_title": {
         "en": "Error!",
         "sr": "Greška!",
-        "jp": ""
+        "jp": "エラー！"
     },
     "server_error_text": {
-        "en": "The following error has occured:\n\n{0}",
+        "en": "The following error has occurred:\n\n{0}",
         "sr": "Sljedeća greška se desila:\n\n{0}",
-        "jp": ""
+        "jp": "以下のエラーが発生しました：\n\n{0}"
     },
     "only_win": {
         "en": "Mync client supports only windows for now :/",
         "sr": "Mync klijent za sada radi samo na Windowsu :/",
-        "jp": ""
+        "jp": "ミンクは今のところWindowsのみをサポートしています"
     },
     "upload": {
         "en": "Upload",
         "sr": "Postavi",
-        "jp": ""
+        "jp": "アップロード"
     },
     "upl_title": {
         "en": "Upload Window",
         "sr": "Postavljanje",
-        "jp": ""
+        "jp": "アップロード"
     },
     "upl_uploading": {
         "en": "Uploading {0}",
         "sr": "Postavljam {0}",
-        "jp": ""
+        "jp": "{0}をアップロードする"
     },
     "upl_loading": {
         "en": "Loading...",
         "sr": "Učitavam...",
-        "jp": ""
+        "jp": "読み込み中..."
     },
     "upl_cancel": {
         "en": "Cancel",
         "sr": "Otkaži",
-        "jp": ""
+        "jp": "キャンセル"
     },
     "upl_flow": {
         "en": "Flow: {0}kbps",
-        "sr": "Protok: {0}",
-        "jp": ""
+        "sr": "Protok: {0}kbps",
+        "jp": "{0}kbpsのストリーム"
     },
     "upl_sent": {
         "en": "Sent: {0}MB/{1}MB",
         "sr": "Poslato: {0}MB/{1}MB",
-        "jp": ""
+        "jp": "{1}MBのうち{0}MBを送信しました"
     },
     "request": {
         "en": "Request a song",
         "sr": "Zatraži pjesmu",
-        "jp": ""
+        "jp": "曲をリクエストする"
     },
     "req_title": {
         "en": "Choose a song...",
         "sr": "Odaberi pjesmu...",
-        "jp": ""
+        "jp": "曲を選んでください..."
     },
     "req_pick": {
         "en": "Pick a song... (scrollable)",
         "sr": "Odaberi pjesmu... (lista se može skrolati)",
-        "jp": ""
+        "jp": "曲を選んでください...（スクロール可能）"
     },
     "req_search": {
         "en": "Search for the song...",
         "sr": "Traži pjesmu...",
-        "jp": ""
+        "jp": "曲を検索する..."
     },
     "chat_placeholder": {
         "en": "Enter message or YouTube URL",
         "sr": "Unesi poruku ili Jutjub poveznicu",
-        "jp": ""
+        "jp": "メッセージまたはYouTubeのURL"
     },
     "chat_send": {
         "en": "Send",
         "sr": "Pošalji",
-        "jp": ""
+        "jp": "送信"
     },
     "player": {
         "en": "PLAYER",
         "sr": "PLEJER",
-        "jp": ""
+        "jp": "プレーヤー"
     },
     "player-playing": {
         "en": "Playing - {0}",
         "sr": "Sviram - {0}",
-        "jp": ""
+        "jp": "{0}を演奏します"
     },
     "waiting": {
         "en": "Waiting for the track...",
