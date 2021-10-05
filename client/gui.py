@@ -251,7 +251,7 @@ class ChatSubFrame(Frame):
         self.input.bind("<Return>", self.sendMsg)
         self.send_btn = Button(self, 
             text=lng("chat_send"),
-            command=self.sendMsg, width=6
+            command=self.sendMsg, width=7
         )
 
         self.input.grid(row=0, column=0, padx=3, pady=3, ipady=1, sticky="we")

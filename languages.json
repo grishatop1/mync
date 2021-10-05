@@ -2,386 +2,463 @@
     "title": {
         "en": "Mync Client",
         "sr": "Mync klijent",
-        "jp": "ミンク - 同期音楽プレーヤー"
+        "jp": "ミンク - 同期音楽プレーヤー",
+        "ru": "Mync Клиент"
     },
     "title_playing": {
         "en": "Mync Client - Playing {0}",
-        "sr": "Mync Client - Svira {0}",
-        "jp": "ミンク - 同期音楽プレーヤーは{0}を演奏します"
+        "sr": "Mync klijent - Svira {0}",
+        "jp": "ミンク - 同期音楽プレーヤーは{0}を演奏します",
+        "ru": "Mync Клиент - Играет {0}"
     },
     "connection": {
         "en": "Connection",
         "sr": "Konekcija",
-        "jp": "接続"
+        "jp": "接続",
+        "ru": "Соединение"
     },
     "connecting": {
         "en": "Connecting...",
-        "sr": "Povezivanje..."
+        "sr": "Povezivanje...",
+        "ru": "Подключение..."
     },
     "username": {
         "en": "Username：",
         "sr": "Ime:",
-        "jp": "ユーザー名"
+        "jp": "ユーザー名",
+        "ru": "Имя: "
     },
     "server_ip": {
         "en": "Server IP:",
         "sr": "Serverski IP:",
-        "jp": "サーバーのIP："
+        "jp": "サーバーのIP：",
+        "ru": "Сервер IP:"
     },
     "connect": {
         "en": "Connect",
         "sr": "Poveži se",
-        "jp": "接続する"
+        "jp": "接続する",
+        "ru": "Подключится"
     },
     "disconnect": {
         "en": "Disconnect",
         "sr": "Prekini vezu",
-        "jp": "切断する"
+        "jp": "切断する",
+        "ru": "Отключится"
     },
     "conn_err_alreadytaken": {
         "en": "Username already taken.",
         "sr": "Ime je zauzeto.",
-        "jp": "ユーザー名はすでに使用されています。"
+        "jp": "ユーザー名はすでに使用されています。",
+        "ru": "Данное имя уже используют."
     },
     "conn_err_couldnt": {
         "en": "Couldn't connect.",
         "sr": "Veza neuspješna.",
-        "jp": "接続できませんでした。"
+        "jp": "接続できませんでした。",
+        "ru": "Ошибка при подключении"
     },
     "conn_err_lost": {
         "en": "Connection lost.",
         "sr": "Veza izgubljena.",
-        "jp": "接続切断。"
+        "jp": "接続切断。",
+        "ru": "Соединение потерянно"
     },
     "connected": {
         "en": "Connected!",
         "sr": "Povezan!",
-        "jp": "接続済み！"
+        "jp": "接続済み！",
+        "ru": "Подключен!"
     },
     "logs": {
         "en": "Logs",
         "sr": "Dopisivanje",
-        "jp": "チャットログ"
+        "jp": "チャットログ",
+        "ru": "Чат"
     },
     "logs_isuploading": {
         "en": "{0} is uploading...",
         "sr": "{0} postavlja...",
-        "jp": "{0}はアップロードしています..."
+        "jp": "{0}はアップロードしています...",
+        "ru": "{0} загружает..."
     },
     "logs_hasuploaded": {
         "en": "{0} has uploaded the song!!!",
         "sr": "{0} je postavio pjesmu!!!",
-        "jp": "{0}はアップロードしました！！！"
+        "jp": "{0}はアップロードしました！！！",
+        "ru": "{0} загрузил трек!!!"
     },
     "logs_isdownloading": {
         "en": "{0} is downloading...",
         "sr": "{0} preuzima...",
-        "jp": "{0}はダウンロードしています..."
+        "jp": "{0}はダウンロードしています...",
+        "ru": "{0} скачивает..."
     },
     "logs_yt_accepted": {
         "en": "YouTube URL accepted.",
         "sr": "Jutjub poveznica prihvaćena.",
-        "jp": "YouTubeのURLが承認されました。"
+        "jp": "YouTubeのURLが承認されました。",
+        "ru": "YouTube ссылка распознана."
     },
     "logs_offline_msg": {
         "en": "[Offline]: {0}",
         "sr": "[Oflajn]: {0}",
-        "jp": "[オフライン]： {0}"
+        "jp": "[オフライン]： {0}",
+        "ru": "[Oффлайн]: {0}"
     },
     "logs_user_joined": {
         "en": "{0} joined.",
         "sr": "{0} se povezao.",
-        "jp": "{0}は接続しました"
+        "jp": "{0}は接続しました",
+        "ru": "{0} присоединился."
     },
     "logs_user_left": {
         "en": "{0} left.",
         "sr": "{0} je otišao.",
-        "jp": "{0}は切断しました"
+        "jp": "{0}は切断しました",
+        "ru": "{0} вышел."
     },
     "logs_track_ready": {
         "en": "Ready for the next song! Waiting for others...",
         "sr": "Spreman za iduću pjesmu! Čekam ostale...",
-        "jp": "次の曲の準備ができました！他の人を待っています..."
+        "jp": "次の曲の準備ができました！他の人を待っています...",
+        "ru": "Готов к следующему треку! Жду остальных..."
     },
     "logs_cant_play": {
         "en": "Can't play this track, sorry.",
         "sr": "Ne mogu pustiti ovu pjesmu.",
-        "jp": "申し訳ありませんが、この曲を演奏できません。"
+        "jp": "申し訳ありませんが、この曲を演奏できません。",
+        "ru": "Ошибка при отыгривании трека."
     },
     "logs_playing_now": {
         "en": "Playing the track!",
         "sr": "Puštam pjesmu!",
-        "jp": "曲を演奏します！"
+        "jp": "曲を演奏します！",
+        "ru": "Играю трек!"
     },
     "logs_requesting": {
         "en": "Missing song! Requesting it...",
         "sr": "Nemam pjesmu! Tražim od servera...",
-        "jp": "曲がありません！要求している..."
+        "jp": "曲がありません！要求している...",
+        "ru": "Трек не найден! Запрашиваю у сервера..."
     },
     "logs_downloaded": {
         "en": "Song has been downloaded, waiting for others!",
         "sr": "Pjesma je preuzeta, čekam ostale!",
-        "jp": "曲がダウンロードされました、他の人を待っています！"
+        "jp": "曲がダウンロードされました、他の人を待っています！",
+        "ru": "Трек скачан, жду остальных!"
     },
     "logs_dl_failed": {
         "en": "Download failed.",
         "sr": "Preuzimanje neuspješno.",
-        "jp": "ダウンロードに失敗しました。"
+        "jp": "ダウンロードに失敗しました。",
+        "ru": "Ошибка при скачивании."
     },
     "logs_uploading": {
         "en": "Uploading the song...",
         "sr": "Postavljam pjesmu...",
-        "jp": "曲をアップロードしています..."
+        "jp": "曲をアップロードしています...",
+        "ru": "Загружаю трек..."
     },
     "logs_uploaded": {
         "en": "Song has been uploaded! You can now request it.",
         "sr": "Pjesma je postavljena! Sad je možeš zatražiti.",
-        "jp": "曲がアップしました！リクエストできるようになりました。"
+        "jp": "曲がアップしました！リクエストできるようになりました。",
+        "ru": "Трек загружен! Теперь его можешь запросить."
     },
     "logs_upload_failed": {
         "en": "Upload failed.",
         "sr": "Postavljanje neuspješno.",
-        "jp": "アップロードに失敗しました。"
+        "jp": "アップロードに失敗しました。",
+        "ru": "Ошибка при загрузке."
     },
     "logs_upload_canceled": {
         "en": "Upload has been canceled.",
         "sr": "Postavljanje otkazano.",
-        "jp": "アップロードはキャンセルされました。"
+        "jp": "アップロードはキャンセルされました。",
+        "ru": "Загрузка отменена."
     },
     "server_ft": {
         "en": "File transfer server started on {0}",
         "sr": "Server za transfer datoteka radi na {0}",
-        "jp": "ファイル転送サーバーは{0}で起動しました。"
+        "jp": "ファイル転送サーバーは{0}で起動しました。",
+        "ru": "Файловый сервер запущен на {0}"
     },
     "server_downloaded": {
         "en": "Server has downloaded the track. You can now request it.",
         "sr": "Server je preuzeo pjesmu. Sad je možeš zatražiti.",
-        "jp": "サーバーが曲をダウンロードしました。リクエストできるようになりました。"
+        "jp": "サーバーが曲をダウンロードしました。リクエストできるようになりました。",
+        "ru": "Сервер скачал трек. Теперь его можно запросить."
     },
     "server_downloading": {
         "en": "Server is downloading the track from YouTube.",
         "sr": "Server preuzima pjesmu sa Jutjuba.",
-        "jp": "サーバーがYouTubeから曲をダウンロードしています。"
+        "jp": "サーバーがYouTubeから曲をダウンロードしています。",
+        "ru": "Сервер скачивает трек с ТыТрубки:)"
     },
     "server_user_left": {
         "en": "{0} has disconnected from the server.",
         "sr": "{0} je napustio server.",
-        "jp": "{0}はサーバーから切断しました。"
+        "jp": "{0}はサーバーから切断しました。",
+        "ru": "{0} вышел с сервера."
     },
     "server_user_joined": {
         "en": "{0} connected to the server!",
         "sr": "{0} se povezao na server!",
-        "jp": "{0}はサーバーに接続しました！"
+        "jp": "{0}はサーバーに接続しました！",
+        "ru": "{0} присоеденился к серверу!"
     },
     "server_started_on": {
         "en": "Server started on {0}",
         "sr": "Server radi na {0}",
-        "jp": "サーバーは{0}で起動しました。"
+        "jp": "サーバーは{0}で起動しました。",
+        "ru": "Сервер запущен на {0}"
     },
     "server_public_ip": {
         "en": "Your public IP: {0}",
         "sr": "Tvoj javni IP: {0}",
-        "jp": "パブリックIP: {0}"
+        "jp": "パブリックIP: {0}",
+        "ru": "Ваш публичный IP: {0}"
     },
     "server_handling": {
         "en": "Handling {0}",
         "sr": "Rukovanje {0}",
-        "jp": "{0}の処理"
+        "jp": "{0}の処理",
+        "ru": "Рукопожатие с {0}"
     },
     "server_title": {
         "en": "Mync Server",
         "sr": "Mync Server",
-        "jp": "ミンクサーバー"
+        "jp": "ミンクサーバー",
+        "ru": "Mync Сервер"
     },
     "server_custom_port": {
         "en": "Custom port (advanced)",
         "sr": "Podesi port (napredno)",
-        "jp": "カスタムポート（詳細）"
+        "jp": "カスタムポート（詳細）",
+        "ru": "Другой порт (продвинуто)"
     },
     "server_start_bttn": {
         "en": "Start server",
         "sr": "Pokreni server",
-        "jp": "サーバーを起動します"
+        "jp": "サーバーを起動します",
+        "ru": "Запусти сервер"
     },
     "server_help_bttn": {
         "en": "How to Use",
         "sr": "Kako koristiti",
-        "jp": "使い方"
+        "jp": "使い方",
+        "ru": "Как использовать"
     },
     "server_help_title": {
         "en": "How to Use",
         "sr": "Kako koristiti",
-        "jp": "使い方"
+        "jp": "使い方",
+        "ru": "Как использовать"
     },
     "server_help_msg": {
         "en": "0) Please read before use:\n\n1) The default port is 8888, but you can also set a custom port. First\ncheck the 'Custom Port' checkbox, and then type in the preferred\nport. The checkbox must remain checked in order to use the custom\nport.\n\n2) Pressing the 'Start Server' button will start the server on the\ncustom port or port 8888. Pressing it again will stop the server and\nclose the launcher. You can also press F3 to launch the server.",
         "sr": "0) Pročitati prije upotrebe:\n\n1) Podrazumijevani port je 8888, ali se može podesiti i drugi. Prvo\nčekiraj 'Podesi Port' kockicu, a zatim unesi željeni\nport. Kockica mora ostati čekirana da bi se koristio željeni\nport.\n\n2) Pritisni 'Pokreni Server' da pokreneš server na\nželjenom ili portu 8888. Pritisni ponovo da ugasiš server i\nzatvoriš prozor. Server se takođe može pokrenut pritiskom na dugme F3.",
-        "jp": "0) 使用前にお読みください：\n\n1) デフォルトのポートは8888ですが、カスタムポートを設定することもできます。 最初に\n [カスタムポート]チェックボックスをオンにしてから、\n優先ポートを入力します。 カスタムポートを使用するには、チェックボックスをオンのままにする必要があります。\n \n2）[サーバーの開始]ボタンを押すと、\nカスタムポートまたはポート8888でサーバーが起動します。もう一度押すと、サーバーが停止し、\nサーバーが閉じます。 ランチャー。 F3を押してサーバーを起動することもできます。"
+        "jp": "0) 使用前にお読みください：\n\n1) デフォルトのポートは8888ですが、カスタムポートを設定することもできます。 最初に\n [カスタムポート]チェックボックスをオンにしてから、\n優先ポートを入力します。 カスタムポートを使用するには、チェックボックスをオンのままにする必要があります。\n \n2）[サーバーの開始]ボタンを押すと、\nカスタムポートまたはポート8888でサーバーが起動します。もう一度押すと、サーバーが停止し、\nサーバーが閉じます。 ランチャー。 F3を押してサーバーを起動することもできます。",
+        "ru": "0) Пожалуйста прочтите перед использованием:\n\n1) По умолчанию порт 8888, но его можно изменить. Сначала выбери `Настрой порт` галочку, а потом введи желаемый порт. Галочка должна быть установлена чтобы использовался желаемый порт\n.\n\n2) Нажми `Запусти сервер` чтобы запустить сервер на требуемом или порту 8888. Нажми снова ту же кнопку чтобы выключить сервер. Так же сервер может быть запущен нажимая клавишу F3."
     },
     "server_close_bttn": {
         "en": "Close server",
         "sr": "Ugasi server",
-        "jp": "サーバーを閉じる"
+        "jp": "サーバーを閉じる",
+        "ru": "Закрой сервер"
     },
     "server_close_title": {
         "en": "Are you sure?",
         "sr": "Sigurno?",
-        "jp": "よろしいですか？？"
+        "jp": "よろしいですか？？",
+        "ru": "Вы уверены?"
     },
     "server_close_ask": {
         "en": "Close server?",
         "sr": "Ugasi server?",
-        "jp": "サーバーを閉じてもよろしいですか？"
+        "jp": "サーバーを閉じてもよろしいですか？",
+        "ru": "Закрыть сервер?"
     },
     "server_error_title": {
         "en": "Error!",
         "sr": "Greška!",
-        "jp": "エラー！"
+        "jp": "エラー！",
+        "ru": "Ошибка!"
     },
     "server_error_text": {
         "en": "The following error has occurred:\n\n{0}",
         "sr": "Sljedeća greška se desila:\n\n{0}",
-        "jp": "以下のエラーが発生しました：\n\n{0}"
+        "jp": "以下のエラーが発生しました：\n\n{0}",
+        "ru": "Произошла следующая ошибка:\n\n{0}"
     },
     "only_win": {
         "en": "Mync client supports only windows for now :/",
         "sr": "Mync klijent za sada radi samo na Windowsu :/",
-        "jp": "ミンクは今のところWindowsのみをサポートしています"
+        "jp": "ミンクは今のところWindowsのみをサポートしています",
+        "ru": "Mync клиент сейчас только работает на Windows :/"
     },
     "upload": {
         "en": "Upload",
         "sr": "Postavi",
-        "jp": "アップロード"
+        "jp": "アップロード",
+        "ru": "Загрузить"
     },
     "upl_title": {
         "en": "Upload Window",
         "sr": "Postavljanje",
-        "jp": "アップロード"
+        "jp": "アップロード",
+        "ru": "Окно загрузки"
     },
     "upl_uploading": {
         "en": "Uploading {0}",
         "sr": "Postavljam {0}",
-        "jp": "{0}をアップロードする"
+        "jp": "{0}をアップロードする",
+        "ru": "Загружаю {0}"
     },
     "upl_loading": {
         "en": "Loading...",
         "sr": "Učitavam...",
-        "jp": "読み込み中..."
+        "jp": "読み込み中...",
+        "ru": "Загрузка..."
     },
     "upl_cancel": {
         "en": "Cancel",
         "sr": "Otkaži",
-        "jp": "キャンセル"
+        "jp": "キャンセル",
+        "ru": "Отменить"
     },
     "upl_flow": {
         "en": "Flow: {0}kbps",
         "sr": "Protok: {0}kbps",
-        "jp": "{0}kbpsのストリーム"
+        "jp": "{0}kbpsのストリーム",
+        "ru": "Поток: {0}kbps"
     },
     "upl_sent": {
         "en": "Sent: {0}MB/{1}MB",
         "sr": "Poslato: {0}MB/{1}MB",
-        "jp": "{1}MBのうち{0}MBを送信しました"
+        "jp": "{1}MBのうち{0}MBを送信しました",
+        "ru": "Посланно: {0}MB/{1}MB"
     },
     "request": {
         "en": "Request a song",
         "sr": "Zatraži pjesmu",
-        "jp": "曲をリクエストする"
+        "jp": "曲をリクエストする",
+        "ru": "Запросить трек"
     },
     "req_title": {
         "en": "Choose a song...",
         "sr": "Odaberi pjesmu...",
-        "jp": "曲を選んでください..."
+        "jp": "曲を選んでください...",
+        "ru": "Выбери трек..."
     },
     "req_pick": {
         "en": "Pick a song... (scrollable)",
         "sr": "Odaberi pjesmu... (lista se može skrolati)",
-        "jp": "曲を選んでください...（スクロール可能）"
+        "jp": "曲を選んでください...（スクロール可能）",
+        "ru": "Выбери трек... (можно прокручивать)"
     },
     "req_search": {
         "en": "Search for the song...",
         "sr": "Traži pjesmu...",
-        "jp": "曲を検索する..."
+        "jp": "曲を検索する...",
+        "ru": "Искать трек..."
     },
     "chat_placeholder": {
         "en": "Enter message or YouTube URL",
         "sr": "Unesi poruku ili Jutjub poveznicu",
-        "jp": "メッセージまたはYouTubeのURL"
+        "jp": "メッセージまたはYouTubeのURL",
+        "ru": "Ввести сообщение или YouTube ссылку"
     },
     "chat_send": {
         "en": "Send",
         "sr": "Pošalji",
-        "jp": "送信"
+        "jp": "送信",
+        "ru": "Послать"
     },
     "player": {
         "en": "PLAYER",
         "sr": "PLEJER",
-        "jp": "プレーヤー"
+        "jp": "プレーヤー",
+        "ru": "ПЛЕЕР"
     },
     "player-playing": {
         "en": "Playing - {0}",
-        "sr": "Sviram - {0}",
-        "jp": "{0}を演奏します"
+        "sr": "Svira - {0}",
+        "jp": "{0}を演奏します",
+        "ru": "Играет - {0}"
     },
     "waiting": {
         "en": "Waiting for the track...",
         "sr": "Čekam pjesmu...",
-        "jp": "曲を待っています..."
+        "jp": "曲を待っています...",
+        "ru": "Ожидание песни"
     },
     "volume": {
         "en": "Volume",
         "sr": "Jačina tona",
-        "jp": "音量"
+        "jp": "音量",
+        "ru": "Звук"
     },
     "muted": {
         "en": "{0} (muted)",
         "sr": "{0} (ugašen ton)",
-        "jp": "{0}（ミュート）"
+        "jp": "{0}（ミュート）",
+        "ru": "{0} (заглушен)"
     },
     "netw_idle": {
         "en": "NETWORK IDLE",
         "sr": "Mreža na čekanju",
-        "jp": "ネットワークアイドリング"
+        "jp": "ネットワークアイドリング",
+        "ru": "СЕТЬ В ОЖИДАНИИ"
     },
     "netw_downloading": {
         "en": "[{0}] Downloading {1}",
         "sr": "[{0}] Preuzimam {1}",
-        "jp": "[{0}]{1}のダウンロード"
+        "jp": "[{0}]{1}のダウンロード",
+        "ru": "[{0}] Скачиваю {1}"
     },
     "netw_uploading": {
         "en": "Uploading...",
         "sr": "Postavljam...",
-        "jp": "アップロード中..."
+        "jp": "アップロード中...",
+        "ru": "Загрузка..."
     },
     "connections": {
         "en": "Connected users",
         "sr": "Povezani korisnici",
-        "jp": "接続されたユーザー"
+        "jp": "接続されたユーザー",
+        "ru": "Подключенные пользователи"
     },
     "language_menu": {
         "en": "Language",
         "sr": "Jezik",
-        "jp": "言語"
+        "jp": "言語",
+        "ru": "Язык"
     },
     "help_menu": {
         "en": "Help",
         "sr": "Pomoć",
-        "jp": "ヘルプ"
+        "jp": "ヘルプ",
+        "ru": "Помощь"
     },
     "about_menu": {
         "en": "About Mync",
         "sr": "O Mync",
-        "jp": "ミンクについて"
+        "jp": "ミンクについて",
+        "ru": "О Минке"
     },
     "about_info": {
         "en": "Mync - Music Sync\n---------\nHave a suggestion, found a typo or a bug, wanna just chat about the\nprogram? Report the problem on the GitHub page (where you probably\ngot the program) at https://github.com/grishatop1/mync!\n---------",
         "sr": "Mync - Music Sync\n---------\nImate prijedlog, našli ste grešku, želite porazgovarati o\nprogramu? Prijavite problem na GitHub stranici (gdje ste vjerovatno\nnašli program) na https://github.com/grishatop1/mync!\n---------",
-        "jp": "ミンク - ミュージくシンク（同期音楽プレーヤー）\n---------\n提案があり、タイプミスやバグを見つけて、\nプログラムについてチャットしたいですか？ https://github.com/grishatop1/myncのGitHubページ\n（おそらくプログラムを入手した場所）で問題を報告してください！\n---------"
+        "jp": "ミンク - ミュージくシンク（同期音楽プレーヤー）\n---------\n提案があり、タイプミスやバグを見つけて、\nプログラムについてチャットしたいですか？ https://github.com/grishatop1/myncのGitHubページ\n（おそらくプログラムを入手した場所）で問題を報告してください！\n---------",
+        "ru": "Mync - Музыкальный синхрон\n---------\nЕсли у Вас есть совет, нашли баг, хотите просто поразговаривать о проекту? Загляните на ГитХаб Минка (предположительно где вы и нашли) на https://github.com/grishatop1/mync!\n---------"
     },
     "license": {
         "en": "License",
         "sr": "Licenca",
-        "jp": "ライセンス"
+        "jp": "ライセンス",
+        "ru": "Лицензия"
     },
     "license_text": {
         "en": "MIT License\n\nCopyright (c) 2021. Grigorije Škipina and Stefan Šućur\n\nPermission is hereby granted, free of charge, to any person obtaining\na copy of this software and associated documentation files\n(the \"Software\"), to deal in the Software without restriction,\nincluding without limitation the rights to use, copy, modify, merge,\npublish, distribute, sublicense, and/or sell copies of the Software,\nand to permit persons to whom the Software is furnished to do so,\nsubject to the following conditions:\n\nThe above copyright notice and this permission notice shall be\nincluded in all copies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY\nKIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE\nWARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR\nPURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\nAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,\nDAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF\nCONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN\nCONNECTION WITH THE SOFTWARE OR THE USE OR OTHER\nDEALINGS IN THE SOFTWARE."
@@ -389,6 +466,7 @@
     "wanna-restart": {
         "en": "Restart now to apply changes?",
         "sr": "Želite li restartovati program da vidite promjene?",
-        "jp": "今すぐプログラムを再起動して変更を適用しますか？"
+        "jp": "今すぐプログラムを再起動して変更を適用しますか？",
+        "ru": "Вы хотите перезагрузить mync чтобы применить изменения?"
     }
 }
