@@ -224,7 +224,7 @@ class Server:
 
         data = {
             "connections": self.snd_connections,
-            "ft-address": [self.ft.ip, self.ft.port]
+            "ft-port": self.port+1
         }
         t.sendDataPickle(data)
         response = t.recvData()

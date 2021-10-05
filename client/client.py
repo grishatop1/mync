@@ -43,7 +43,7 @@ class Client:
         try:
             data = pickle.loads(response)
             connections = data["connections"]
-            self.ft_addr = data["ft-address"]
+            self.ft_addr = (self.ip, data["ft-port"])
         except:
             return
 
