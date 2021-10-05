@@ -1,306 +1,382 @@
 {
     "title": {
         "en": "Mync Client",
-        "sr": "Mync Klijent"
+        "sr": "Mync Klijent",
+        "jp": "ミンク - 同期音楽プレーヤー"
     },
     "title_playing": {
         "en": "Mync Client - Playing {0}",
-        "sr": "Mync Client - Svira {0}"
+        "sr": "Mync Client - Svira {0}",
+        "jp": "ミンク - 同期音楽プレーヤーは{0}演奏します"
     },
     "connection": {
         "en": "Connection",
-        "sr": "Povezivanje"
+        "sr": "Povezivanje",
+        "jp": "接続"
     },
     "username": {
-        "en": "Username:",
-        "sr": "Ime:"
+        "en": "Username：",
+        "sr": "Ime:",
+        "jp": "ユーザー名"
     },
     "server_ip": {
         "en": "Server IP:",
-        "sr": "Serverski IP:"
+        "sr": "Serverski IP:",
+        "jp": "サーバーのIP："
     },
     "connect": {
         "en": "Connect",
-        "sr": "Poveži se"
+        "sr": "Poveži se",
+        "jp": "接続する"
     },
     "disconnect": {
-        "en": "Disconnect.",
-        "sr": "Prekini vezu."
+        "en": "Disconnect",
+        "sr": "Prekini vezu",
+        "jp": "切断する"
     },
     "conn_err_alreadytaken": {
         "en": "Username already taken.",
-        "sr": "Ime je zauzeto."
+        "sr": "Ime je zauzeto.",
+        "jp": "ユーザー名はすでに使用されています。"
     },
     "conn_err_couldnt": {
         "en": "Couldn't connect.",
-        "sr": "Veza neuspješna."
+        "sr": "Veza neuspješna.",
+        "jp": "接続できませんでした。"
     },
     "conn_err_lost": {
         "en": "Connection lost.",
-        "sr": "Veza izgubljena."
-    },
-    "logs": {
-        "en": "Logs",
-        "sr": "Dopisivanje"
-    },
-    "logs_isuploading": {
-        "en": "{0} is uploading...",
-        "sr": "{0} postavlja..."
-    },
-    "logs_hasuploaded": {
-        "en": "{0} has uploaded the song!!!",
-        "sr": "{0} je postavio pjesmu!!!"
-    },
-    "logs_isdownloading": {
-        "en": "{0} is downloading...",
-        "sr": "{0} preuzima..."
-    },
-    "logs_yt_accepted": {
-        "en": "YouTube URL accepted.",
-        "sr": "Jutjub poveznica prihvaćena."
-    },
-    "logs_offline_msg": {
-        "en": "[Offline]: {0}",
-        "sr": "[Oflajn]: {0}"
-    },
-    "logs_user_joined": {
-        "en": "{0} joined.",
-        "sr": "{0} se povezao."
-    },
-    "logs_user_left": {
-        "en": "{0} left.",
-        "sr": "{0} je otišao."
-    },
-    "logs_track_ready": {
-        "en": "Ready for the next song! Waiting for others...",
-        "sr": "Spreman za iduću pjesmu! Čekam ostale..."
-    },
-    "logs_cant_play": {
-        "en": "Can't play this track, sorry.",
-        "sr": "Ne mogu pustiti ovu pjesmu."
-    },
-    "logs_playing_now": {
-        "en": "Playing the track!",
-        "sr": "Puštam pjesmu!"
-    },
-    "logs_requesting": {
-        "en": "Missing song! Requesting it...",
-        "sr": "Nemam pjesmu! Tražim od servera..."
-    },
-    "logs_downloaded": {
-        "en": "Song has been downloaded, waiting for others!",
-        "sr": "Pjesma je preuzeta, čekam ostale!"
-    },
-    "logs_dl_failed": {
-        "en": "Download failed.",
-        "sr": "Preuzimanje neuspješno."
-    },
-    "logs_uploading": {
-        "en": "Uploading the song...",
-        "sr": "Postavljam pjesmu..."
-    },
-    "logs_uploaded": {
-        "en": "Song has been uploaded! You can now request it.",
-        "sr": "Pjesma je postavljena! Sad je možeš zatražiti."
-    },
-    "logs_upload_failed": {
-        "en": "Upload failed.",
-        "sr": "Postavljanje neuspješno."
-    },
-    "logs_upload_canceled": {
-        "en": "Upload has been canceled.",
-        "sr": "Postavljanje otkazano."
-    },
-    "server_ft": {
-        "en": "File transfer server started on ",
-        "sr": "Server za transfer datoteka radi na {0}"
-    },
-    "server_downloaded": {
-        "en": "Server has downloaded the track. You can now request it.",
-        "sr": "Server je preuzeo pjesmu. Sad je možeš zatražiti."
-    },
-    "server_downloading": {
-        "en": "Server is downloading the track from YouTube.",
-        "sr": "Server preuzima pjesmu sa Jutjuba."
-    },
-    "server_user_left": {
-        "en": "{0} has disconnected from the server.",
-        "sr": "{0} je napustio server."
-    },
-    "server_user_joined": {
-        "en": "{0} connected to the server!",
-        "sr": "{0} se povezao na server!"
-    },
-    "server_started_on": {
-        "en": "Server started on {0}",
-        "sr": "Server radi na "
-    },
-    "server_public_ip": {
-        "en": "Your public IP: {0}",
-        "sr": "Tvoj javni IP: "
-    },
-    "server_handling": {
-        "en": "Handling {0}",
-        "sr": "Rukovanje {0}"
-    },
-    "server_title": {
-        "en": "Mync Server",
-        "sr": "Mync Server"
-    },
-    "server_custom_port": {
-        "en": "Custom port (advanced)",
-        "sr": "Podesi port (napredno)"
-    },
-    "server_start_bttn": {
-        "en": "Start server",
-        "sr": "Pokreni server"
-    },
-    "server_help_bttn": {
-        "en": "How to Use",
-        "sr": "Kako koristiti"
-    },
-    "server_help_title": {
-        "en": "How to Use",
-        "sr": "Kako koristiti"
-    },
-    "server_help_msg": {
-        "en": "0) Please read before use:\n\n1) The default port is 8888, but you can also set a custom port. First\ncheck the 'Custom Port' checkbox, and then type in the preferred\nport. The checkbox must remain checked in order to use the custom\nport.\n\n2) Pressing the 'Start Server' button will start the server on the\ncustom port or port 8888. Pressing it again will stop the server and\nclose the launcher. You can also press F3 to launch the server.",
-        "sr": "0) Pročitati prije upotrebe:\n\n1) Podrazumijevani port je 8888, ali se može podesiti i drugi. Prvo\nčekiraj 'Podesi Port' kockicu, a zatim unesi željeni\nport. Kockica mora ostati čekirana da bi se koristio željeni\nport.\n\n2) Pritisni 'Pokreni Server' da pokreneš server na\nželjenom ili portu 8888. Pritisni ponovo da ugasiš server i\nzatvoriš prozor. Server se takođe može pokrenut pritiskom na dugme F3."
-    },
-    "server_close_bttn": {
-        "en": "Close server",
-        "sr": "Ugasi server"
-    },
-    "server_close_title": {
-        "en": "Are you sure?",
-        "sr": "Sigurno?"
-    },
-    "server_close_ask": {
-        "en": "Close server?",
-        "sr": "Ugasi server?"
-    },
-    "server_error_title": {
-        "en": "Error!",
-        "sr": "Greška!"
-    },
-    "server_error_text": {
-        "en": "The following error has occured:\n\n{0}",
-        "sr": "Sljedeća greška se desila:\n\n{0}"
-    },
-    "only_win": {
-        "en": "Mync client supports only windows for now :/",
-        "sr": "Mync klijent za sada radi samo na Windowsu:/"
-    },
-    "upload": {
-        "en": "Upload",
-        "sr": "Postavi"
-    },
-    "upl_title": {
-        "en": "Upload Window",
-        "sr": "Postavljanje"
-    },
-    "upl_uploading": {
-        "en": "Uploading {0}",
-        "sr": "Postavljam {0}"
-    },
-    "upl_loading": {
-        "en": "Loading...",
-        "sr": "Učitavam..."
-    },
-    "upl_cancel": {
-        "en": "Cancel",
-        "sr": "Otkaži"
-    },
-    "upl_flow": {
-        "en": "Flow: {0}kbps",
-        "sr": "Protok: {0}"
-    },
-    "upl_sent": {
-        "en": "Sent: {0}MB/{1}MB",
-        "sr": "Poslato: {0}MB/{1}MB"
-    },
-    "request": {
-        "en": "Request a song",
-        "sr": "Zatraži pjesmu"
-    },
-    "req_title": {
-        "en": "Choose a song...",
-        "sr": "Odaberi pjesmu..."
-    },
-    "req_pick": {
-        "en": "Pick a song... (scrollable)",
-        "sr": "Odaberi pjesmu... (lista se može skrolati)"
-    },
-    "req_search": {
-        "en": "Search for the song...",
-        "sr": "Traži pjesmu..."
-    },
-    "chat_placeholder": {
-        "en": "Enter message or YouTube URL",
-        "sr": "Unesi poruku ili Jutjub poveznicu"
-    },
-    "chat_send": {
-        "en": "Send",
-        "sr": "Pošalji"
-    },
-    "player": {
-        "en": "PLAYER",
-        "sr": "PLEJER"
-    },
-    "player-playing": {
-        "en": "Playing - {0}",
-        "sr": "Sviram - {0}"
-    },
-    "waiting": {
-        "en": "Waiting for the track...",
-        "sr": "Čekam pjesmu..."
-    },
-    "volume": {
-        "en": "Volume",
-        "sr": "Jačina tona"
-    },
-    "muted": {
-        "en": "{0} (muted)",
-        "sr": "{0} (ugašen ton)"
-    },
-    "netw_idle": {
-        "en": "NETWORK IDLE",
-        "sr": "Mreža na čekanju"
-    },
-    "netw_downloading": {
-        "en": "[{0}] Downloading {1}",
-        "sr": "[{0}] Preuzimam {1}"
-    },
-    "netw_uploading": {
-        "en": "Uploading...",
-        "sr": "Postavljam..."
-    },
-    "connections": {
-        "en": "Connections",
-        "sr": "Veze"
-    },
-    "language_menu": {
-        "en": "Language",
-        "sr": "Jezik"
-    },
-    "help_menu": {
-        "en": "Help",
-        "sr": "Pomoć"
-    },
-    "about_menu": {
-        "en": "About Mync",
-        "sr": "O Mync"
-    },
-    "about_info": {
-        "en": "Mync - Music Sync\n---------\nHave a suggestion, found a typo or a bug, wanna just chat about the\nprogram? Report the problem on the GitHub page (where you probably\ngot the program) at https://github.com/grishatop1/mync!\n---------",
-        "sr": "Mync - Music Sync\n---------\nImate prijedlog, našli ste grešku, želite porazgovarati o\nprogramu? Prijavite problem na GitHub stranici (gdje ste vjerovatno\nnašli program) na https://github.com/grishatop1/mync!\n---------"
-    },
-    "license": {
-        "en": "License",
-        "sr": "Licenca"
+        "sr": "Veza izgubljena.",
+        "jp": "接続切断。"
     },
     "connected": {
         "en": "Connected!",
-        "sr": "Povezan!"
+        "sr": "Povezan!",
+        "jp": "接続済み！"
+    },
+    "logs": {
+        "en": "Logs",
+        "sr": "Dopisivanje",
+        "jp": "チャットログ"
+    },
+    "logs_isuploading": {
+        "en": "{0} is uploading...",
+        "sr": "{0} postavlja...",
+        "jp": "{0}はアップロードしています..."
+    },
+    "logs_hasuploaded": {
+        "en": "{0} has uploaded the song!!!",
+        "sr": "{0} je postavio pjesmu!!!",
+        "jp": "{0}はアップロードしました！！！"
+    },
+    "logs_isdownloading": {
+        "en": "{0} is downloading...",
+        "sr": "{0} preuzima...",
+        "jp": "{0}はダウンロードしています..."
+    },
+    "logs_yt_accepted": {
+        "en": "YouTube URL accepted.",
+        "sr": "Jutjub poveznica prihvaćena.",
+        "jp": "YouTubeのURLが承認されました。"
+    },
+    "logs_offline_msg": {
+        "en": "[Offline]: {0}",
+        "sr": "[Oflajn]: {0}",
+        "jp": "[オフライン]： {0}"
+    },
+    "logs_user_joined": {
+        "en": "{0} joined.",
+        "sr": "{0} se povezao.",
+        "jp": "{0}は接続しました"
+    },
+    "logs_user_left": {
+        "en": "{0} left.",
+        "sr": "{0} je otišao.",
+        "jp": "{0}は切断しました"
+    },
+    "logs_track_ready": {
+        "en": "Ready for the next song! Waiting for others...",
+        "sr": "Spreman za iduću pjesmu! Čekam ostale...",
+        "jp": "次の曲の準備ができました！他の人を待っています..."
+    },
+    "logs_cant_play": {
+        "en": "Can't play this track, sorry.",
+        "sr": "Ne mogu pustiti ovu pjesmu.",
+        "jp": "申し訳ありませんが、このトラックを演奏できません。"
+    },
+    "logs_playing_now": {
+        "en": "Playing the track!",
+        "sr": "Puštam pjesmu!",
+        "jp": "トラックを演奏します！"
+    },
+    "logs_requesting": {
+        "en": "Missing song! Requesting it...",
+        "sr": "Nemam pjesmu! Tražim od servera...",
+        "jp": "曲がありません！要求している..."
+    },
+    "logs_downloaded": {
+        "en": "Song has been downloaded, waiting for others!",
+        "sr": "Pjesma je preuzeta, čekam ostale!",
+        "jp": "曲がダウンロードされました、他の人を待っています！"
+    },
+    "logs_dl_failed": {
+        "en": "Download failed.",
+        "sr": "Preuzimanje neuspješno.",
+        "jp": ""
+    },
+    "logs_uploading": {
+        "en": "Uploading the song...",
+        "sr": "Postavljam pjesmu...",
+        "jp": ""
+    },
+    "logs_uploaded": {
+        "en": "Song has been uploaded! You can now request it.",
+        "sr": "Pjesma je postavljena! Sad je možeš zatražiti.",
+        "jp": ""
+    },
+    "logs_upload_failed": {
+        "en": "Upload failed.",
+        "sr": "Postavljanje neuspješno.",
+        "jp": ""
+    },
+    "logs_upload_canceled": {
+        "en": "Upload has been canceled.",
+        "sr": "Postavljanje otkazano.",
+        "jp": ""
+    },
+    "server_ft": {
+        "en": "File transfer server started on ",
+        "sr": "Server za transfer datoteka radi na {0}",
+        "jp": ""
+    },
+    "server_downloaded": {
+        "en": "Server has downloaded the track. You can now request it.",
+        "sr": "Server je preuzeo pjesmu. Sad je možeš zatražiti.",
+        "jp": ""
+    },
+    "server_downloading": {
+        "en": "Server is downloading the track from YouTube.",
+        "sr": "Server preuzima pjesmu sa Jutjuba.",
+        "jp": ""
+    },
+    "server_user_left": {
+        "en": "{0} has disconnected from the server.",
+        "sr": "{0} je napustio server.",
+        "jp": ""
+    },
+    "server_user_joined": {
+        "en": "{0} connected to the server!",
+        "sr": "{0} se povezao na server!",
+        "jp": ""
+    },
+    "server_started_on": {
+        "en": "Server started on {0}",
+        "sr": "Server radi na ",
+        "jp": ""
+    },
+    "server_public_ip": {
+        "en": "Your public IP: {0}",
+        "sr": "Tvoj javni IP: ",
+        "jp": ""
+    },
+    "server_handling": {
+        "en": "Handling {0}",
+        "sr": "Rukovanje {0}",
+        "jp": ""
+    },
+    "server_title": {
+        "en": "Mync Server",
+        "sr": "Mync Server",
+        "jp": ""
+    },
+    "server_custom_port": {
+        "en": "Custom port (advanced)",
+        "sr": "Podesi port (napredno)",
+        "jp": ""
+    },
+    "server_start_bttn": {
+        "en": "Start server",
+        "sr": "Pokreni server",
+        "jp": ""
+    },
+    "server_help_bttn": {
+        "en": "How to Use",
+        "sr": "Kako koristiti",
+        "jp": ""
+    },
+    "server_help_title": {
+        "en": "How to Use",
+        "sr": "Kako koristiti",
+        "jp": ""
+    },
+    "server_help_msg": {
+        "en": "0) Please read before use:\n\n1) The default port is 8888, but you can also set a custom port. First\ncheck the 'Custom Port' checkbox, and then type in the preferred\nport. The checkbox must remain checked in order to use the custom\nport.\n\n2) Pressing the 'Start Server' button will start the server on the\ncustom port or port 8888. Pressing it again will stop the server and\nclose the launcher. You can also press F3 to launch the server.",
+        "sr": "0) Pročitati prije upotrebe:\n\n1) Podrazumijevani port je 8888, ali se može podesiti i drugi. Prvo\nčekiraj 'Podesi Port' kockicu, a zatim unesi željeni\nport. Kockica mora ostati čekirana da bi se koristio željeni\nport.\n\n2) Pritisni 'Pokreni Server' da pokreneš server na\nželjenom ili portu 8888. Pritisni ponovo da ugasiš server i\nzatvoriš prozor. Server se takođe može pokrenut pritiskom na dugme F3.",
+        "jp": ""
+    },
+    "server_close_bttn": {
+        "en": "Close server",
+        "sr": "Ugasi server",
+        "jp": ""
+    },
+    "server_close_title": {
+        "en": "Are you sure?",
+        "sr": "Sigurno?",
+        "jp": ""
+    },
+    "server_close_ask": {
+        "en": "Close server?",
+        "sr": "Ugasi server?",
+        "jp": ""
+    },
+    "server_error_title": {
+        "en": "Error!",
+        "sr": "Greška!",
+        "jp": ""
+    },
+    "server_error_text": {
+        "en": "The following error has occured:\n\n{0}",
+        "sr": "Sljedeća greška se desila:\n\n{0}",
+        "jp": ""
+    },
+    "only_win": {
+        "en": "Mync client supports only windows for now :/",
+        "sr": "Mync klijent za sada radi samo na Windowsu :/",
+        "jp": ""
+    },
+    "upload": {
+        "en": "Upload",
+        "sr": "Postavi",
+        "jp": ""
+    },
+    "upl_title": {
+        "en": "Upload Window",
+        "sr": "Postavljanje",
+        "jp": ""
+    },
+    "upl_uploading": {
+        "en": "Uploading {0}",
+        "sr": "Postavljam {0}",
+        "jp": ""
+    },
+    "upl_loading": {
+        "en": "Loading...",
+        "sr": "Učitavam...",
+        "jp": ""
+    },
+    "upl_cancel": {
+        "en": "Cancel",
+        "sr": "Otkaži",
+        "jp": ""
+    },
+    "upl_flow": {
+        "en": "Flow: {0}kbps",
+        "sr": "Protok: {0}",
+        "jp": ""
+    },
+    "upl_sent": {
+        "en": "Sent: {0}MB/{1}MB",
+        "sr": "Poslato: {0}MB/{1}MB",
+        "jp": ""
+    },
+    "request": {
+        "en": "Request a song",
+        "sr": "Zatraži pjesmu",
+        "jp": ""
+    },
+    "req_title": {
+        "en": "Choose a song...",
+        "sr": "Odaberi pjesmu...",
+        "jp": ""
+    },
+    "req_pick": {
+        "en": "Pick a song... (scrollable)",
+        "sr": "Odaberi pjesmu... (lista se može skrolati)",
+        "jp": ""
+    },
+    "req_search": {
+        "en": "Search for the song...",
+        "sr": "Traži pjesmu...",
+        "jp": ""
+    },
+    "chat_placeholder": {
+        "en": "Enter message or YouTube URL",
+        "sr": "Unesi poruku ili Jutjub poveznicu",
+        "jp": ""
+    },
+    "chat_send": {
+        "en": "Send",
+        "sr": "Pošalji",
+        "jp": ""
+    },
+    "player": {
+        "en": "PLAYER",
+        "sr": "PLEJER",
+        "jp": ""
+    },
+    "player-playing": {
+        "en": "Playing - {0}",
+        "sr": "Sviram - {0}",
+        "jp": ""
+    },
+    "waiting": {
+        "en": "Waiting for the track...",
+        "sr": "Čekam pjesmu...",
+        "jp": ""
+    },
+    "volume": {
+        "en": "Volume",
+        "sr": "Jačina tona",
+        "jp": ""
+    },
+    "muted": {
+        "en": "{0} (muted)",
+        "sr": "{0} (ugašen ton)",
+        "jp": ""
+    },
+    "netw_idle": {
+        "en": "NETWORK IDLE",
+        "sr": "Mreža na čekanju",
+        "jp": ""
+    },
+    "netw_downloading": {
+        "en": "[{0}] Downloading {1}",
+        "sr": "[{0}] Preuzimam {1}",
+        "jp": ""
+    },
+    "netw_uploading": {
+        "en": "Uploading...",
+        "sr": "Postavljam...",
+        "jp": ""
+    },
+    "connections": {
+        "en": "Connections",
+        "sr": "Veze",
+        "jp": ""
+    },
+    "language_menu": {
+        "en": "Language",
+        "sr": "Jezik",
+        "jp": ""
+    },
+    "help_menu": {
+        "en": "Help",
+        "sr": "Pomoć",
+        "jp": ""
+    },
+    "about_menu": {
+        "en": "About Mync",
+        "sr": "O Mync",
+        "jp": ""
+    },
+    "about_info": {
+        "en": "Mync - Music Sync\n---------\nHave a suggestion, found a typo or a bug, wanna just chat about the\nprogram? Report the problem on the GitHub page (where you probably\ngot the program) at https://github.com/grishatop1/mync!\n---------",
+        "sr": "Mync - Music Sync\n---------\nImate prijedlog, našli ste grešku, želite porazgovarati o\nprogramu? Prijavite problem na GitHub stranici (gdje ste vjerovatno\nnašli program) na https://github.com/grishatop1/mync!\n---------",
+        "jp": ""
+    },
+    "license": {
+        "en": "License",
+        "sr": "Licenca",
+        "jp": ""
     }
 }
