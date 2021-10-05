@@ -22,6 +22,8 @@ class LanguageSupport:
         if not self.lng_code in self.data[_id]:
             return self.data[_id]["en"] #return en translation if there is no required
         output = self.data[_id][self.lng_code]
+        if not output:
+            return self.data[_id]["en"]
         for i, arg in enumerate(args):
             toFind = "{" + str(i) + "}"
             output = output.replace(toFind, str(arg))
