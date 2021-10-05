@@ -33,7 +33,7 @@ class MainApplication(Tk):
         self.menu = Menu(self)
         self.help_menu = Menu(self.menu, tearoff=0)
         self.help_menu.add_command(label=lng("about_menu"),command=self.about,underline=0)
-        self.help_menu.add_command(label=lng("license"),underline=0)
+        self.help_menu.add_command(label=lng("license"),command=self.license,underline=0)
         self.lang_menu = Menu(self.menu, tearoff=0)
         self.lang_menu.add_command(label='English',command=lambda:self.changeLang("en"),underline=0)
         self.lang_menu.add_command(label='Srpski',command=lambda:self.changeLang("sr"),underline=0)
@@ -73,8 +73,10 @@ class MainApplication(Tk):
             showerror(title, message)
 
     def about(*args):
-        '''Shows an About box'''
         messagebox.showinfo(title=lng("about_menu"),message=lng("about_info"))
+
+    def license(*args):
+        messagebox.showinfo(title=lng("license"),message=lng("license_text"))
 
 class TopLevelControl:
     def __init__(self, parent) -> None:

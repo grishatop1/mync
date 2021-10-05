@@ -1,7 +1,7 @@
 {
     "title": {
         "en": "Mync Client",
-        "sr": "Mync Klijent",
+        "sr": "Mync klijent",
         "jp": "ミンク - 同期音楽プレーヤー"
     },
     "title_playing": {
@@ -383,11 +383,12 @@
         "sr": "Licenca",
         "jp": "ライセンス"
     },
-    "wanna-restart": {
-        "en": "Restart mync now to apply changes?",
-        "sr": "Zelite li restartovati mync da vidite promjene?"
-    },
     "license_text": {
         "en": "MIT License\n\nCopyright (c) 2021. Grigorije Škipina and Stefan Šućur\n\nPermission is hereby granted, free of charge, to any person obtaining\na copy of this software and associated documentation files\n(the \"Software\"), to deal in the Software without restriction,\nincluding without limitation the rights to use, copy, modify, merge,\npublish, distribute, sublicense, and/or sell copies of the Software,\nand to permit persons to whom the Software is furnished to do so,\nsubject to the following conditions:\n\nThe above copyright notice and this permission notice shall be\nincluded in all copies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY\nKIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE\nWARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR\nPURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\nAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,\nDAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF\nCONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN\nCONNECTION WITH THE SOFTWARE OR THE USE OR OTHER\nDEALINGS IN THE SOFTWARE."
+    },
+    "wanna-restart": {
+        "en": "Restart now to apply changes?",
+        "sr": "Želite li restartovati program da vidite promjene?",
+        "jp": "今すぐプログラムを再起動して変更を適用しますか？"
     }
 }
