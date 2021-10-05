@@ -18,6 +18,6 @@ class LanguageSupport:
         output = self.data[_id]
         for i, arg in enumerate(args):
             toFind = "{" + str(i) + "}"
-            output = output.replace(toFind, arg)
+            output = output.replace(toFind, str(arg))
 
         return output
