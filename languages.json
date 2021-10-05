@@ -80,8 +80,11 @@
 
         "connections":"Connections",
 
+        "language_menu":"Language",
+        "help_menu":"Help",
         "about_menu":"About Mync",
-        "about_info":"Mync - Music Sync\n---------\nHave a suggestion, found a typo or a bug, wanna just chat about the\nprogram? Report the problem on the GitHub page (where you probably\ngot the program) at https://github.com/grishatop1/mync!\n---------"
+        "about_info":"Mync - Music Sync\n---------\nHave a suggestion, found a typo or a bug, wanna just chat about the\nprogram? Report the problem on the GitHub page (where you probably\ngot the program) at https://github.com/grishatop1/mync!\n---------",
+        "license":"License"
     },
     "sr": {
         "title":"Mync Klijent",
@@ -165,7 +168,10 @@
 
         "connections":"Veze",
 
+        "language_menu":"Jezik",
+        "help_menu":"Pomoć",
         "about_menu":"O Mync",
-        "about_info":"Mync - Music Sync\n---------\nImate prijedlog, našli ste grešku, želite porazgovarati o\nprogramu? Prijavite problem na GitHub stranici (gdje ste vjerovatno\nnašli program) na https://github.com/grishatop1/mync!\n---------"
+        "about_info":"Mync - Music Sync\n---------\nImate prijedlog, našli ste grešku, želite porazgovarati o\nprogramu? Prijavite problem na GitHub stranici (gdje ste vjerovatno\nnašli program) na https://github.com/grishatop1/mync!\n---------",
+        "license":"Licenca"
     }
 }
