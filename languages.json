@@ -354,8 +354,8 @@
         "jp": "アップロード中..."
     },
     "connections": {
-        "en": "Connections",
-        "sr": "Veze",
+        "en": "Connected users",
+        "sr": "Povezani korisnici",
         "jp": "接続されたユーザー"
     },
     "language_menu": {
