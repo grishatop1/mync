@@ -1,4 +1,5 @@
 import os
+import sys
 import threading
 
 from tkinter import *
@@ -20,7 +21,7 @@ class MainApplication(Tk):
         self.controller = controller
         lng = self.controller.lng
 
-        self.title("Mync Client")
+        self.title(lng("title"))
         self.resizable(0,0)
         style = Style('material-dark', "media/themes.json")
         style.colors.set("primary", "#BB86FC")        
@@ -29,18 +30,18 @@ class MainApplication(Tk):
         self.top = TopLevelControl(self)
 
         self.bind("<F1>",self.about)
-        menu = Menu(self)
-        help_menu = Menu(menu, tearoff=0)
-        help_menu.add_command(label='About Mync',command=self.about,underline=0)
-        help_menu.add_command(label='License',command=self.nothing,underline=0)
-        lang_menu = Menu(menu, tearoff=0)
-        lang_menu.add_command(label='English',command=self.nothing,underline=0)
-        lang_menu.add_command(label='Srpski',command=self.nothing,underline=0)
-        lang_menu.add_command(label='日本語',command=self.nothing)
-        lang_menu.add_command(label='Русский',command=self.nothing,underline=0)
-        menu.add_cascade(label='Language', menu=lang_menu, underline=0)
-        menu.add_cascade(label='Help', menu=help_menu, underline=0)
-        self.config(menu=menu)
+        self.menu = Menu(self)
+        self.help_menu = Menu(self.menu, tearoff=0)
+        self.help_menu.add_command(label=lng("about_menu"),command=self.about,underline=0)
+        self.help_menu.add_command(label=lng("license"),underline=0)
+        self.lang_menu = Menu(self.menu, tearoff=0)
+        self.lang_menu.add_command(label='English',command=lambda:self.changeLang("en"),underline=0)
+        self.lang_menu.add_command(label='Srpski',command=lambda:self.changeLang("sr"),underline=0)
+        self.lang_menu.add_command(label='日本語',command=lambda:self.changeLang("jp"))
+        self.lang_menu.add_command(label='Русский',command=lambda:self.changeLang("ru"),underline=0)
+        self.menu.add_cascade(label=lng("language_menu"), menu=self.lang_menu, underline=0)
+        self.menu.add_cascade(label=lng("help_menu"), menu=self.help_menu, underline=0)
+        self.config(menu=self.menu)
 
         self.connect_frame = ConnectFrame(self, text=lng("connection"))
         self.connect_frame.grid(row=0, column=0, padx=5, pady=5)
@@ -58,9 +59,10 @@ class MainApplication(Tk):
         self.netstatus_label = NetworkStatusLabel(self)
         self.netstatus_label.grid(row=2, columnspan=3, padx=5, pady=5)
 
-    def nothing(*args):
-        '''PLACEHOLDER FOR EMPTY MENU ITEMS'''
-        pass
+    def changeLang(self, lang_code):
+        if askyesno("Mync", lng("wanna-restart")):
+            lng.changeLanguage(lang_code)
+            os.execl(sys.executable, sys.executable, *sys.argv)
 
     def showDialog(self, message, title="Mync Client", _type="info"):
         if _type == "info":
@@ -165,7 +167,7 @@ class ConnectFrame(LabelFrame):
         self.username_entry["state"] = "disabled"
         self.ip_entry["state"] = "disabled"
         self.connect_btn.config(
-            text=lng("connection"),
+            text=lng("connecting"),
             state="disabled"
         )
 

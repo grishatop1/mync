@@ -11,8 +11,12 @@
     },
     "connection": {
         "en": "Connection",
-        "sr": "Povezivanje",
+        "sr": "Konekcija",
         "jp": "接続"
+    },
+    "connecting": {
+        "en": "Connecting...",
+        "sr": "Povezivanje..."
     },
     "username": {
         "en": "Username：",
@@ -378,5 +382,9 @@
         "en": "License",
         "sr": "Licenca",
         "jp": "ライセンス"
+    },
+    "wanna-restart": {
+        "en": "Restart mync now to apply changes?",
+        "sr": "Zelite li restartovati mync da vidite promjene?"
     }
 }
