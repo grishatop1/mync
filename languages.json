@@ -24,8 +24,8 @@
         "sr": "Poveži se"
     },
     "disconnect": {
-        "en": "Disconnected.",
-        "sr": "Veza prekinuta."
+        "en": "Disconnect.",
+        "sr": "Prekini vezu."
     },
     "conn_err_alreadytaken": {
         "en": "Username already taken.",
