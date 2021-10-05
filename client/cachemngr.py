@@ -16,7 +16,8 @@ class CacheManager:
             data = {
                 "volume": 80,
                 "ip": "",
-                "username": ""
+                "username": "",
+                "language": "en"
             }
             with open(self.cache_file, "wb") as f:
                 pickle.dump(data, f)

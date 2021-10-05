@@ -7,6 +7,7 @@ from client.client import Client
 from client.cachemngr import CacheManager
 from client.player import Player
 
+from modules.langs import LanguageSupport
 from modules.utils import youtube_url_validation
 
 class Controller:
@@ -15,6 +16,7 @@ class Controller:
         self.client = None
         self.cache = CacheManager()
         self.player = Player(self)
+        self.lng = LanguageSupport(self, "languages.json")
 
     def runGUI(self):
         self.gui = MainApplication(self)
@@ -30,11 +32,11 @@ class Controller:
         elif result == "badusername":
             self.client = None
             self.gui.connect_frame.setNormalState()
-            self.gui.showDialog("Username already taken.", "Connection", "warning")
+            self.gui.showDialog(self.lng("conn_err_alreadytaken"), "Connection", "warning")
         else:
             self.client = None
             self.gui.connect_frame.setNormalState()
-            self.gui.showDialog("Couldn't connect.", "Connection", "warning")
+            self.gui.showDialog(self.lng("conn_err_couldnt"), "Connection", "warning")
     
     def removeClientInstance(self):
         self.resetAll()
@@ -44,7 +46,7 @@ class Controller:
     def lostClientConnection(self):
         self.removeClientInstance()
         self.gui.connect_frame.setNormalState()
-        self.gui.showDialog("Connection lost.", "Connection", "warning")
+        self.gui.showDialog(self.lng("conn_err_lost"), "Connection", "warning")
 
     def isClientAlive(self):
         if self.client: return True
@@ -58,7 +60,7 @@ class Controller:
     def sendMessage(self, message):
         if self.client:
             if youtube_url_validation(message):
-                self.gui.log("YouTube URL Accepted.")
+                self.gui.log(self.lng("logs_yt_accepted"))
                 self.client.reqYoutube(message)
                 return
             self.client.transmitMsg(
@@ -67,7 +69,7 @@ class Controller:
             )
         else:
             self.gui.log_frame.insertTextLine(
-                f"[Offline]: {message}"
+                self.lng("logs_offline_msg", message)
             )
 
     def recvMessage(self, message, color):
@@ -87,11 +89,11 @@ class Controller:
         self.gui.connections_frame.addUsers(users)
 
     def addUser(self, user):
-        self.gui.log(f"{user} joined.", "#d97000")
+        self.gui.log(self.lng("logs_user_joined", user), "#d97000")
         self.gui.connections_frame.addUser(user)
 
     def removeUser(self, user):
-        self.gui.log(f"{user} left.", "#d97000")
+        self.gui.log(self.lng("logs_user_left", user), "#d97000")
         self.gui.connections_frame.removeUser(user)
 
     def userSuffix(self, user, sfx):
@@ -109,7 +111,7 @@ class Controller:
 
     def readyForTheSong(self, songname):
         self.gui.log(
-            "Ready for the next song! Waiting for others..."
+            self.lng("logs_track_ready")
         )
         self.gui.top.closeRequestWindow()
 
@@ -123,11 +125,11 @@ class Controller:
                 start
             )
         except:
-            self.gui.log("Can't play this track, sorry.", "red")
+            self.gui.log(self.lng("logs_cant_play"), "red")
             return
 
         self.gui.player_frame.setPlayingState(songname[:70]+"...")
-        self.gui.log("Playing next track!", "green")
+        self.gui.log(self.lng("logs_playing_now"), "green")
 
     def stopTrack(self):
         self.player.stopTrack()
@@ -135,8 +137,8 @@ class Controller:
 
     def startSongRequesting(self, songname):
         self.gui.log_frame.upload_btn["state"] = "disabled"
-        self.gui.log("Missing song! Requesting it...", "red")
-        self.gui.netstatus_label.set(f"[0%] Downloading {songname[:70]}")
+        self.gui.log(self.lng("logs_requesting"), "red")
+        self.gui.netstatus_label.set(self.lng("netw_downloading", "0%", songname))
         self.gui.top.closeRequestWindow()
 
         if self.client.ft and self.client.ft.running:
@@ -147,24 +149,26 @@ class Controller:
     def downloadSuccess(self):
         self.gui.netstatus_label.reset()
         self.gui.log_frame.upload_btn["state"] = "normal"
-        self.gui.log("Song has been downloaded, waiting for others!", "green")
+        self.gui.log(self.lng("logs_downloaded"), "green")
 
     def downloadFail(self):
         self.gui.netstatus_label.reset()
         self.gui.log_frame.upload_btn["state"] = "normal"
-        self.gui.log("Download failed.", "red")
+        self.gui.log(self.lng("logs_dl_failed"), "red")
 
     def cancelDownload(self):
         if self.client.ft:
             self.client.ft.kill(fail=True)
 
     def updateDownloadStatus(self, songname, percent):
-        self.gui.netstatus_label.set(f"[{percent}%] Downloading {songname[:70]}")
+        self.gui.netstatus_label.set(
+            self.lng("netw_downloading", f"{percent}%", songname)
+        )
 
     def startUploading(self, songpath):
         self.gui.log_frame.upload_btn["state"] = "disabled"
-        self.gui.log("Uploading the song...")
-        self.gui.netstatus_label.set(f"Uploading...")
+        self.gui.log(self.lng("logs_uploading"))
+        self.gui.netstatus_label.set(self.lng("netw_uploading"))
 
         threading.Thread(target=self.client.uploadSong, args=(songpath,), daemon=True).start()
 
@@ -172,11 +176,11 @@ class Controller:
         self.gui.top.closeUploadWindow()
         self.gui.netstatus_label.reset()
         self.gui.log_frame.upload_btn["state"] = "normal"
-        self.gui.log("Song has been uploaded! You can now request it.", "green")
+        self.gui.log(self.lng("logs_uploaded"), "green")
 
     def uploadFail(self):
         self.closeUpload()
-        self.gui.log("Upload failed.", "red")
+        self.gui.log(self.lng("logs_upload_failed"), "red")
 
     def updateUploadStatus(self, bps, recvd):
         try:
@@ -193,7 +197,7 @@ class Controller:
         self.closeUpload()
         if self.client.ft:
             self.client.ft.kill()
-        self.gui.log("Upload has been canceled.", "red")
+        self.gui.log(self.lng("logs_upload_canceled"), "red")
 
     def resetAll(self):
         self.stopTrack()

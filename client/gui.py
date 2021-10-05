@@ -1,4 +1,5 @@
 import os
+import sys
 import threading
 
 from tkinter import *
@@ -10,13 +11,17 @@ from tkinter import Scale as ScaleDefault
 
 from ttkbootstrap import Style
 
+lng = None
+
 class MainApplication(Tk):
     def __init__(self, controller, *args, **kwargs) -> None:
         Tk.__init__(self, *args, **kwargs)
+        global lng
 
         self.controller = controller
+        lng = self.controller.lng
 
-        self.title("Mync Client")
+        self.title(lng("title"))
         self.resizable(0,0)
         style = Style('material-dark', "media/themes.json")
         style.colors.set("primary", "#BB86FC")        
@@ -25,30 +30,41 @@ class MainApplication(Tk):
         self.top = TopLevelControl(self)
 
         self.bind("<F1>",self.about)
-        menu = Menu(self)
-        help_menu = Menu(menu, tearoff=0)
-        menu.add_command(label='About', command=self.about, underline=0)
-        self.config(menu=menu)
+        self.menu = Menu(self)
+        self.help_menu = Menu(self.menu, tearoff=0)
+        self.help_menu.add_command(label=lng("about_menu"),command=self.about,underline=0)
+        self.help_menu.add_command(label=lng("license"),command=self.license,underline=0)
+        self.lang_menu = Menu(self.menu, tearoff=0)
+        self.lang_menu.add_command(label='English',command=lambda:self.changeLang("en"),underline=0)
+        self.lang_menu.add_command(label='Srpski',command=lambda:self.changeLang("sr"),underline=0)
+        self.lang_menu.add_command(label='日本語',command=lambda:self.changeLang("jp"))
+        self.lang_menu.add_command(label='Русский',command=lambda:self.changeLang("ru"),underline=0)
+        self.menu.add_cascade(label=lng("language_menu"), menu=self.lang_menu, underline=0)
+        self.menu.add_cascade(label=lng("help_menu"), menu=self.help_menu, underline=0)
+        self.config(menu=self.menu)
 
-        self.connect_frame = ConnectFrame(self, text="Connection")
+        self.connect_frame = ConnectFrame(self, text=lng("connection"))
         self.connect_frame.grid(row=0, column=0, padx=5, pady=5)
 
-        self.log_frame = LogFrame(self, text="Logs")
+        self.log_frame = LogFrame(self, text=lng("logs"))
         self.log = self.log_frame.insertTextLine
         self.log_frame.grid(row=0, column=1, padx=5, pady=5)
 
-        self.connections_frame = ConnectionsFrame(self, text="Connections")
+        self.connections_frame = ConnectionsFrame(self, text=lng("connections"))
         self.connections_frame.grid(row=0, column=2, padx=5, pady=5)
 
-        self.player_frame = PlayerFrame(self, text="PLAYER")
+        self.player_frame = PlayerFrame(self, text=lng("player"))
         self.player_frame.grid(row=1, column=0, columnspan=3, padx=5, pady=10)
 
         self.netstatus_label = NetworkStatusLabel(self)
         self.netstatus_label.grid(row=2, columnspan=3, padx=5, pady=5)
 
+    def changeLang(self, lang_code):
+        if askyesno(lng("title"), lng("wanna-restart")):
+            lng.changeLanguage(lang_code)
+            os.execl(sys.executable, sys.executable, *sys.argv)
 
-
-    def showDialog(self, message, title="Mync client", _type="info"):
+    def showDialog(self, message, title="Mync Client", _type="info"):
         if _type == "info":
             showinfo(title, message)
         elif _type == "warning":
@@ -57,15 +73,10 @@ class MainApplication(Tk):
             showerror(title, message)
 
     def about(*args):
-        '''Shows an About box'''
-        messagebox.showinfo(title='About Mync',message=
-'''Mync - Music Sync
----------
-Have a suggestion, found a typo or a bug, wanna just chat about the
-program? Report the problem on the GitHub page (where you probably
-got the program) at https://github.com/grishatop1/mync!
----------
-''')
+        messagebox.showinfo(title=lng("about_menu"),message=lng("about_info"))
+
+    def license(*args):
+        messagebox.showinfo(title=lng("license"),message=lng("license_text"))
 
 class TopLevelControl:
     def __init__(self, parent) -> None:
@@ -91,7 +102,7 @@ class TopLevelControl:
         if not self.checkClient(): return
         if self.upload_win: return
 
-        filepath = filedialog.askopenfilename(title="Open music file",
+        filepath = filedialog.askopenfilename(title=lng("upl_file_dialog_title"),
                         filetypes=(("Music Files","*.mp3"),))
         if not filepath: return
         self.upload_win = UploadTopLevel(self.parent, filepath)
@@ -111,12 +122,14 @@ class ConnectFrame(LabelFrame):
         self.parent = parent
         self.client = None
 
-        self.username_label = Label(self, text="Username:")
+        self.username_label = Label(self, text=lng("username"))
         self.username_entry = Entry(self)
-        self.ip_label = Label(self, text="Server IP:")
+        self.ip_label = Label(self, text=lng("server_ip"))
         self.ip_entry = Entry(self)
-        self.connect_btn = Button(self, text="Connect", 
-                                    command=self.connectCommand)
+        self.connect_btn = Button(self, 
+            text=lng("connect"), 
+            command=self.connectCommand
+        )
 
         self.username_label.grid(row=1, column=0, padx=3, pady=3)
         self.username_entry.grid(row=1, column=1, padx=3, pady=3)
@@ -150,13 +163,13 @@ class ConnectFrame(LabelFrame):
     def disconnectCommand(self):
         self.parent.controller.removeClientInstance()
         self.setNormalState()
-        self.parent.showDialog("Disconnected", "Connection")
+        self.parent.showDialog(lng("disconnected"), lng("connection"))
 
     def setConnectingState(self):
         self.username_entry["state"] = "disabled"
         self.ip_entry["state"] = "disabled"
         self.connect_btn.config(
-            text="Connecting...",
+            text=lng("connecting"),
             state="disabled"
         )
 
@@ -164,7 +177,7 @@ class ConnectFrame(LabelFrame):
         self.username_entry["state"] = "normal"
         self.ip_entry["state"] = "normal"
         self.connect_btn.config(
-            text="Connect",
+            text=lng("connect"),
             state="normal",
             command=self.connectCommand
         )
@@ -173,12 +186,12 @@ class ConnectFrame(LabelFrame):
         self.username_entry["state"] = "disabled"
         self.ip_entry["state"] = "disabled"
         self.connect_btn.config(
-            text="Disconnect",
+            text=lng("disconnect"),
             state="normal",
             command=self.disconnectCommand
         )
         if dialog:
-            showinfo("Connection", "Connected!")
+            showinfo(lng("connection"), lng("connected"))
 
 class LogFrame(LabelFrame):
     def __init__(self, parent, *args, **kwargs) -> None:
@@ -191,10 +204,10 @@ class LogFrame(LabelFrame):
         for color in colors:
             self.log_text.tag_configure(color, foreground=color)
 
-        self.upload_btn = Button(self, text="Upload",
+        self.upload_btn = Button(self, text=lng("upload"),
             command=self.openUploadCommand
         )
-        self.req_btn = Button(self, text="Request a song", 
+        self.req_btn = Button(self, text=lng("request"), 
             command=self.openRequestCommand
         )
 
@@ -230,23 +243,25 @@ class ChatSubFrame(Frame):
         
         self.input = PlaceholderEntry(
             self,
-            "Enter message or YouTube URL",
+            lng("chat_placeholder"),
             style="TEntry",
             placeholder_style="Placeholder.TEntry",
             width=36,
         )
         self.input.bind("<Return>", self.sendMsg)
-        self.send_btn = Button(self, text="Send",
-                                  command=self.sendMsg, width=5)
+        self.send_btn = Button(self, 
+            text=lng("chat_send"),
+            command=self.sendMsg, width=7
+        )
 
         self.input.grid(row=0, column=0, padx=3, pady=3, ipady=1, sticky="we")
         self.send_btn.grid(row=0, column=1, padx=3, pady=3, sticky="e")
 
     def sendMsg(self, *args):
-        self.input.focus()
         msg = self.input.get().strip(' ')
-        if not msg or msg == "Enter message or YouTube URL": return
+        if not msg: return
         if self.input["foreground"] == "gray": return
+        self.input.focus()
         self.input.delete(0, "end")
         self.parent.parent.controller.sendMessage(msg)
 
@@ -295,8 +310,8 @@ class PlayerFrame(LabelFrame):
         self.player = None
         self.start_time = 0
 
-        self.status_label = Label(self, text="Waiting for the track...")
-        self.volume_label = Label(self, text="Volume:")
+        self.status_label = Label(self, text=lng("waiting"))
+        self.volume_label = Label(self, text=lng("volume"))
         self.volume_var = IntVar()
         self.volume_var.trace('w', self.changeVolume)
         self.volume_scale = ScaleDefault(self, from_=0, to=100, 
@@ -318,11 +333,11 @@ class PlayerFrame(LabelFrame):
         self.parent.controller.player.setVolume(volume)
 
     def setPlayingState(self, songname):
-        self.status_label["text"] = f"Playing - {songname}"
+        self.status_label["text"] = lng("player-playing", songname)
         self.status_label["foreground"] = "#c89cff"
 
     def resetState(self):
-        self.status_label["text"] = f"Waiting for the track..."
+        self.status_label["text"] = lng("waiting")
         self.status_label["foreground"] = "white"
 
 class PlaceholderEntry(Entry):
@@ -356,7 +371,7 @@ class RequestTopLevel(Toplevel):
         Toplevel.__init__(self, parent, *args, **kwargs)
         self.parent = parent
 
-        self.title("Choose a song...")
+        self.title(lng("req_title"))
         self.resizable(0,0)
         self.grab_set() #get the all controls from root muahaha
         self.bind("<Return>", self.playCommand)
@@ -365,17 +380,17 @@ class RequestTopLevel(Toplevel):
         self.tracks = []
         
         self.status_label = Label(self,
-            text="Loading..."
+            text=lng("upl_loading")
         )
         self.search_entry = PlaceholderEntry(
-            self, 
-            "Search for the song...",
+            self,
+            lng("req_search"),
             style="TEntry",
             placeholder_style="Placeholder.TEntry",
             width=70
         )
         self.tracks_list = Listbox(self, width=100)
-        self.choose_btn = Button(self, text="Play!", command=self.playCommand)
+        self.choose_btn = Button(self, text=lng("req_play"), command=self.playCommand)
 
         self.search_entry.bind("<KeyRelease>", self.search)
 
@@ -401,7 +416,7 @@ class RequestTopLevel(Toplevel):
             self.tracks = tracks
             for track in tracks:
                 self.tracks_list.insert("end", track)
-            self.status_label["text"] = "Pick a song... (scrollable)"
+            self.status_label["text"] = lng("req_pick")
         except:pass
 
     def search(self, *args):
@@ -437,7 +452,7 @@ class UploadTopLevel(Toplevel):
         self.filename = os.path.basename(filepath)
         self.filesize = os.path.getsize(filepath)
 
-        self.title("Upload Window")
+        self.title(lng("upl_title"))
         self.resizable(0,0)
         self.protocol("WM_DELETE_WINDOW", self.cancel)
 
@@ -446,11 +461,11 @@ class UploadTopLevel(Toplevel):
         self.canv_count = self.canv_h//15
         self.points = []
 
-        self.title_label = Label(self, text=f"Uploading {self.filename[:25]}...")
+        self.title_label = Label(self, text=lng("upl_uploading", self.filename[:25]))
         self.graph_canvas = Canvas(self, width=self.canv_w, height=self.canv_h, background="white")
-        self.speed_label = Label(self, text="Loading...")
-        self.percent_label = Label(self, text="Loading...")
-        self.cancel_btn = Button(self, text="Cancel", command=self.cancel)
+        self.speed_label = Label(self, text=lng("upl_loading"))
+        self.percent_label = Label(self, text=lng("upl_loading"))
+        self.cancel_btn = Button(self, text=lng("upl_cancel"), command=self.cancel)
 
         self.title_label.grid(row=0, column=0, columnspan=2, pady=(10,0))
         self.graph_canvas.grid(row=1, column=0, columnspan=2, padx=15, pady=8)
@@ -466,8 +481,8 @@ class UploadTopLevel(Toplevel):
 
     def updateStatus(self, bps, received):
         songsize = round(self.filesize/1024/1024, 1)
-        self.speed_label["text"] = f"Flow: {round(bps/1024, 1)}kbps"
-        self.percent_label["text"] = f"Sent: {round(received/1024/1024, 1)}MB/{songsize}MB"
+        self.speed_label["text"] = lng("upl_flow", round(bps/1024, 1))
+        self.percent_label["text"] = lng("upl_sent", round(received/1024/1024, 1), songsize)
         self.updateGraph(bps)
 
     def cancel(self):
@@ -504,7 +519,7 @@ class UploadTopLevel(Toplevel):
 
 class NetworkStatusLabel(Label):
     def __init__(self, parent, *args, **kwargs) -> None:
-        Label.__init__(self, parent, text="NETWORK IDLE", foreground="white")
+        Label.__init__(self, parent, text=lng("netw_idle"), foreground="white")
         self.parent = parent
 
     def set(self, text):
@@ -512,5 +527,5 @@ class NetworkStatusLabel(Label):
         self["foreground"] = "#c89cff"
 
     def reset(self):
-        self["text"] = "NETWORK IDLE"
+        self["text"] = lng("netw_idle")
         self["foreground"] = "white"
