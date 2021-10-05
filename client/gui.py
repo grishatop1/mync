@@ -158,7 +158,7 @@ class ConnectFrame(LabelFrame):
     def disconnectCommand(self):
         self.parent.controller.removeClientInstance()
         self.setNormalState()
-        self.parent.showDialog(lng("disconnect"), "Connection")
+        self.parent.showDialog(lng("disconnected"), "Connection")
 
     def setConnectingState(self):
         self.username_entry["state"] = "disabled"
