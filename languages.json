@@ -25,7 +25,7 @@
     "username": {
         "en": "Username：",
         "sr": "Ime:",
-        "jp": "ユーザー名",
+        "jp": "ユーザー名：",
         "ru": "Имя: "
     },
     "server_ip": {
