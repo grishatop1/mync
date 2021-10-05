@@ -60,7 +60,7 @@ class MainApplication(Tk):
         self.netstatus_label.grid(row=2, columnspan=3, padx=5, pady=5)
 
     def changeLang(self, lang_code):
-        if askyesno("Mync", lng("wanna-restart")):
+        if askyesno(lng("title"), lng("wanna-restart")):
             lng.changeLanguage(lang_code)
             os.execl(sys.executable, sys.executable, *sys.argv)
 
@@ -102,7 +102,7 @@ class TopLevelControl:
         if not self.checkClient(): return
         if self.upload_win: return
 
-        filepath = filedialog.askopenfilename(title="Open music file",
+        filepath = filedialog.askopenfilename(title=lng("upl_file_dialog_title"),
                         filetypes=(("Music Files","*.mp3"),))
         if not filepath: return
         self.upload_win = UploadTopLevel(self.parent, filepath)

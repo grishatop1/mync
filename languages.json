@@ -316,6 +316,12 @@
         "jp": "アップロード",
         "ru": "Окно загрузки"
     },
+    "upl_file_dialog_title": {
+        "en": "Open music file",
+        "sr": "Otvori muzičku datoteku",
+        "jp": "音楽ファイルを開く",
+        "ru": "Откройте музыкальный файл"
+    },
     "upl_uploading": {
         "en": "Uploading {0}",
         "sr": "Postavljam {0}",
