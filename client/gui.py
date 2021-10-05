@@ -389,7 +389,7 @@ class RequestTopLevel(Toplevel):
             width=70
         )
         self.tracks_list = Listbox(self, width=100)
-        self.choose_btn = Button(self, text="Play!", command=self.playCommand)
+        self.choose_btn = Button(self, text=lng("req_play"), command=self.playCommand)
 
         self.search_entry.bind("<KeyRelease>", self.search)
 

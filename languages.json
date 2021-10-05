@@ -370,6 +370,12 @@
         "jp": "曲を検索する...",
         "ru": "Искать трек..."
     },
+    "req_play": {
+        "en": "Play!",
+        "sr": "Pusti!",
+        "jp": "再生します！",
+        "ru": "Играть!"
+    },
     "chat_placeholder": {
         "en": "Enter message or YouTube URL",
         "sr": "Unesi poruku ili Jutjub poveznicu",
