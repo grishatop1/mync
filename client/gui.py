@@ -122,7 +122,7 @@ class ConnectFrame(LabelFrame):
 
         self.username_label = Label(self, text=lng("username"))
         self.username_entry = Entry(self)
-        self.ip_label = Label(self, text="Server IP:")
+        self.ip_label = Label(self, text=lng("server_ip"))
         self.ip_entry = Entry(self)
         self.connect_btn = Button(self, 
             text=lng("connect"), 
