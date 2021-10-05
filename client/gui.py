@@ -31,7 +31,14 @@ class MainApplication(Tk):
         self.bind("<F1>",self.about)
         menu = Menu(self)
         help_menu = Menu(menu, tearoff=0)
-        menu.add_command(label='About Mync', command=self.about, underline=0)
+        help_menu.add_command(label='About Mync',command=self.about,underline=0)
+        help_menu.add_command(label='License',command=self.nothing,underline=0)
+        lang_menu = Menu(menu, tearoff=0)
+        lang_menu.add_command(label='English',command=self.nothing,underline=0)
+        lang_menu.add_command(label='Srpski',command=self.nothing,underline=0)
+        lang_menu.add_command(label='Русский',command=self.nothing,underline=0)
+        menu.add_cascade(label='Language', menu=lang_menu, underline=0)
+        menu.add_cascade(label='Help', menu=help_menu, underline=0)
         self.config(menu=menu)
 
         self.connect_frame = ConnectFrame(self, text="Connection")
@@ -50,7 +57,9 @@ class MainApplication(Tk):
         self.netstatus_label = NetworkStatusLabel(self)
         self.netstatus_label.grid(row=2, columnspan=3, padx=5, pady=5)
 
-
+    def nothing(*args):
+        '''PLACEHOLDER FOR EMPTY MENU ITEMS'''
+        pass
 
     def showDialog(self, message, title="Mync Client", _type="info"):
         if _type == "info":
