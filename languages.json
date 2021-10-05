@@ -25,7 +25,7 @@
     },
     "disconnect": {
         "en": "Disconnected.",
-        "sr": "Prekini vezu"
+        "sr": "Veza prekinuta."
     },
     "conn_err_alreadytaken": {
         "en": "Username already taken.",
