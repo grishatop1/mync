@@ -46,6 +46,12 @@
         "jp": "切断する",
         "ru": "Отключится"
     },
+    "disconnected": {
+        "en": "Disconnected",
+        "sr": "Veza prekinuta",
+        "jp": "切断されました",
+        "ru": "Отключен"
+    },
     "conn_err_alreadytaken": {
         "en": "Username already taken.",
         "sr": "Ime je zauzeto.",
