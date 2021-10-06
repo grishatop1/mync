@@ -59,7 +59,7 @@ class MainApplication(Tk):
         self.netstatus_label = NetworkStatusLabel(self)
         self.netstatus_label.grid(row=2, columnspan=3, padx=5, pady=5)
 
-        self.status_bar = Label(self)
+        self.status_bar = Label(self, text="Mync Client v0.69 "+str(self.player_frame.volume_var.get()))
         self.status_bar.grid(row=3, columnspan=3, padx=5, pady=5, sticky="we")
 
     def changeLang(self, lang_code):
@@ -336,7 +336,7 @@ class PlayerFrame(LabelFrame):
         self.parent.controller.player.setVolume(volume)
 
     def setPlayingState(self, songname):
-        self.status_label["text"] = lng("player-playing", songname)
+        self.status_label["text"] = lng("player_playing", songname)
         self.status_label["foreground"] = "#c89cff"
 
     def resetState(self):
