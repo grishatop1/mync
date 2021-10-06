@@ -59,7 +59,7 @@ class MainApplication(Tk):
         self.netstatus_label = NetworkStatusLabel(self)
         self.netstatus_label.grid(row=2, columnspan=3, padx=5, pady=5)
 
-        self.status_bar = Label(self, text=f"Mync Client v0.69")
+        self.status_bar = Label(self, text=lng("title"))
         self.status_bar.grid(row=3, columnspan=3, padx=5, pady=5, sticky="we")
 
     def changeLang(self, lang_code):
