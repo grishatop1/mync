@@ -43,6 +43,11 @@ class Transfer:
 			except socket.error:
 				return
 
+	def sendNow(self, data):
+		#do NOT use this if you have more than 1 thread sending data
+		h_data = self.appendHeader(data)
+		self.s.send(h_data)
+
 	def recvData(self):
 		full = b""
 		recv_len = 0
