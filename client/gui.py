@@ -314,7 +314,7 @@ class PlayerFrame(LabelFrame):
         self.status_label = Label(self, text=lng("waiting"))
         self.volume_label = Label(self, text=lng("volume"))
         self.volume_var = IntVar()
-        self.volume_var.trace('w', self.changeVolume)
+        self.volume_var.trace_add('write', self.changeVolume)
         self.volume_scale = ScaleDefault(self, from_=0, to=100, 
                                     orient="horizontal",
                                     length=300,
