@@ -35,6 +35,7 @@ class MainApplication(Tk):
         self.help_menu.add_command(label=lng("about_menu"),command=self.about,underline=0)
         self.help_menu.add_command(label=lng("license"),command=self.license,underline=0)
         self.lang_menu = Menu(self.menu, tearoff=0)
+        self.lang_menu.add_command(label='Translations may not be 100% correct', state="disabled")
         self.lang_menu.add_command(label='English',command=lambda:self.changeLang("en"),underline=0)
         self.lang_menu.add_command(label='Srpski',command=lambda:self.changeLang("sr"),underline=0)
         self.lang_menu.add_command(label='日本語',command=lambda:self.changeLang("jp"))
