@@ -24,8 +24,11 @@ class MyncPresence:
         })
 
     def process(self, q):
-        presence = Presence("889166597476982804")
-        presence.connect()
+        try:
+            presence = Presence("889166597476982804")
+            presence.connect()
+        except:
+            return
         q.put({"type": "setdisconnected"}) #on start
         while True:
             time.sleep(2)
