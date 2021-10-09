@@ -1,11 +1,14 @@
 import os
 import sys
+import time
 import threading
+import multiprocessing
 
 from client.gui import MainApplication
 from client.client import Client
 from client.cachemngr import CacheManager
 from client.player import Player
+from client.presence import MyncPresence
 
 from modules.langs import LanguageSupport
 from modules.utils import youtube_url_validation
@@ -17,6 +20,7 @@ class Controller:
         self.cache = CacheManager()
         self.player = Player(self)
         self.lng = LanguageSupport(self, "languages.json")
+        self.ds = MyncPresence(self, os.getpid())
 
     def runGUI(self):
         self.gui = MainApplication(self)
@@ -29,6 +33,7 @@ class Controller:
             self.writeToCache("ip", f"{ip}:{port}")
             self.writeToCache("username", username)
             self.gui.connect_frame.setConnectedState(dialog=True)
+            self.ds.setConnected()
         elif result == "badusername":
             self.client = None
             self.gui.connect_frame.setNormalState()
@@ -130,6 +135,7 @@ class Controller:
 
         self.gui.player_frame.setPlayingState(songname[:70]+"...")
         self.gui.log(self.lng("logs_playing_now"), "green")
+        self.ds.setPlaying(songname, time.time())
 
     def stopTrack(self):
         self.player.stopTrack()
@@ -217,5 +223,6 @@ if __name__ == "__main__":
         print("Mync client supports only windows for now :/")
         sys.exit()
 
+    multiprocessing.freeze_support() #for pyinstaller
     controller = Controller()
     controller.runGUI()
