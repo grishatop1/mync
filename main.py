@@ -209,6 +209,7 @@ class Controller:
         self.stopTrack()
         self.cancelUpload()
         self.cancelDownload()
+        self.ds.setDisconnected()
 
         self.gui.connect_frame.setNormalState()
         self.gui.log_frame.clearLogs()

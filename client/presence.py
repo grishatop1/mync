@@ -13,7 +13,7 @@ class MyncPresence:
     def setConnected(self):
         self.q.put({"type": "setconnected"})
 
-    def setDiscionnected(self):
+    def setDisconnected(self):
         self.q.put({"type": "setdisconnected"})
 
     def setPlaying(self, songname, _time):
@@ -28,7 +28,7 @@ class MyncPresence:
         presence.connect()
         q.put({"type": "setdisconnected"}) #on start
         while True:
-            time.sleep(3)
+            time.sleep(2)
             response = q.get()
             if response["type"] == "setconnected":
                 presence.update(
