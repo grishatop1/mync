@@ -45,8 +45,11 @@ class Transfer:
 
 	def sendNow(self, data):
 		#do NOT use this if you have more than 1 thread sending data
-		h_data = self.appendHeader(data)
-		self.s.send(h_data)
+		try:
+			h_data = self.appendHeader(data)
+			self.s.send(h_data)
+		except socket.error:
+			return
 
 	def recvData(self):
 		full = b""

@@ -73,7 +73,6 @@ class ServerFT:
                     self.server.player.addTrack(songname)
                     self.server.transmitAllExceptMe(f"{username} has uploaded the song!!!",
                             "blue", username)
-                    client.songhandler.close()
                     break
 
         elif data["method"] == "download":
@@ -114,9 +113,10 @@ class SongReceiver:
         self.songname = songname
         self.songpath = songpath
         self.songsize = songsize
+        self.sfx = ".raw"
         
         self.recvd = 0
-        self.f = open(self.songpath, "ab")
+        self.f = open(self.songpath + self.sfx, "ab")
         self.closed = False
 
     def write(self, data):
@@ -141,9 +141,11 @@ class SongReceiver:
         self.f.close()
         if fail:
             try:
-                os.remove(self.songpath)
-            except:
-                pass
+                os.remove(self.songpath + self.sfx)
+            except: pass
+        else:
+            #if success
+            os.rename(self.songpath+self.sfx, self.songpath)
 
 class ClientFT:
     def __init__(self, client, ip, port) -> None:
@@ -245,6 +247,7 @@ class ClientFT:
                 data = f.read(1024*4)
                 if not data:
                     break
+                time.sleep(0.06)
                 self.t.sendNow(data)
 
     def uploadStatusThread(self):
@@ -267,7 +270,8 @@ class ClientFT:
     def kill(self, fail=False):
         self.connected = False
         self.running = False
-        if self.handler: self.handler.close(fail)
+        if self.handler and not self.handler.closed: 
+            self.handler.close(fail)
         try:
             self.s.shutdown(2)
         except: pass
