@@ -66,7 +66,7 @@ class Controller:
         if self.client:
             if message.startswith("!"):
                 try:
-                    cmnd = message.split(" ")
+                    cmnd = message.split(" ", 1)
                     cmd = cmnd[0][1:]
                     content = cmnd[1]
                     if cmd in ["search", "help"]:
