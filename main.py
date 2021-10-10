@@ -9,6 +9,7 @@ from client.client import Client
 from client.cachemngr import CacheManager
 from client.player import Player
 from client.presence import MyncPresence
+from client.toast import MyncNotifier
 
 from modules.langs import LanguageSupport
 from modules.utils import youtube_url_validation
@@ -21,6 +22,7 @@ class Controller:
         self.player = Player(self)
         self.lng = LanguageSupport(self, "languages.json")
         self.ds = MyncPresence(self, os.getpid())
+        self.notf = MyncNotifier(self)
 
     def runGUI(self):
         self.gui = MainApplication(self)
@@ -149,6 +151,8 @@ class Controller:
         self.gui.player_frame.setPlayingState(songname[:70]+"...")
         self.gui.log(self.lng("logs_playing_now"), "green")
         self.ds.setPlaying(songname, time.time())
+        if not self.gui.focus_displayof():
+            self.notf.notify(f"Playing - {songname}...")
 
     def stopTrack(self):
         self.player.stopTrack()
