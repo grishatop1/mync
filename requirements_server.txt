@@ -1,0 +1,4 @@
+moviepy==1.0.3
+beautifulsoup4==4.10.0
+requests==2.23.0
+pytube==11.0.1
