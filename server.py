@@ -12,19 +12,25 @@ from tkinter.ttk import *
 from modules.transfer import Transfer
 from modules.ft import ServerFT
 
+from pytube import YouTube
+from pytube import Search
+
 from requests import get, post
 from bs4 import BeautifulSoup
-from pytube import YouTube
 from moviepy.editor import AudioFileClip
 
 class YTHandler:
-    def __init__(self, client, link) -> None:
+    def __init__(self, client, link, obj=False) -> None:
         self.client = client
         self.link = link
+        self.obj = obj
         threading.Thread(target=self.downloadMP3, daemon=True).start()
 
     def downloadMP3(self):
-        yt = YouTube(self.link).streams.filter(only_audio=True).first()
+        if not self.obj:
+            yt = YouTube(self.link).streams.filter(only_audio=True).first()
+        else:
+            yt = self.link.streams.filter(only_audio=True).first()
         yt.download("servermusic/")
         songname, songext = os.path.splitext(yt.default_filename)
         songnamefull = yt.default_filename
@@ -44,6 +50,19 @@ class YTHandler:
             "Server has downloaded the track. You can now request it.",
             "green"
         )
+
+class YTSearcher:
+    def __init__(self, client, keyword) -> None:
+        self.client = client
+        self.keyword = keyword
+        self.handler = None
+        threading.Thread(target=self.searchAndRequest, daemon=True).start()
+
+    def searchAndRequest(self):
+        s = Search(self.keyword)
+        result = s.results[0]
+        self.client.transmitMe(f"Found - {result.title}\nDownloading it.", "black")
+        self.handler = YTHandler(self.client, result, obj=True)
 
 class ServerPlayer:
     PATH = "servermusic/"
@@ -149,6 +168,16 @@ class ClientHandler:
                 self.server.changeConnectionSuffix(
                     self.username, sfx
                 )
+
+            elif data["method"] == "command":
+                cmd = data["cmd"]
+                content = data["content"]
+                if cmd == "search":
+                    self.transmitMe(
+                    "Server is searching the song...",
+                    "black"
+                    )
+                    YTSearcher(self, content)
                 
 
         del self.server.connections[self.username]

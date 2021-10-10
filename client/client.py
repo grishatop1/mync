@@ -150,3 +150,8 @@ class Client:
         self.t.sendDataPickle(
             {"method": "suffix", "suffix": sfx}
         )
+
+    def transmitCommand(self, cmd, content):
+        self.t.sendDataPickle(
+            {"method": "command", "cmd": cmd, "content":content}
+        )

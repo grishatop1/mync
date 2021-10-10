@@ -64,6 +64,19 @@ class Controller:
 
     def sendMessage(self, message):
         if self.client:
+            if message.startswith("!"):
+                try:
+                    cmnd = message.split(" ")
+                    cmd = cmnd[0][1:]
+                    content = cmnd[1]
+                    if cmd in ["search", "help"]:
+                        self.client.transmitCommand(cmd, content)
+                    else:
+                        self.gui.log("Unknown command...", "red")
+                except:
+                    self.gui.log("!command [args]", "red")
+                    return
+                return
             if youtube_url_validation(message):
                 self.gui.log(self.lng("logs_yt_accepted"))
                 self.client.reqYoutube(message)
@@ -73,7 +86,7 @@ class Controller:
                 "blue"
             )
         else:
-            self.gui.log_frame.insertTextLine(
+            self.gui.log(
                 self.lng("logs_offline_msg", message)
             )
 
