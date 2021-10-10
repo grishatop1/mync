@@ -247,7 +247,7 @@ class ClientFT:
                 data = f.read(1024*4)
                 if not data:
                     break
-                time.sleep(0.06)
+                #time.sleep(0.06) bad net
                 self.t.sendNow(data)
 
     def uploadStatusThread(self):
