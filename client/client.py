@@ -6,6 +6,8 @@ import threading
 from modules.transfer import Transfer
 from modules.ft import ClientFT
 
+from shutil import copy
+
 class Client:
     def __init__(self, controller, ip, port, username):
         self.controller = controller
@@ -112,6 +114,12 @@ class Client:
             self.controller.lostClientConnection()
 
     def uploadSong(self, songpath):
+        songname = os.path.basename(songpath)
+        copy(
+            songpath, 
+            self.controller.cache.sharedmusic + songname
+        )
+        
         self.ft = ClientFT(self, *self.ft_addr)
         if self.ft.createConnection():
             self.ft.uploadThread(songpath)
