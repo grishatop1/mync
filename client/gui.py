@@ -132,6 +132,8 @@ class ConnectFrame(LabelFrame):
             command=self.connectCommand
         )
 
+        self.ip_entry.bind("<Return>", self.connectCommand)
+
         self.username_label.grid(row=1, column=0, padx=3, pady=3)
         self.username_entry.grid(row=1, column=1, padx=3, pady=3)
         self.ip_label.grid(row=2, column=0, padx=3, pady=3)
@@ -146,7 +148,7 @@ class ConnectFrame(LabelFrame):
         self.ip_entry.insert(0, ip)
         self.username_entry.insert(0, username)
         
-    def connectCommand(self):        
+    def connectCommand(self, event=None):        
         try:
             ip, port = self.ip_entry.get().split(":")
             port = int(port)
