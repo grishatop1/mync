@@ -15,7 +15,7 @@ class Player:
 
     def playTrack(self, path, songname, start_time=0):
         mixer.music.load(path)
-        mixer.music.play(-1, start=start_time)
+        mixer.music.play(start=start_time)
         self.playing = songname
 
     def stopTrack(self):

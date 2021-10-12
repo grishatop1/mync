@@ -132,6 +132,8 @@ class ConnectFrame(LabelFrame):
             command=self.connectCommand
         )
 
+        self.ip_entry.bind("<Return>", self.connectCommand)
+
         self.username_label.grid(row=1, column=0, padx=3, pady=3)
         self.username_entry.grid(row=1, column=1, padx=3, pady=3)
         self.ip_label.grid(row=2, column=0, padx=3, pady=3)
@@ -146,7 +148,7 @@ class ConnectFrame(LabelFrame):
         self.ip_entry.insert(0, ip)
         self.username_entry.insert(0, username)
         
-    def connectCommand(self):        
+    def connectCommand(self, event=None):        
         try:
             ip, port = self.ip_entry.get().split(":")
             port = int(port)
@@ -391,14 +393,19 @@ class RequestTopLevel(Toplevel):
             width=70
         )
         self.tracks_list = Listbox(self, width=100)
+        self.tracks_scroll = Scrollbar(self)
         self.choose_btn = Button(self, text=lng("req_play"), command=self.playCommand)
 
         self.search_entry.bind("<KeyRelease>", self.search)
 
-        self.status_label.pack(padx=5, pady=5)
-        self.search_entry.pack(padx=5, pady=5)
-        self.tracks_list.pack(padx=5, pady=5)
-        self.choose_btn.pack(padx=5, pady=10)
+        self.status_label.grid(row=0, column=0, padx=5, pady=5)
+        self.search_entry.grid(row=1, column=0, padx=5, pady=5)
+        self.tracks_list.grid(row=2, column=0, padx=(5,0), pady=5)
+        self.tracks_scroll.grid(row=2, column=1, padx=(0,5), sticky="ns")
+        self.choose_btn.grid(row=3, column=0, padx=5, pady=5)
+
+        self.tracks_list.config(yscrollcommand = self.tracks_scroll.set)
+        self.tracks_scroll.config(command = self.tracks_list.yview)
 
         self.parent.controller.requestTracksForReq()
 
