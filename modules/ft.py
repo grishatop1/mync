@@ -145,7 +145,9 @@ class SongReceiver:
             except: pass
         else:
             #if success
-            os.rename(self.songpath+self.sfx, self.songpath)
+            try:
+                os.rename(self.songpath+self.sfx, self.songpath)
+            except: pass
 
 class ClientFT:
     def __init__(self, client, ip, port) -> None:
