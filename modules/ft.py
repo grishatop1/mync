@@ -5,7 +5,7 @@ import os
 import time
 from typing import SupportsComplex
 
-from modules.transfer import Transfer
+from modules.transfer import MyncTransfer
 from shutil import move as moveFile
 
 SONG_PATH = "servermusic/"
@@ -34,7 +34,7 @@ class ServerFT:
 
     def clientHandler(self, conn, addr):
         conn.ioctl(socket.SIO_KEEPALIVE_VALS, (1, 10000, 3000))
-        t = Transfer(conn)
+        t = MyncTransfer(conn)
         try:
             username = t.recvData().decode()
         except: return
@@ -70,6 +70,7 @@ class ServerFT:
                     break
                 if client.songhandler.write(data):
                     t.send(b"done")
+                    t.recvData()
                     self.server.player.addTrack(songname)
                     self.server.transmitAllExceptMe(f"{username} has uploaded the song!!!",
                             "blue", username)
@@ -172,7 +173,7 @@ class ClientFT:
         except socket.error:
             return
 
-        self.t = Transfer(self.s)
+        self.t = MyncTransfer(self.s)
         self.t.send(self.client.username.encode())
         response = self.t.recvData()
         if not response == b"success":
@@ -188,7 +189,7 @@ class ClientFT:
         self.start_time = time.perf_counter()
         self.songname = songname
         songpath = self.client.controller.cache.sharedmusic + songname
-        self.t.sendDataPickle(
+        self.t.sendPickle(
             {"method": "download", "songname": songname}
         )
         try:
@@ -231,7 +232,7 @@ class ClientFT:
         self.songname = os.path.basename(songpath)
         songsize = os.path.getsize(songpath)
 
-        self.t.sendDataPickle(
+        self.t.sendPickle(
             {"method": "upload", "songname": self.songname, "songsize": songsize}
         )
 
@@ -256,9 +257,10 @@ class ClientFT:
         while self.running:
             data = self.t.recvData()
             if not data:
-                self.kill()
+                self.kill(True)
                 break
             if data == b"done":
+                self.t.send(b"ack_done")
                 self.kill()
                 self.client.controller.uploadSuccess()
                 break
