@@ -21,11 +21,7 @@ class MyncTransfer:
 
     def send(self, data):
         packet = self.attachHeader(data)
-        lock = queue.SimpleQueue()
-        self.pending.put(
-            [lock, packet]
-        )
-        lock.get()
+        self.pending.put(packet)
     
     def sendPickle(self, obj):
         data = pickle.dumps(obj)
@@ -33,14 +29,15 @@ class MyncTransfer:
 
     def sendNow(self, data):
         packet = self.attachHeader(data)
-        self.s.send(packet)
+        try:
+            self.s.send(packet)
+        except: pass
 
     def sendDataLoop(self):
         while True:
-            lock, data = self.pending.get()
+            data = self.pending.get()
             try:
                 self.s.send(data)
-                lock.put(1)
             except socket.error:
                 return
 

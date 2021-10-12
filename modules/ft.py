@@ -70,6 +70,7 @@ class ServerFT:
                     break
                 if client.songhandler.write(data):
                     t.send(b"done")
+                    t.recvData()
                     self.server.player.addTrack(songname)
                     self.server.transmitAllExceptMe(f"{username} has uploaded the song!!!",
                             "blue", username)
@@ -263,6 +264,7 @@ class ClientFT:
                 self.kill(True)
                 break
             if data == b"done":
+                self.t.send(b"ack_done")
                 self.kill()
                 self.client.controller.uploadSuccess()
                 break
