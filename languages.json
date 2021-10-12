@@ -486,5 +486,11 @@
         "sr": "Želite li restartovati program da vidite promjene?",
         "jp": "今すぐプログラムを再起動して変更を適用しますか？",
         "ru": "Вы хотите перезагрузить mync чтобы применить изменения?"
+    },
+    "transl_disclaimer": {
+        "en": "Translations may not be 100% accurate",
+        "sr": "Prevodi možda nisu 100% tačni",
+        "jp": "翻訳は100％正確ではない可能性があります",
+        "ru": "Переводы могут быть неточными на 100%"
     }
 }
