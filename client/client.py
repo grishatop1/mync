@@ -3,7 +3,7 @@ import pickle
 import socket
 import threading
 
-from modules.transfer import MyncTransfer
+from modules.transfer import Transfer
 from modules.ft import ClientFT
 
 from shutil import copy
@@ -36,7 +36,7 @@ class Client:
             return
 
         self.s.ioctl(socket.SIO_KEEPALIVE_VALS, (1, 10000, 3000))
-        self.t = MyncTransfer(self.s)
+        self.t = Transfer(self.s)
         self.t.send(self.username.encode())
 
         response = self.t.recvData()
@@ -134,31 +134,32 @@ class Client:
             self.controller.downloadFail()
 
     def getTracks(self):
-        self.t.sendPickle({"method":"gettracks"})
+        self.t.sendDataPickle({"method":"gettracks"})
 
     def reqSong(self, songname):
-        self.t.sendPickle({"method": "req", "songname": songname})
+        self.t.sendDataPickle({"method": "req", "songname": songname},
+                              blocking=False)
 
     def reqYoutube(self, link):
-        self.t.sendPickle(
+        self.t.sendDataPickle(
             {"method": "req-yt", "link": link}
         )
 
     def sendReady(self):
-        self.t.sendPickle(
+        self.t.sendDataPickle(
             {"method": "ready"}
         )
 
     def transmitMsg(self, message, color="black"):
-        self.t.sendPickle({"method":"transmit", "message":message,
-                               "color": color})
+        self.t.sendDataPickle({"method":"transmit", "message":message,
+                               "color": color}, blocking=False)
 
     def transmitSuffix(self, sfx):
-        self.t.sendPickle(
+        self.t.sendDataPickle(
             {"method": "suffix", "suffix": sfx}
         )
 
     def transmitCommand(self, cmd, content):
-        self.t.sendPickle(
+        self.t.sendDataPickle(
             {"method": "command", "cmd": cmd, "content":content}
         )

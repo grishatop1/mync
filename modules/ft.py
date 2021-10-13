@@ -5,7 +5,7 @@ import os
 import time
 from typing import SupportsComplex
 
-from modules.transfer import MyncTransfer
+from modules.transfer import Transfer
 from shutil import move as moveFile
 
 SONG_PATH = "servermusic/"
@@ -34,7 +34,7 @@ class ServerFT:
 
     def clientHandler(self, conn, addr):
         conn.ioctl(socket.SIO_KEEPALIVE_VALS, (1, 10000, 3000))
-        t = MyncTransfer(conn)
+        t = Transfer(conn)
         try:
             username = t.recvData().decode()
         except: return
@@ -173,7 +173,7 @@ class ClientFT:
         except socket.error:
             return
 
-        self.t = MyncTransfer(self.s)
+        self.t = Transfer(self.s)
         self.t.send(self.client.username.encode())
         response = self.t.recvData()
         if not response == b"success":
@@ -189,7 +189,7 @@ class ClientFT:
         self.start_time = time.perf_counter()
         self.songname = songname
         songpath = self.client.controller.cache.sharedmusic + songname
-        self.t.sendPickle(
+        self.t.sendDataPickle(
             {"method": "download", "songname": songname}
         )
         try:
@@ -232,7 +232,7 @@ class ClientFT:
         self.songname = os.path.basename(songpath)
         songsize = os.path.getsize(songpath)
 
-        self.t.sendPickle(
+        self.t.sendDataPickle(
             {"method": "upload", "songname": self.songname, "songsize": songsize}
         )
 
@@ -257,7 +257,7 @@ class ClientFT:
         while self.running:
             data = self.t.recvData()
             if not data:
-                self.kill(True)
+                self.kill()
                 break
             if data == b"done":
                 self.t.send(b"ack_done")

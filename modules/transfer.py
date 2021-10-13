@@ -4,67 +4,87 @@ import queue
 import pickle
 import time
 
-class MyncTransfer:
-    def __init__(self, sock):
-        self.s = sock
-        self.header_len = 8 #about 95MB
-        self.pending = queue.Queue()
-        self.buffer = 2048
-        threading.Thread(target=self.sendDataLoop, daemon=True).start()
+class Transfer:
+	def __init__(self, sock):
+		self.s = sock
+		self.pending = queue.Queue()
+		self.header = 12
+		self.buffer = 1024 * 2
+		self.timeout = 5
+		self.total = 0
+		threading.Thread(target=self.sendDataLoop, daemon=True).start()
 
-    def _pad(self, data:bytes, to:int):
-        return data + b" " * (to - len(data) % to)
+	def appendHeader(self, data):
+		data_len = len(data)
+		header = str(data_len).encode() + (self.header - len(str(data_len))) * b" "
+		return header + data
 
-    def attachHeader(self, data):
-        header = self._pad(str(len(data)).encode(), self.header_len)
-        return header + data
+	def send(self, data, blocking=True):
+		h_data = self.appendHeader(data)
+		if blocking:
+			lock = queue.Queue()
+			self.pending.put([lock, h_data])
+			result = lock.get()
+			return result
+		else:
+			self.pending.put([None, h_data])
 
-    def send(self, data):
-        packet = self.attachHeader(data)
-        self.pending.put(packet)
-    
-    def sendPickle(self, obj):
-        data = pickle.dumps(obj)
-        self.send(data)
+	def sendDataPickle(self, obj, blocking=True):
+		data = pickle.dumps(obj)
+		self.send(data, blocking)
 
-    def sendNow(self, data):
-        packet = self.attachHeader(data)
-        try:
-            self.s.send(packet)
-        except: pass
+	def sendDataLoop(self):
+		while True:
+			lock, data = self.pending.get()
+			try:
+				self.s.send(data)
+				if lock:
+					lock.put(True)
+			except socket.error:
+				return
 
-    def sendDataLoop(self):
-        while True:
-            data = self.pending.get()
-            try:
-                self.s.send(data)
-            except socket.error:
-                return
+	def sendNow(self, data):
+		#do NOT use this if you have more than 1 thread sending data
+		try:
+			h_data = self.appendHeader(data)
+			self.s.send(h_data)
+		except socket.error:
+			return
 
-    def recvData(self):
-        data = b""
-        toRecv = self.header_len
-        header = b""
-        recvd = 0
+	def recvData(self):
+		full = b""
+		recv_len = 0
+		recv_size = self.header
+		header = b""
+		new = True
+		while True:
+			if recv_size == 0:
+				break
+			try:
+				data = self.s.recv(recv_size)
+			except socket.error:
+				return
+			if not data:
+				return
 
-        while True:
-            try:
-                header += self.s.recv(toRecv)
-            except: return
-            if not header: return
-            if len(header) == self.header_len:
-                header_len = int(header)
-                break
-            toRecv -= len(header) #very unlikely to happen
-        
-        while True:
-            try:
-                packet = self.s.recv(self.buffer)
-            except: return
-            if not packet: return
-            recvd += len(packet)
-            data += packet
-            if recvd == header_len:
-                break
+			if new:
+				header += data
+				if len(header) < self.header:
+					recv_size = self.header - len(header)
+					continue
+				try:					
+					actual_len = int(header)
+				except:
+					return
+				recv_size = min(actual_len, self.buffer)
+				new = False
+				continue
 
-        return data
+			full += data
+			recv_len += len(data)
+			recv_size = min(actual_len - recv_len, self.buffer)
+
+			self.total = int((recv_len/actual_len)*100)
+
+		self.total = 100
+		return full

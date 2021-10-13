@@ -9,7 +9,7 @@ from tkinter import messagebox
 from tkinter import filedialog
 from tkinter.ttk import *
 
-from modules.transfer import MyncTransfer
+from modules.transfer import Transfer
 from modules.ft import ServerFT
 
 from pytube import YouTube
@@ -103,7 +103,7 @@ class ClientHandler:
             data = pickle.loads(dataraw)
 
             if data["method"] == "gettracks":
-                self.t.sendPickle({"method": "returnTracks", "data":self.server.player.tracks})
+                self.t.sendDataPickle({"method": "returnTracks", "data":self.server.player.tracks})
 
             elif data["method"] == "req":
                 self.server.player.current_playing = None
@@ -124,14 +124,14 @@ class ClientHandler:
 
             elif data["method"] == "reqsongfile":
                 songname = data["songname"]
-                self.t.sendPickle({"method":"sendingsong", "songname": songname})
+                self.t.sendDataPickle({"method":"sendingsong", "songname": songname})
                 with open(self.server.player.PATH+songname, "rb") as f:
                     data = f.read()
                 self.t.send(data)
 
             elif data["method"] == "ready":
                 if self.server.player.current_playing:
-                    self.t.sendPickle(
+                    self.t.sendDataPickle(
                         {
                             "method": "play",
                             "songname": self.server.player.current_playing,
@@ -155,7 +155,7 @@ class ClientHandler:
                     ))
 
             elif data["method"] == "transmit":
-                self.t.sendPickle(
+                self.t.sendDataPickle(
                     {"method":"echo", "msg": data["message"]}
                 )
                 self.server.transmitAllExceptMe(
@@ -185,7 +185,7 @@ class ClientHandler:
         print(f"{self.username} has disconnected from the server.")
 
     def transmitMe(self, text, color):
-        self.t.sendPickle(
+        self.t.sendDataPickle(
             {"method": "transmit", "message":text, "color": color}
         )
 
@@ -242,7 +242,7 @@ class Server:
     def clientHandler(self, conn, addr):
         print(f"Handling {addr[0]}:{addr[1]}")
         conn.ioctl(socket.SIO_KEEPALIVE_VALS, (1, 10000, 3000))
-        t = MyncTransfer(conn)
+        t = Transfer(conn)
         try:
             username = t.recvData().decode()
         except: return
@@ -255,7 +255,7 @@ class Server:
             "connections": self.snd_connections,
             "ft-port": self.port+1
         }
-        t.sendPickle(data)
+        t.sendDataPickle(data)
         response = t.recvData()
         if response != b"gotall": return
 
@@ -266,7 +266,7 @@ class Server:
         if self.player.current_playing:
             songpath = "servermusic/"+self.player.current_playing
             songsize = os.path.getsize(songpath)
-            t.sendPickle(
+            t.sendDataPickle(
                 {
                     "method": "checksong", 
                     "songname":self.player.current_playing,
