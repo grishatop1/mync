@@ -50,7 +50,7 @@ class MyncPresence:
                 songname = response["songname"]
                 presence.update(
                     self.pid,
-                    state=songname[:40],
+                    state=songname[:120],
                     large_image="myncimage",
                     start=_time
                 )
