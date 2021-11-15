@@ -78,6 +78,9 @@ class Client:
                 starttime = data["starttime"]
                 self.controller.playTrack(songname, play_at, starttime)
 
+            elif data["method"] == "stop":
+                self.controller.stopTrack()
+
             elif data["method"] == "returnTracks":
                 self.controller.loadTracksForReq(data["data"])
 

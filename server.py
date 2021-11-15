@@ -18,6 +18,28 @@ from pytube import Search
 from requests import get, post
 from bs4 import BeautifulSoup
 from moviepy.editor import AudioFileClip
+from mutagen.mp3 import MP3
+
+class CurrentPlayingTimer:
+    def __init__(self, server, path, callback) -> None:
+        self.server = server
+        self.path = path
+        self.callback = callback
+        self.stopped = False
+    
+    def start(self):
+        self.stopped = False
+        self.audio = MP3(self.path)
+        threading.Thread(target=self.run, args=()).start()
+
+    def run(self):
+        time.sleep(self.audio.info.length)
+        if not self.stopped:
+            self.callback()
+
+    def stop(self):
+        self.stopped = True
+
 
 class YTHandler:
     def __init__(self, client, link, obj=False) -> None:
@@ -91,7 +113,8 @@ class ClientHandler:
         self.username = username
         self.s = sock
         self.t = transport
-        
+        self.current_timer = None
+
         self.songhandler = False
 
     def mainThread(self):
@@ -153,6 +176,17 @@ class ClientHandler:
                             "starttime": 0
                         }
                     ))
+                    if self.current_timer:
+                        self.current_timer.stop()
+                    self.current_timer = CurrentPlayingTimer(
+                        self.server,
+                        self.server.player.PATH+self.server.player.current_playing,
+                        lambda :
+                        self.server.sendAll(
+                            pickle.dumps({"method": "stop"})
+                        )
+                    )
+                    self.current_timer.start()
 
             elif data["method"] == "transmit":
                 self.t.sendDataPickle(
@@ -183,6 +217,7 @@ class ClientHandler:
         del self.server.connections[self.username]
         self.server.removeConnection(self.username)
         print(f"{self.username} has disconnected from the server.")
+
 
     def transmitMe(self, text, color):
         self.t.sendDataPickle(

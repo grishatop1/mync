@@ -2,3 +2,4 @@ moviepy
 beautifulsoup4
 requests
 pytube
+mutagen
