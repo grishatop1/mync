@@ -2,6 +2,7 @@ import pickle
 import socket
 import threading
 import time
+import queue
 import os
 
 from tkinter import *
@@ -96,8 +97,12 @@ class ServerPlayer:
         self.current_started_time = 0
         self.current_started_timetime = None
         self.people_ready = 0
-
         self.tracks = self.loadTracks()
+        self.current_timer = None
+
+        self.cmd_queue = queue.Queue()
+
+        threading.Thread(target=self.playAwaiter, daemon=True).start()
 
     def loadTracks(self):
         tracks = [f for f in os.listdir('servermusic/') if os.path.isfile("servermusic/"+f)]
@@ -107,13 +112,60 @@ class ServerPlayer:
         if not songname in self.tracks:
             self.tracks.append(songname)
 
+    def newSongRequest(self, songname):
+        self.cmd_queue.put(
+            {"method": "req", "songname": songname}
+        )
+
+    def newUserIsReady(self):
+        self.cmd_queue.put(
+            {"method": "ready"}
+        )
+
+    def playAwaiter(self):
+        while True:
+            cmd = self.cmd_queue.get()
+            if cmd["method"] == "req":
+                self.current_playing = None
+                self.people_ready = 0
+                self.waiting_song = cmd["songname"]
+                self.server.sendAll(pickle.dumps({
+                    "method": "checksong",
+                    "songname": cmd["songname"]
+                }))
+
+            elif cmd["method"] == "ready":
+                self.people_ready += 1
+                if self.people_ready == len(self.server.connections):
+                    self.current_playing = self.server.player.waiting_song
+                    self.current_started_time = time.perf_counter()
+                    self.server.current_started_timetime = time.time()
+                    self.server.sendAll(pickle.dumps(
+                        {
+                            "method": "play",
+                            "songname": self.waiting_song,
+                            "play_at": self.current_started_timetime,
+                            "starttime": 0
+                        }
+                    ))
+                    if self.current_timer:
+                        self.current_timer.stop()
+                    self.current_timer = CurrentPlayingTimer(
+                        self.server,
+                        self.PATH+self.current_playing,
+                        lambda :
+                        self.server.sendAll(
+                            pickle.dumps({"method": "stop"})
+                        )
+                    )
+                    self.current_timer.start()
+
 class ClientHandler:
     def __init__(self, server, username, sock, transport):
         self.server = server
         self.username = username
         self.s = sock
         self.t = transport
-        self.current_timer = None
 
         self.songhandler = False
 
@@ -129,14 +181,10 @@ class ClientHandler:
                 self.t.sendDataPickle({"method": "returnTracks", "data":self.server.player.tracks})
 
             elif data["method"] == "req":
-                self.server.player.current_playing = None
-                self.server.player.people_ready = 0
-                songname = data["songname"]
-                songsize = os.path.getsize("servermusic/"+songname)
-                self.server.player.waiting_song = songname
-                self.server.sendAll(pickle.dumps(
-                    {"method":"checksong","songname":songname, "songsize": songsize}
-                ))
+                self.server.player.newSongRequest(data["songname"])
+
+            elif data["method"] == "ready":
+                self.server.player.newUserIsReady()
 
             elif data["method"] == "req-yt":
                 self.transmitMe(
@@ -151,42 +199,6 @@ class ClientHandler:
                 with open(self.server.player.PATH+songname, "rb") as f:
                     data = f.read()
                 self.t.send(data)
-
-            elif data["method"] == "ready":
-                if self.server.player.current_playing:
-                    self.t.sendDataPickle(
-                        {
-                            "method": "play",
-                            "songname": self.server.player.current_playing,
-                            "play_at": self.server.current_started_timetime,
-                            "starttime": time.perf_counter()-self.server.player.current_started_time
-                        }
-                    )
-                    continue
-                self.server.player.people_ready += 1
-                if self.server.player.people_ready == len(self.server.connections):
-                    self.server.player.current_playing = self.server.player.waiting_song
-                    self.server.player.current_started_time = time.perf_counter()
-                    self.server.current_started_timetime = time.time()
-                    self.server.sendAll(pickle.dumps(
-                        {
-                            "method": "play",
-                            "songname": self.server.player.waiting_song,
-                            "play_at": self.server.current_started_timetime,
-                            "starttime": 0
-                        }
-                    ))
-                    if self.current_timer:
-                        self.current_timer.stop()
-                    self.current_timer = CurrentPlayingTimer(
-                        self.server,
-                        self.server.player.PATH+self.server.player.current_playing,
-                        lambda :
-                        self.server.sendAll(
-                            pickle.dumps({"method": "stop"})
-                        )
-                    )
-                    self.current_timer.start()
 
             elif data["method"] == "transmit":
                 self.t.sendDataPickle(
