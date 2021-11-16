@@ -126,6 +126,13 @@ class ServerPlayer:
             {"method": "ready"}
         )
 
+    def stopPlaying(self):
+        if self.current_timer:
+            self.current_timer.stop()
+        self.current_playing = None
+        self.people_ready = 0
+        self.server.sendAll(pickle.dumps({"method": "stop"}))
+
     def playAwaiter(self):
         while True:
             cmd = self.cmd_queue.get()
@@ -158,10 +165,7 @@ class ServerPlayer:
                     self.current_timer = CurrentPlayingTimer(
                         self.server,
                         self.PATH+self.current_playing,
-                        lambda :
-                        self.server.sendAll(
-                            pickle.dumps({"method": "stop"})
-                        )
+                        self.stopPlaying
                     )
                     self.current_timer.start()
 
