@@ -92,10 +92,19 @@ class Controller:
                 self.lng("logs_offline_msg", message)
             )
 
-    def recvMessage(self, message, color):
+    def log(self, message, color):
+        self.gui.log(message, color)
+
+    def recvServerMessage(self, message_id, color, args):
         self.gui.log_frame.insertTextLine(
-            message,
+            self.lng(message_id, *args),
             color
+        )
+
+    def recvUserMessage(self, message, sender):
+        self.gui.log_frame.insertTextLine(
+            f"[{sender}]: {message}",
+            "blue"
         )
 
     def requestTracksForReq(self):

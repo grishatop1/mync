@@ -70,7 +70,7 @@ class YTHandler:
         os.remove("servermusic/"+songnamefull)
 
         self.client.transmitMe(
-            "Server has downloaded the track. You can now request it.",
+            "server_downloaded",
             "green"
         )
 
@@ -84,7 +84,11 @@ class YTSearcher:
     def searchAndRequest(self):
         s = Search(self.keyword)
         result = s.results[0]
-        self.client.transmitMe(f"Found - {result.title}\nDownloading it.", "black")
+        self.client.transmitMe(
+            "server_found_track", 
+            "black",
+            result.title
+            )
         self.handler = YTHandler(self.client, result, obj=True)
 
 class ServerPlayer:
@@ -188,7 +192,7 @@ class ClientHandler:
 
             elif data["method"] == "req-yt":
                 self.transmitMe(
-                    "Server is downloading the track from YouTube.",
+                    "server_downloading",
                     "black"
                 )
                 YTHandler(self, data["link"])
@@ -204,10 +208,13 @@ class ClientHandler:
                 self.t.sendDataPickle(
                     {"method":"echo", "msg": data["message"]}
                 )
-                self.server.transmitAllExceptMe(
-                    f"[{self.username}]: {data['message']}", 
-                    data["color"],
-                    self.username)
+                self.server.sendAllExceptMe(
+                    pickle.dumps({
+                        "method": "client-msg",
+                        "message": data["message"],
+                        "sender": self.username
+                    }), self.username
+                )
 
             elif data["method"] == "suffix":
                 sfx = data["suffix"]
@@ -220,7 +227,7 @@ class ClientHandler:
                 content = data["content"]
                 if cmd == "search":
                     self.transmitMe(
-                    "Server is searching the song...",
+                    "server_search",
                     "black"
                     )
                     YTSearcher(self, content)
@@ -230,11 +237,13 @@ class ClientHandler:
         self.server.removeConnection(self.username)
         print(f"{self.username} has disconnected from the server.")
 
-
-    def transmitMe(self, text, color):
-        self.t.sendDataPickle(
-            {"method": "transmit", "message":text, "color": color}
-        )
+    def transmitMe(self, msg_id, color, *args):
+        self.t.sendDataPickle({
+            "method": "server-msg", 
+            "msg_id": msg_id,
+            "args": args,
+            "color": color
+            })
 
 class Server:
     os.makedirs("servermusic/", exist_ok=True)

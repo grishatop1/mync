@@ -190,6 +190,11 @@
         "jp": "ファイル転送サーバーは{0}で起動しました。",
         "ru": "Файловый сервер запущен на {0}"
     },
+    "server_search": {
+        "en": "Server is searching for the song...",
+        "ru": "Сервер ищет трек...",
+        "sr": "Server trazi pjesmu..."
+    },
     "server_downloaded": {
         "en": "Server has downloaded the track. You can now request it.",
         "sr": "Server je preuzeo pjesmu. Sad je možeš zatražiti.",
@@ -200,7 +205,12 @@
         "en": "Server is downloading the track from YouTube.",
         "sr": "Server preuzima pjesmu sa Jutjuba.",
         "jp": "サーバーがYouTubeから曲をダウンロードしています。",
-        "ru": "Сервер скачивает трек с ТыТрубки:)"
+        "ru": "Сервер скачивает трек с Ютуба."
+    },
+    "server_found_track": {
+        "en": "Found - {0}\nDownloading it...",
+        "sr": "Pronadjeno - {0}\nSkida se...",
+        "ru": "Трек найден - {0}\nСкачивается..."
     },
     "server_user_left": {
         "en": "{0} has disconnected from the server.",

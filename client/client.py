@@ -104,12 +104,19 @@ class Client:
                     data["username"], data["suffix"]
                 )
 
-            elif data["method"] == "transmit":
-                self.controller.recvMessage(data["message"], data["color"])
+            elif data["method"] == "server-msg":
+                self.controller.recvServerMessage(
+                    data["msg_id"], 
+                    data["color"],
+                    data["args"]
+                )
+
+            elif data["method"] == "client-msg":
+                self.controller.recvUserMessage(data["message"], data["sender"])
 
             elif data["method"] == "echo":
                 message = f"[You]: {data['msg']}"
-                self.controller.recvMessage(message, "blue")
+                self.controller.log(message, "black")
 
         if not self.force_disconnect:
             self.alive = False
