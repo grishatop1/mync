@@ -239,7 +239,7 @@ class Controller:
 
         self.gui.connect_frame.setNormalState()
         self.gui.log_frame.clearLogs()
-        self.gui.log_frame.upload_btn.configure(text="Upload", state="normal")
+        self.gui.log_frame.upload_btn.configure(text=self.lng("upload"), state="normal")
         self.gui.connections_frame.clear()
         self.gui.player_frame.resetState()
 

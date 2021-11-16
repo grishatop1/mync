@@ -141,13 +141,14 @@ class ServerPlayer:
             elif cmd["method"] == "ready":
                 self.people_ready += 1
                 if self.people_ready == len(self.server.connections):
-                    self.current_playing = self.server.player.waiting_song
+                    self.current_playing = self.waiting_song
+                    self.waiting_song = None
                     self.current_started_time = time.perf_counter()
                     self.server.current_started_timetime = time.time()
                     self.server.sendAll(pickle.dumps(
                         {
                             "method": "play",
-                            "songname": self.waiting_song,
+                            "songname": self.current_playing,
                             "play_at": self.current_started_timetime,
                             "starttime": 0
                         }
@@ -188,7 +189,17 @@ class ClientHandler:
                 self.server.player.newSongRequest(data["songname"])
 
             elif data["method"] == "ready":
-                self.server.player.newUserIsReady()
+                if self.server.player.waiting_song:
+                    self.server.player.newUserIsReady()
+                else:
+                    self.t.sendDataPickle(
+                        {
+                            "method": "play",
+                            "songname": self.server.player.current_playing,
+                            "play_at": self.server.player.current_started_timetime,
+                            "starttime": time.perf_counter() - self.server.player.current_started_time
+                        }
+                    )
 
             elif data["method"] == "req-yt":
                 self.transmitMe(
@@ -325,8 +336,7 @@ class Server:
             t.sendDataPickle(
                 {
                     "method": "checksong", 
-                    "songname":self.player.current_playing,
-                    "songsize": songsize
+                    "songname":self.player.current_playing
                 }
             )
 

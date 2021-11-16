@@ -66,11 +66,11 @@ class Client:
 
     def mainThread(self):
         while self.alive:
-            data = self.t.recvData()
-            if not data or data == b"drop":
+            response = self.t.recvData()
+            if not response or response == b"drop":
                 break
 
-            data = pickle.loads(data)
+            data = pickle.loads(response)
 
             if data["method"] == "play":
                 play_at = data["play_at"]
