@@ -1,6 +1,7 @@
 import os
 import sys
 import time
+import socket
 import threading
 import multiprocessing
 
@@ -244,6 +245,14 @@ class Controller:
         self.gui.player_frame.resetState()
 
         self.gui.focus()
+
+    def getLocalIP(self):
+        hostname = socket.gethostname()    
+        IPAddr = socket.gethostbyname(hostname)
+        return IPAddr
+
+    def runServer(self):
+        pass
 
 if __name__ == "__main__":
     if sys.platform != "win32" and sys.platform != "win64":

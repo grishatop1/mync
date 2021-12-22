@@ -40,8 +40,11 @@ class MainApplication(Tk):
         self.lang_menu.add_command(label='Srpski',command=lambda:self.changeLang("sr"),underline=0)
         self.lang_menu.add_command(label='日本語',command=lambda:self.changeLang("jp"))
         self.lang_menu.add_command(label='Русский',command=lambda:self.changeLang("ru"),underline=0)
+        self.server_menu = Menu(self.menu, tearoff=0)
+        self.server_menu.add_command(label="Run server", command=self.runServer)
         self.menu.add_cascade(label=lng("language_menu"), menu=self.lang_menu, underline=0)
         self.menu.add_cascade(label=lng("help_menu"), menu=self.help_menu, underline=0)
+        self.menu.add_cascade(label="Server", menu=self.server_menu, underline=0)
         self.config(menu=self.menu)
 
         self.connect_frame = ConnectFrame(self, text=lng("connection"))
@@ -59,6 +62,9 @@ class MainApplication(Tk):
 
         self.netstatus_label = NetworkStatusLabel(self)
         self.netstatus_label.grid(row=2, columnspan=3, padx=5, pady=5)
+
+    def runServer(self):
+        self.top.openServerWindow()
 
     def changeLang(self, lang_code):
         if askyesno(lng("title"), lng("wanna-restart")):
@@ -85,6 +91,7 @@ class TopLevelControl:
 
         self.req_win = None
         self.upload_win = None
+        self.server_win = None
 
     def checkClient(self):
         return self.parent.controller.isClientAlive()
@@ -107,6 +114,10 @@ class TopLevelControl:
                         filetypes=(("Music Files","*.mp3"),))
         if not filepath: return
         self.upload_win = UploadTopLevel(self.parent, filepath)
+
+    def openServerWindow(self):
+        if not self.server_win:
+            self.server_win = ServerTopLevel(self.parent)
 
     def closeUploadWindow(self):
         if not self.upload_win: return
@@ -537,3 +548,26 @@ class NetworkStatusLabel(Label):
     def reset(self):
         self["text"] = lng("netw_idle")
         self["foreground"] = "white"
+
+class ServerTopLevel(Toplevel):
+    def __init__(self, parent, *args, **kwargs) -> None:
+        Toplevel.__init__(self, parent, *args, **kwargs)
+        self.parent = parent
+
+        self.title("Server Window")
+        self.resizable(0,0)
+        self.protocol("WM_DELETE_WINDOW", self.stop)
+
+        self.ip_label = Label(self, text=f"Local IP: {self.parent.controller.getLocalIP()}", foreground="gray")
+        self.pubip_label = Label(self, text="Public IP: Getting...", foreground="gray")
+        self.start_btn = Button(self, text="Start Server", command=self.start)
+
+        self.ip_label.pack(side=TOP, fill=X, padx=25, pady=(10,5))
+        self.pubip_label.pack(side=TOP, fill=X, padx=25, pady=(5,5))
+        self.start_btn.pack(side=TOP, fill=X, padx=25, pady=(5,10))
+
+    def start(self):
+        pass
+
+    def stop(self):
+        pass
