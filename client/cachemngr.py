@@ -1,12 +1,10 @@
 import os
+import sys
 import pickle
 
 class CacheManager:
     def __init__(self):
-        self.appdata = os.getenv('APPDATA').replace("\\", "/")
-        self.cache_path = self.appdata+"/.mync/"
-        self.cache_file = self.cache_path+"cache.temp"
-        self.sharedmusic = self.cache_path+"sharedmusic/"
+        self.generatePaths()
         self._checkInitial()
 
     def _checkInitial(self):
@@ -44,3 +42,15 @@ class CacheManager:
         self.data[key] = value
         with open(self.cache_file, "wb") as f:
             pickle.dump(self.data, f)
+
+    def generatePaths(self):
+        if sys.platform == "win32":
+            self.appdata = os.getenv('APPDATA').replace("\\", "/")
+            self.cache_path = self.appdata+"/.mync/"
+            self.cache_file = self.cache_path+"cache.temp"
+            self.sharedmusic = self.cache_path+"sharedmusic/"
+        elif sys.platform == "linux":
+            self.appdata = "cache"
+            self.cache_path = self.appdata+"/.mync/"
+            self.cache_file = self.cache_path+"cache.temp"
+            self.sharedmusic = self.cache_path+"sharedmusic/"

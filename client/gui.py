@@ -23,9 +23,10 @@ class MainApplication(Tk):
 
         self.title(lng("title"))
         self.resizable(0,0)
-        style = Style('material-dark', "media/themes.json")
-        style.colors.set("primary", "#BB86FC")        
-        self.iconbitmap("media/iconica.ico")
+        if sys.platform == "win32":
+            style = Style('material-dark', "media/themes.json")
+            style.colors.set("primary", "#BB86FC")        
+            self.iconbitmap("media/iconica.ico")
 
         self.top = TopLevelControl(self)
 

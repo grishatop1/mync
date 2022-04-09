@@ -246,10 +246,6 @@ class Controller:
         self.gui.focus()
 
 if __name__ == "__main__":
-    if sys.platform != "win32" and sys.platform != "win64":
-        print("Mync client supports only windows for now :/")
-        sys.exit()
-
     multiprocessing.freeze_support() #for pyinstaller
     controller = Controller()
     controller.runGUI()
