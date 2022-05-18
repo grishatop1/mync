@@ -312,7 +312,7 @@ class Server:
 
     def clientHandler(self, conn, addr):
         print(f"Handling {addr[0]}:{addr[1]}")
-        conn.ioctl(socket.SIO_KEEPALIVE_VALS, (1, 10000, 3000))
+        #conn.ioctl(socket.SIO_KEEPALIVE_VALS, (1, 10000, 3000))
         t = Transfer(conn)
         try:
             username = t.recvData().decode()

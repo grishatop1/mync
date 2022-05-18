@@ -35,7 +35,7 @@ class Client:
             print(e)
             return
 
-        self.s.ioctl(socket.SIO_KEEPALIVE_VALS, (1, 10000, 3000))
+        #self.s.ioctl(socket.SIO_KEEPALIVE_VALS, (1, 10000, 3000))
         self.t = Transfer(self.s)
         self.t.send(self.username.encode())
 
