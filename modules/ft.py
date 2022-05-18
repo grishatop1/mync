@@ -33,7 +33,7 @@ class ServerFT:
             threading.Thread(target=self.clientHandler, args=(conn,addr),daemon=True).start()
 
     def clientHandler(self, conn, addr):
-        conn.ioctl(socket.SIO_KEEPALIVE_VALS, (1, 10000, 3000))
+        #conn.ioctl(socket.SIO_KEEPALIVE_VALS, (1, 10000, 3000))
         t = Transfer(conn)
         try:
             username = t.recvData().decode()
@@ -179,7 +179,7 @@ class ClientFT:
         if not response == b"success":
             return
         
-        self.s.ioctl(socket.SIO_KEEPALIVE_VALS, (1, 10000, 3000))
+        #self.s.ioctl(socket.SIO_KEEPALIVE_VALS, (1, 10000, 3000))
         self.connected = True
         return True
 
