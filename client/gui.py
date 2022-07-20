@@ -201,7 +201,7 @@ class LogFrame(LabelFrame):
 
         self.log_text = Text(self, width=50, height=10, state="disabled")
 
-        colors = ["green", "red", "#00ffff", "black", "orange", "#d97000"]
+        colors = ["green", "red", "#00ffff", "white", "orange", "#d97000"]
         for color in colors:
             self.log_text.tag_configure(color, foreground=color)
 
@@ -359,7 +359,7 @@ class PlaceholderEntry(Entry):
         if self["style"] == self.placeholder_style:
             self.delete("0", "end")
             self["style"] = self.field_style
-            self["foreground"] = "black"
+            self["foreground"] = "white"
 
     def _add_placeholder(self, e):
         if not self.get():
