@@ -5,11 +5,6 @@ import time
 import queue
 import os
 
-from tkinter import *
-from tkinter import messagebox
-from tkinter import filedialog
-from tkinter.ttk import *
-
 from modules.transfer import Transfer
 from modules.ft import ServerFT
 
@@ -381,101 +376,6 @@ class Server:
             {"method":"connectionminus", "user":username}
         ), username)
 
-class LauncherGUI(Tk):
-    def __init__(self, debug=False, *args, **kwargs) -> None:
-        Tk.__init__(self, *args, **kwargs)
-
-        self.debug = debug
-        if self.debug:
-            self.startNoGUI()
-            return
-
-        self.title("Mync Server")
-        self.resizable(False,False)
-
-        self.custom_port_cbox_var=IntVar()
-        self.custom_port_cbox_var.set(0)
-
-        self.custom_port_cbox=Checkbutton(self, text="Custom port (advanced)",
-                        variable=self.custom_port_cbox_var,command=self.entrytog)
-        self.custom_port_cbox.grid(column=0,row=0,sticky="we",padx=50,pady=3)
-
-        self.custom_port_var=StringVar(value="8888")
-
-        self.custom_port_entry=Entry(self, textvariable=self.custom_port_var,
-                                state="readonly",width=20,foreground="grey")
-        self.custom_port_entry.grid(column=0,row=1,sticky="we",padx=50)
-
-        self.startB=Button(self, text="Start server",command=self.thread)
-        self.startB.grid(column=0,row=2,columnspan=3,sticky="we",padx=50,pady=10)
-
-        self.bind("<F1>",self.help_)
-        self.bind("<F3>",self.thread)
-
-        self.menu = Menu(self)
-        self.menu.add_command(label="How to Use", command=self.help_, underline=0)
-        self.config(menu=self.menu)
-
-    def help_(self, *args):
-        messagebox.showinfo(title="How to use",message=
-            """0) Please read before use:
-
-1) The default port is 8888, but you can also set a custom port. First
-check the 'Custom Port' checbox, and then type in the preferred
-port. The checkbox must remain checked in order to use the custom
-port.
-
-2) Pressing the 'Start Server' button will start the server on the
-custom port or port 8888. Pressing it again will stop the server and
-close the launcher. You can also press F3 to launch the server.""")
-
-    #checkbox toggler for entry box
-    def entrytog(self, *args):
-        if not self.custom_port_cbox_var.get():
-            self.custom_port_entry["state"]="readonly"
-            self.custom_port_entry["foreground"]="grey"
-            self.custom_port_entry.delete(0,"end")
-            self.custom_port_var.set("8888")
-        else:
-            self.custom_port_entry["state"]=""
-            self.custom_port_entry["foreground"]="black"
-            self.custom_port_entry.delete(0,"end")
-            self.custom_port_entry.insert(0, "")
-            self.custom_port_entry.focus()
-
-    def thread(self):
-        self.focus()
-        threading.Thread(target=self.start,daemon=True).start()
-
-    def start(self, *args):
-        try:
-            self.startB["text"]="Close server"
-            self.startB["command"]=self.exitcond
-            #if custom port
-            if self.custom_port_var.get() and self.custom_port_cbox_var.get():
-                #start server with custom port
-                server = Server(socket.gethostbyname(socket.gethostname()),
-                                int(self.custom_port_var.get()))
-                server.runServer()
-                
-            else:
-                #start server with port 8888
-                server = Server(socket.gethostbyname(socket.gethostname()),
-                                8888)
-                server.runServer()
-        except Exception as error:
-            messagebox.showerror(
-            "Error!","The following error has occured:\n\n\"{}\"".format(error))
-
-    def startNoGUI(self):
-        server = Server(socket.gethostbyname(socket.gethostname()),
-                                8888)
-        server.runServer()
-
-    def exitcond(self, *args):
-        self.destroy()
-
-
 if __name__ == "__main__":
-    app = LauncherGUI(debug=True)
-    app.mainloop()
+    server = Server("0.0.0.0", 8888)
+    server.runServer()
