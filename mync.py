@@ -85,7 +85,7 @@ class Controller:
                 return
             self.client.transmitMsg(
                 message,
-                "blue"
+                "#00ffff"
             )
         else:
             self.gui.log(
@@ -104,7 +104,7 @@ class Controller:
     def recvUserMessage(self, message, sender):
         self.gui.log_frame.insertTextLine(
             f"[{sender}]: {message}",
-            "blue"
+            "#00ffff"
         )
 
     def requestTracksForReq(self):

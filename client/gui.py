@@ -201,7 +201,7 @@ class LogFrame(LabelFrame):
 
         self.log_text = Text(self, width=50, height=10, state="disabled")
 
-        colors = ["green", "red", "blue", "black", "orange", "#d97000"]
+        colors = ["green", "red", "#00ffff", "black", "orange", "#d97000"]
         for color in colors:
             self.log_text.tag_configure(color, foreground=color)
 
@@ -219,7 +219,7 @@ class LogFrame(LabelFrame):
         self.chat_subframe = ChatSubFrame(self)
         self.chat_subframe.grid(row=2, column=0, columnspan=2)
 
-    def insertTextLine(self, data, color="black"):
+    def insertTextLine(self, data, color="white"):
         self.log_text["state"] = "normal"
         self.log_text.insert("end", data + "\n", color)
         self.log_text["state"] = "disabled"
