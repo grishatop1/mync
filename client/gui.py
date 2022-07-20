@@ -16,7 +16,7 @@ lng = None
 
 class MainApplication(Window):
     def __init__(self, controller, *args, **kwargs) -> None:
-        super().__init__(self, themename="darkly", *args, **kwargs)
+        super().__init__(self, themename="vapor", *args, **kwargs)
         global lng
 
         self.controller = controller
