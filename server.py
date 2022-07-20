@@ -473,8 +473,7 @@ close the launcher. You can also press F3 to launch the server.""")
         server.runServer()
 
     def exitcond(self, *args):
-        if (res2 := messagebox.askyesno("Are you sure?","Close server?")):
-            self.destroy()
+        self.destroy()
 
 
 if __name__ == "__main__":
