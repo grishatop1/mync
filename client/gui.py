@@ -9,13 +9,14 @@ from tkinter.messagebox import *
 from tkinter import filedialog
 from tkinter import Scale as ScaleDefault
 
-from ttkbootstrap import Style
+from ttkbootstrap import *
+from ttkbootstrap.constants import *
 
 lng = None
 
-class MainApplication(Tk):
+class MainApplication(Window):
     def __init__(self, controller, *args, **kwargs) -> None:
-        Tk.__init__(self, *args, **kwargs)
+        super().__init__(self, themename="darkly", *args, **kwargs)
         global lng
 
         self.controller = controller
@@ -23,10 +24,6 @@ class MainApplication(Tk):
 
         self.title(lng("title"))
         self.resizable(0,0)
-        if sys.platform == "win32":
-            style = Style('material-dark', "media/themes.json")
-            style.colors.set("primary", "#BB86FC")        
-            self.iconbitmap("media/iconica.ico")
 
         self.top = TopLevelControl(self)
 
