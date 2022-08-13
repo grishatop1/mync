@@ -117,7 +117,7 @@ class SongReceiver:
         self.sfx = ".raw"
         
         self.recvd = 0
-        self.f = open(self.songpath + self.sfx, "ab")
+        self.f = open(self.songpath + self.sfx, "ab", encoding="utf-8")
         self.closed = False
 
     def write(self, data):
