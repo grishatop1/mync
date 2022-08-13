@@ -265,7 +265,7 @@ class ClientFT:
                 self.client.controller.uploadSuccess()
                 break
 
-            speed, recvd = data.decode().split(":")
+            speed, recvd = data.decode("utf-8").split(":")
             ispeed, irecvd = float(speed), float(recvd)
             self.client.controller.updateUploadStatus(
                 ispeed, irecvd
