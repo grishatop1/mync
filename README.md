@@ -9,6 +9,8 @@ Listen to music together in sync! Request from server's songlist or upload your 
 
 Run the following command in your CLI to get the requirements.
 
+**NOTE** If you're using Linux, please install `tk` package. ```sudo pacman -S tk``` for Arch users
+
 `pip install -r requirements.txt`
 
 If you're running **server** then also you need:
