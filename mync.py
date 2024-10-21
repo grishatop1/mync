@@ -247,5 +247,5 @@ class Controller:
 
 if __name__ == "__main__":
     multiprocessing.freeze_support() #for pyinstaller
-    controller = Controller()
+    controller = Controller() #main controller
     controller.runGUI()
